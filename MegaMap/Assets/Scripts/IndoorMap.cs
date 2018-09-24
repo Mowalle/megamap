@@ -4,13 +4,34 @@ using UnityEngine;
 
 public class IndoorMap : MonoBehaviour {
 
+    [Header("Outdoor Settings"), Space]
     public GameObject outdoorView;
+
+    [Header("Indoor Settings"), Space]
     public GameObject indoorView;
+    public GameObject[] floors;
 
     public bool showIndoorPosition = true;
     public GameObject positionMarker;
 
     private bool isEntered = false;
+
+    private int currentFloor = 0;
+    public int CurrentFloor
+    {
+        get {
+            return currentFloor;
+        }
+
+        set {
+            currentFloor = value;
+
+            // Hide all floors but enable current floor again.
+            foreach (GameObject floor in floors)
+                floor.SetActive(false);
+            floors[currentFloor].SetActive(true);
+        }
+    }
 
     // TODO: Refactor these methods.
     public void Enter()
@@ -34,7 +55,23 @@ public class IndoorMap : MonoBehaviour {
             positionMarker.SetActive(false);
         }
     }
-    
+
+    public int GetNumberOfFloors()
+    {
+        return floors.Length;
+    }
+
+    private void Start()
+    {
+        if (floors.Length < 1) {
+            Debug.LogError("Indoor Map must have at least one floor.");
+            enabled = false;
+            return;
+        }
+
+        CurrentFloor = 0;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space)) {
