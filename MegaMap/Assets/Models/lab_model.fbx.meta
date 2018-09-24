@@ -1,0 +1,223 @@
+fileFormatVersion: 2
+guid: 948c47449f3194143824232a766648a0
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Baseboard
+    100002: Cabinet1
+    100004: Cabinet1_Door
+    100006: Ceiling
+    100008: Column
+    100010: Door
+    100012: Door.000
+    100014: Door.001
+    100016: DoorFrame
+    100018: DoorFrame.000
+    100020: DoorFrame.001
+    100022: Floor
+    100024: Handle
+    100026: Handle_Back
+    100028: Handle_Back.000
+    100030: Handle_Back.001
+    100032: Handle_Front
+    100034: Handle_Front.000
+    100036: Handle_Front.001
+    100038: //RootNode
+    100040: RidgeBright
+    100042: RidgeBright.001
+    100044: RidgeBright.002
+    100046: RidgeDark
+    100048: RidgeDark.001
+    100050: Room
+    400000: Baseboard
+    400002: Cabinet1
+    400004: Cabinet1_Door
+    400006: Ceiling
+    400008: Column
+    400010: Door
+    400012: Door.000
+    400014: Door.001
+    400016: DoorFrame
+    400018: DoorFrame.000
+    400020: DoorFrame.001
+    400022: Floor
+    400024: Handle
+    400026: Handle_Back
+    400028: Handle_Back.000
+    400030: Handle_Back.001
+    400032: Handle_Front
+    400034: Handle_Front.000
+    400036: Handle_Front.001
+    400038: //RootNode
+    400040: RidgeBright
+    400042: RidgeBright.001
+    400044: RidgeBright.002
+    400046: RidgeDark
+    400048: RidgeDark.001
+    400050: Room
+    2100000: Cabinet_material
+    2100002: Handle_material
+    2100004: RidgeDark_material
+    2100006: RidgeBright_material
+    2100008: Column_material
+    2100010: Wall_material
+    2100012: Ceiling_material
+    2100014: Floor_material
+    2100016: Baseboard_material
+    2100018: Door_material
+    2300000: Baseboard
+    2300002: Cabinet1
+    2300004: Cabinet1_Door
+    2300006: Ceiling
+    2300008: Column
+    2300010: Door
+    2300012: Door.000
+    2300014: Door.001
+    2300016: DoorFrame
+    2300018: DoorFrame.000
+    2300020: DoorFrame.001
+    2300022: Floor
+    2300024: Handle
+    2300026: Handle_Back
+    2300028: Handle_Back.000
+    2300030: Handle_Back.001
+    2300032: Handle_Front
+    2300034: Handle_Front.000
+    2300036: Handle_Front.001
+    2300038: RidgeBright
+    2300040: RidgeBright.001
+    2300042: RidgeBright.002
+    2300044: RidgeDark
+    2300046: RidgeDark.001
+    2300048: Room
+    3300000: Baseboard
+    3300002: Cabinet1
+    3300004: Cabinet1_Door
+    3300006: Ceiling
+    3300008: Column
+    3300010: Door
+    3300012: Door.000
+    3300014: Door.001
+    3300016: DoorFrame
+    3300018: DoorFrame.000
+    3300020: DoorFrame.001
+    3300022: Floor
+    3300024: Handle
+    3300026: Handle_Back
+    3300028: Handle_Back.000
+    3300030: Handle_Back.001
+    3300032: Handle_Front
+    3300034: Handle_Front.000
+    3300036: Handle_Front.001
+    3300038: RidgeBright
+    3300040: RidgeBright.001
+    3300042: RidgeBright.002
+    3300044: RidgeDark
+    3300046: RidgeDark.001
+    3300048: Room
+    4300000: Cabinet1
+    4300002: Cabinet1_Door
+    4300004: Handle
+    4300006: RidgeDark
+    4300008: RidgeDark.001
+    4300010: RidgeBright
+    4300012: RidgeBright.002
+    4300014: RidgeBright.001
+    4300016: Column
+    4300018: Room
+    4300020: Ceiling
+    4300022: Floor
+    4300024: Baseboard
+    4300026: DoorFrame.000
+    4300028: Door.000
+    4300030: Handle_Back.000
+    4300032: Handle_Front.000
+    4300034: DoorFrame
+    4300036: Door
+    4300038: Handle_Back
+    4300040: Handle_Front
+    4300042: DoorFrame.001
+    4300044: Door.001
+    4300046: Handle_Back.001
+    4300048: Handle_Front.001
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
