@@ -34,3 +34,6 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Ignore Unity3D Test Scene; used for making intermediate changes.
+TestScene.unity*
