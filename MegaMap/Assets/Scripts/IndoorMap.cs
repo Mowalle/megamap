@@ -8,7 +8,6 @@ public class IndoorMap : MonoBehaviour {
     public GameObject outdoorView;
 
     [Header("Indoor Settings"), Space]
-    public GameObject indoorView;
     public GameObject[] floors;
 
     public bool showIndoorPosition = true;
@@ -16,7 +15,27 @@ public class IndoorMap : MonoBehaviour {
 
     private bool isEntered = false;
     public bool IsEntered
-    { get { return isEntered; } }
+    {
+        get { return isEntered; }
+        set {
+            isEntered = value;
+
+            // When entering indoor map, disable outdoor view and show current floor.
+            // Vice versa when exiting.
+            outdoorView.SetActive(!isEntered);
+
+            // When entering, ensure that correct floor is displayed.
+            CurrentFloor = currentFloor;
+            
+            // Hide current floor when exiting to avoid overlap with outside model.
+            if (!isEntered)
+                floors[currentFloor].SetActive(false);
+            
+            if (showIndoorPosition) {
+                positionMarker.SetActive(isEntered);
+            }
+        }
+    }
 
     private int currentFloor = 0;
     public int CurrentFloor
@@ -27,34 +46,8 @@ public class IndoorMap : MonoBehaviour {
 
         set {
             currentFloor = value;
-
-            // Hide all floors but enable current floor again.
-            foreach (GameObject floor in floors)
-                floor.SetActive(false);
+            HideFloors();
             floors[currentFloor].SetActive(true);
-        }
-    }
-
-    // TODO: Refactor these methods.
-    public void Enter()
-    {
-        outdoorView.SetActive(false);
-        indoorView.SetActive(true);
-        isEntered = true;
-
-        if (showIndoorPosition) {
-            positionMarker.SetActive(true);
-        }
-    }
-
-    public void Exit()
-    {
-        outdoorView.SetActive(true);
-        indoorView.SetActive(false);
-        isEntered = false;
-
-        if (showIndoorPosition) {
-            positionMarker.SetActive(false);
         }
     }
 
@@ -71,16 +64,13 @@ public class IndoorMap : MonoBehaviour {
             return;
         }
 
-        CurrentFloor = 0;
+        IsEntered = false;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space)) {
-            if (isEntered)
-                Exit();
-            else
-                Enter();
+            IsEntered = !IsEntered;
         }
 
         if (!showIndoorPosition)
@@ -94,5 +84,11 @@ public class IndoorMap : MonoBehaviour {
         // Position marker accordingly.
         positionMarker.transform.localPosition = offset;
         positionMarker.transform.rotation = player.transform.rotation;
+    }
+
+    private void HideFloors()
+    {
+        foreach (GameObject floor in floors)
+            floor.SetActive(false);
     }
 }
