@@ -15,6 +15,8 @@ public class IndoorMap : MonoBehaviour {
     public GameObject positionMarker;
 
     private bool isEntered = false;
+    public bool IsEntered
+    { get { return isEntered; } }
 
     private int currentFloor = 0;
     public int CurrentFloor

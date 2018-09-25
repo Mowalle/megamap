@@ -22,6 +22,10 @@ namespace Megamap {
 
         private void Update()
         {
+            // Don't do anything if not inside of building.
+            if (!indoorMap.IsEntered)
+                return;
+
             float mouseInput = Input.GetAxis("Mouse ScrollWheel");
             if (mouseInput == 0f)
                 return;
