@@ -6,18 +6,21 @@ namespace Megamap {
 
     public class ChangeFloor : MonoBehaviour {
 
-        [Tooltip("Reference to the indoor map for changing floors.")]
-        public IndoorMap indoorMap;
+        [SerializeField, Tooltip("Reference to the indoor map for changing floors.")]
+        private IndoorMap indoorMap;
 
-        public Image floorSelectionCursor;
-        public Image floorSelectionNumbers;
+        [SerializeField]
+        private Image floorSelectionCursor;
+
+        [SerializeField]
+        private Text currentFloorText, nextFloorText, previousFloorText;
         
         private Coroutine waitAndHideRoutine;
         
         private void Start()
         {
-            floorSelectionCursor.enabled = false;
-            floorSelectionNumbers.enabled = false;
+            SetFloorDisplayVisible(false);
+            UpdateFloorDisplay();
         }
 
         private void Update()
@@ -31,30 +34,47 @@ namespace Megamap {
                 return;
 
             if (mouseInput > 0f && indoorMap.CurrentFloor + 1 < indoorMap.GetNumberOfFloors())
-                ChangeFloorNumberDisplay(++indoorMap.CurrentFloor);
+                ++indoorMap.CurrentFloor;
             else if (mouseInput < 0f && indoorMap.CurrentFloor > 0)
-                ChangeFloorNumberDisplay(--indoorMap.CurrentFloor);
+                --indoorMap.CurrentFloor;
+            UpdateFloorDisplay();
 
             if (waitAndHideRoutine != null) {
                 StopCoroutine(waitAndHideRoutine);
             }
             waitAndHideRoutine = StartCoroutine(WaitAndHideCounter());
-            floorSelectionCursor.enabled = true;
-            floorSelectionNumbers.enabled = true;
+            SetFloorDisplayVisible(true);
         }
 
         private IEnumerator WaitAndHideCounter()
         {
             while (true) {
                 yield return new WaitForSeconds(2.0f);
-                floorSelectionCursor.enabled = false;
-                floorSelectionNumbers.enabled = false;
+                SetFloorDisplayVisible(false);
             }
         }
 
-        private void ChangeFloorNumberDisplay(int floor)
+        private void UpdateFloorDisplay()
         {
-            floorSelectionNumbers.GetComponent<RectTransform>().localPosition = new Vector3(0f, -floor, 0f);
+            currentFloorText.text = indoorMap.CurrentFloor.ToString();
+
+            if (indoorMap.CurrentFloor == indoorMap.GetNumberOfFloors() - 1)
+                nextFloorText.text = "";
+            else
+                nextFloorText.text = (indoorMap.CurrentFloor + 1).ToString();
+
+            if (indoorMap.CurrentFloor == 0)
+                previousFloorText.text = "";
+            else
+                previousFloorText.text = (indoorMap.CurrentFloor - 1).ToString();
+        }
+
+        private void SetFloorDisplayVisible(bool visible)
+        {
+            floorSelectionCursor.enabled = visible;
+            currentFloorText.enabled = visible;
+            nextFloorText.enabled = visible;
+            previousFloorText.enabled = visible;
         }
     }
 
