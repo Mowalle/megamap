@@ -10,6 +10,11 @@ public class FpsCharacterController : MonoBehaviour {
 
     public float mouseSensivity = 5.0f;
 
+    [Header("Other Settings"), Space]
+
+    [SerializeField, Tooltip("Reference to lab model to return players relative position.")]
+    private GameObject lab;
+
     private void Awake()
     {
         if (cam == null) {
@@ -45,6 +50,14 @@ public class FpsCharacterController : MonoBehaviour {
         float strafe = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
 
         transform.Translate(strafe, 0.0f, translation);
+    }
+
+    public Vector3 GetPositionRelativeToLab()
+    {
+        if (lab == null)
+            return new Vector3(0f, 0f, 0f);
+
+        return transform.position - lab.transform.position;
     }
 }
 
