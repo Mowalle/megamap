@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FpsCharacterController : MonoBehaviour {
-
-    public Transform spawnPoint;
-
+    
     public float speed = 10.0f;
 
     public Camera cam;
@@ -21,10 +19,6 @@ public class FpsCharacterController : MonoBehaviour {
 
     private void Start()
     {
-        if (spawnPoint != null)
-            transform.position = spawnPoint.position;
-
-        transform.position += Vector3.up;
     }
 
     private void Update()
