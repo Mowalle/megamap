@@ -15,8 +15,17 @@ public class MegamapConfiguration : MonoBehaviour {
 
     [SerializeField, Range(0, 100)]
     private int wallHeight = 10;
+
+    [Range(0f, 1.5f)]
+    public float heightOffset = 0f;
     	
 	void Update () {
+        // Apply room and wall scale.
         map.transform.localScale = new Vector3(scale, wallHeight / 100f, scale);
+
+        // Apply height offset.
+        var pos = map.transform.position;
+        pos[1] = heightOffset;
+        map.transform.position = pos;
 	}
 }

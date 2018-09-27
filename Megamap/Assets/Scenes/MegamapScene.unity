@@ -890,6 +890,7 @@ MonoBehaviour:
   map: {fileID: 294326121}
   scale: 0.1
   wallHeight: 10
+  heightOffset: 0
 --- !u!1 &2039762000
 GameObject:
   m_ObjectHideFlags: 0
