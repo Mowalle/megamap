@@ -20,8 +20,8 @@ public class SceneSwitcher : MonoBehaviour {
         }
 
         ++currentSceneIndex;
-        SceneManager.LoadScene(currentSceneIndex, LoadSceneMode.Additive);
-        SceneManager.UnloadSceneAsync(currentSceneIndex - 1);
+        SceneManager.LoadScene(conditionSceneNames[currentSceneIndex], LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync(conditionSceneNames[currentSceneIndex - 1]);
     }
 
     public void LoadPreviousScene()
@@ -31,8 +31,8 @@ public class SceneSwitcher : MonoBehaviour {
         }
 
         --currentSceneIndex;
-        SceneManager.LoadScene(currentSceneIndex, LoadSceneMode.Additive);
-        SceneManager.UnloadSceneAsync(currentSceneIndex + 1);
+        SceneManager.LoadScene(conditionSceneNames[currentSceneIndex], LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync(conditionSceneNames[currentSceneIndex + 1]);
     }
 
     private void Start()
