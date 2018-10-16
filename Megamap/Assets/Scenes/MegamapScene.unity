@@ -425,50 +425,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4457109188305766, guid: 8502f82b3ea930844bfc4fe739a2edd8,
     type: 2}
   m_PrefabInternal: {fileID: 628200935}
---- !u!1 &780110112 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1404492065990318, guid: f504203d5b34a6f41a0020051ede9473,
-    type: 2}
-  m_PrefabInternal: {fileID: 185128846}
 --- !u!4 &780110113 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4612890957294118, guid: f504203d5b34a6f41a0020051ede9473,
     type: 2}
   m_PrefabInternal: {fileID: 185128846}
---- !u!114 &780110114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 780110112}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edcad7a8dd001454abf77c854ca5d76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 780110113}
-  exclusionLayers:
-    serializedVersion: 2
-    m_Bits: 4
-  reticle: {fileID: 780110115}
-  showDebugRay: 1
-  debugRayLength: 5
-  debugRayDuration: 1
-  rayLength: 500
---- !u!114 &780110115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 780110112}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 551d0324d0842d0428422d4ea213abe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectionDuration: 1
-  hideOnStart: 1
-  selectionReticle: {fileID: 1385249096}
 --- !u!1 &830160881
 GameObject:
   m_ObjectHideFlags: 0
