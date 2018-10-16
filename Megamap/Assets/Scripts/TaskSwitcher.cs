@@ -43,7 +43,7 @@ namespace Megamap {
                 task = "Bitte schaue auf das Ziel an der Wand.";
                 break;
             case Type.Searching:
-                task = "Suche den nächsten Raum.";
+                task = "Suche nach Raum mit niedrigstem Attribut.";
                 break;
             case Type.Pointing:
                 task = "Zeige dorthin, wo sich der ausgewählte Raum befindet.";
