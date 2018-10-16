@@ -1,27 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class LocationPin : MonoBehaviour {
+namespace Megamap {
 
-    [SerializeField]
-    private GameObject locationPinText;
+    public class LocationPin : MonoBehaviour {
 
-    public bool isTargetPin = false;
+        [SerializeField]
+        private GameObject locationPinText;
 
-    public void showLocationPinText(bool show)
-    {
-        locationPinText.SetActive(show);
-    }
+        // TODO: Rename this to something more semantic.
+        public int attribute = 0;
 
-    private void Start()
-    {
-        if (locationPinText == null) {
-            Debug.LogError("LocationPin: locationPinText reference not set; disabling script.");
-            enabled = false;
-            return;
+        private int roomNumber;
+
+        public void ShowLocationPinText(bool show)
+        {
+            locationPinText.SetActive(show);
         }
 
-        showLocationPinText(false);
+        private void Start()
+        {
+            if (locationPinText == null) {
+                Debug.LogError("LocationPin: locationPinText reference not set; disabling script.");
+                enabled = false;
+                return;
+            }
+
+            roomNumber = Random.Range(100, 1000);
+            var text = locationPinText.GetComponentInChildren<Text>();
+            text.text = "Room " + roomNumber + "\nAttribute: " + attribute;
+
+            ShowLocationPinText(false);
+        }
     }
+
 }
