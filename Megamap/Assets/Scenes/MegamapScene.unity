@@ -740,7 +740,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1142954767
 GameObject:
@@ -844,6 +844,11 @@ Prefab:
     - target: {fileID: 4457109188305766, guid: 8502f82b3ea930844bfc4fe739a2edd8, type: 2}
       propertyPath: m_LocalScale.z
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114786805334776446, guid: 8502f82b3ea930844bfc4fe739a2edd8,
+        type: 2}
+      propertyPath: isTargetPin
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8502f82b3ea930844bfc4fe739a2edd8, type: 2}
@@ -1631,7 +1636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2021292864
 Transform:
   m_ObjectHideFlags: 0
@@ -1644,7 +1649,7 @@ Transform:
   m_Children:
   - {fileID: 294326122}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2021292865
 MonoBehaviour:
@@ -1652,13 +1657,11 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2021292863}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b663284355ac0bf4997a8ee2d4a96777, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b94856d8daef0448b44f04b94f508f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  map: {fileID: 0}
 --- !u!114 &2021292866
 MonoBehaviour:
   m_ObjectHideFlags: 0

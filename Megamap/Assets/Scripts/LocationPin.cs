@@ -19,6 +19,10 @@ namespace Megamap {
         [SerializeField]
         private GameObject locationPinInfo;
 
+        [SerializeField]
+        private bool isTargetPin = false;
+        public bool IsTargetPin { get { return isTargetPin; } set { isTargetPin = value; } }
+
         // TODO: Rename this to something more semantic.
         public int attribute = 0;
 
