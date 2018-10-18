@@ -90,62 +90,7 @@ namespace Megamap {
 
             taskDisplay.GetComponent<Text>().text = task;
         }
-
-        private void Update()
-        {
-            switch (currentType) {
-            case Type.UserPositionSetup:
-                HandleUserPositionSetup();
-                break;
-            case Type.UserGazeSetup:
-                HandleUserGazeSetup();
-                break;
-            case Type.Searching:
-                HandleSearching();
-                break;
-            case Type.Pointing:
-                HandlePointing();
-                break;
-            default:
-                break;
-            }
-        }
-
-        private void HandleUserPositionSetup()
-        {
-            var floorTarget = userPositionSetupTask.gameObject.GetComponentInChildren<FloorTarget>();
-            if (floorTarget.OnTarget) {
-                SwitchTask(Type.UserGazeSetup);
-            }
-        }
-
-        private void HandleUserGazeSetup()
-        {
-            var floorTarget = userPositionSetupTask.gameObject.GetComponentInChildren<FloorTarget>();
-            var wallTarget = userPositionSetupTask.gameObject.GetComponentInChildren<WallTarget>();
-
-            // If user steps off floor target before completing gaze setup, return to position setup.
-            if (!floorTarget.OnTarget) {
-                SwitchTask(Type.UserPositionSetup);
-                return;
-            }
-
-            // User stands on floor target. If looking at wall target, continue to searching.
-            if (wallTarget.OnTarget) {
-                SwitchTask(Type.Searching);
-            }
-        }
-
-        private void HandleSearching()
-        {
-            // TODO: Implement.
-        }
-
-        private void HandlePointing()
-        {
-            // TODO: Implement.
-        }
-
+                
         private void DisableOnError(string message)
         {
             Debug.LogError("TaskSwitcher: " + message + " Disabling script.");
