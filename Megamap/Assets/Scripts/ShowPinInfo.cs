@@ -42,7 +42,9 @@ namespace Megamap {
             GrabTypes startingGrabType = hand.GetGrabStarting();
             //bool isGrabEnding = hand.IsGrabEnding(this.gameObject);
 
-            if (interactable.attachedToHand == null && startingGrabType != GrabTypes.None) {
+            // The GetMouseButtonDown(0) is a workaround for left-click not working currently with SteamVRs fallback hand (in 2D-mode).
+            if ((interactable.attachedToHand == null && startingGrabType != GrabTypes.None)
+                || Input.GetMouseButtonDown(0)) {
                 bool alreadyShown = pin.IsInfoShown();
                 LocationPin.HideAllInfos();
                 if (!alreadyShown) {
