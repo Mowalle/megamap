@@ -23,6 +23,13 @@ namespace Megamap {
         private bool isTargetPin = false;
         public bool IsTargetPin { get { return isTargetPin; } set { isTargetPin = value; } }
 
+        [SerializeField]
+        private Button acceptButton;
+        [SerializeField]
+        private Color normalColor;
+        [SerializeField]
+        private Color errorColor;
+
         // TODO: Rename this to something more semantic.
         public int attribute = 0;
 
@@ -32,6 +39,8 @@ namespace Megamap {
 
         public void ShowInfo(bool show)
         {
+            locationPinInfo.GetComponent<Image>().color = normalColor;
+            acceptButton.interactable = true;
             locationPinInfo.SetActive(show);
         }
 
@@ -47,6 +56,8 @@ namespace Megamap {
 
             // Selected pin is not correct.
             if (attribute != minimum) {
+                locationPinInfo.GetComponent<Image>().color = errorColor;
+                acceptButton.interactable = false;
                 return;
             }
 
