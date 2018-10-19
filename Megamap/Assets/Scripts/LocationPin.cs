@@ -56,6 +56,7 @@ namespace Megamap {
 
             // Selected pin is not correct.
             if (attribute != minimum) {
+                FindObjectOfType<TaskSwitcher>().SetTaskDescription("Raum hat nicht das niedrigste Attribut. Versuche es weiter.");
                 locationPinInfo.GetComponent<Image>().color = errorColor;
                 acceptButton.interactable = false;
                 return;

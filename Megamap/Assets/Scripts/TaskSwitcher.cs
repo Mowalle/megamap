@@ -29,6 +29,11 @@ namespace Megamap {
         [SerializeField]
         private GameObject pointingTask;
 
+        public void SetTaskDescription(string description)
+        {
+            taskDisplay.GetComponent<Text>().text = description;
+        }
+
         private void Start()
         {
             if (taskDisplay == null) {
@@ -59,36 +64,31 @@ namespace Megamap {
         {
             currentType = taskType;
 
-            string task = "";
             switch (currentType) {
             case Type.UserPositionSetup:
-                task = "Bitte stelle dich auf das 'X'.";
                 userPositionSetupTask.SetActive(true);
                 megamapTask.SetActive(false);
                 pointingTask.SetActive(false);
                 break;
             case Type.UserGazeSetup:
-                task = "Bitte schaue auf das Ziel an der Wand.";
                 userPositionSetupTask.SetActive(true);
                 megamapTask.SetActive(false);
                 pointingTask.SetActive(false);
                 break;
             case Type.Searching:
-                task = "Suche nach Raum mit niedrigstem Attribut.";
+                //task = "Suche nach Raum mit niedrigstem Attribut.";
                 userPositionSetupTask.SetActive(false);
                 megamapTask.SetActive(true);
                 pointingTask.SetActive(false);
                 break;
             case Type.Pointing:
-                task = "Zeige dorthin, wo sich der ausgewählte Raum befindet.";
+                //task = "Zeige dorthin, wo sich der ausgewählte Raum befindet.";
                 userPositionSetupTask.SetActive(false);
                 megamapTask.SetActive(false);
                 pointingTask.SetActive(true);
                 break;
             default: break;
             }
-
-            taskDisplay.GetComponent<Text>().text = task;
         }
                 
         private void DisableOnError(string message)

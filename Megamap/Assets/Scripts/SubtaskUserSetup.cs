@@ -26,10 +26,12 @@ namespace Megamap {
         private void Update()
         {
             if (floorTarget.OnTarget) {
+                switcher.SetTaskDescription("Bitte schaue auf das Ziel an der Wand.");
                 switcher.SwitchTask(TaskSwitcher.Type.UserGazeSetup);
             }
             else {
                 // If user steps off floor target before completing gaze setup, return to position setup.
+                switcher.SetTaskDescription("Bitte stelle dich auf das 'X'.");
                 switcher.SwitchTask(TaskSwitcher.Type.UserPositionSetup);
                 return;
             }
