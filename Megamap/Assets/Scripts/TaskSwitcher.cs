@@ -76,13 +76,11 @@ namespace Megamap {
                 pointingTask.SetActive(false);
                 break;
             case Type.Searching:
-                //task = "Suche nach Raum mit niedrigstem Attribut.";
                 userPositionSetupTask.SetActive(false);
                 megamapTask.SetActive(true);
                 pointingTask.SetActive(false);
                 break;
             case Type.Pointing:
-                //task = "Zeige dorthin, wo sich der ausgewählte Raum befindet.";
                 userPositionSetupTask.SetActive(false);
                 megamapTask.SetActive(false);
                 pointingTask.SetActive(true);
