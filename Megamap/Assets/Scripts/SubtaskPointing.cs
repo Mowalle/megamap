@@ -32,7 +32,7 @@ namespace Megamap {
 
         private void Update()
         {
-            if (acceptAction.GetStateDown(hand.handType)) {
+            if (acceptAction.GetStateDown(hand.handType) || Input.GetMouseButtonDown(0)) {
                 if (!laserLocked) {
                     laserLocked = true;
                     FindObjectOfType<TaskSwitcher>().SetTaskDescription(confirmation);
@@ -45,7 +45,7 @@ namespace Megamap {
                     FindObjectOfType<TaskSwitcher>().SwitchTask(TaskSwitcher.Type.UserPositionSetup);
                 }
             }
-            else if (backAction.GetStateDown(hand.handType) && laserLocked) {
+            else if ((backAction.GetStateDown(hand.handType) || Input.GetKeyDown(KeyCode.Backspace)) && laserLocked) {
                 laserLocked = false;
                 FindObjectOfType<TaskSwitcher>().SetTaskDescription(taskDescription);
             }
