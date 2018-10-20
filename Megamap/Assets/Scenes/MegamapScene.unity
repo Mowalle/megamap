@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -338,12 +338,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Valve.VR.SteamVR_Behaviour_PoseEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &321309855 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 11497470, guid: dc06161b6d97feb419f45f03b62e14b9,
-    type: 2}
-  m_PrefabInternal: {fileID: 986415472}
-  m_Script: {fileID: 11500000, guid: 29e3e4511966ba94d8ba0b98c6c62f82, type: 3}
 --- !u!4 &463444890 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4457109188305766, guid: 8502f82b3ea930844bfc4fe739a2edd8,
@@ -462,7 +456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa4d1c4048cbc6c478f2496246f7419d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preferredHandType: 0
+  preferredHandType: 1
 --- !u!1 &741686157
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,8 +960,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   action: {fileID: 11400000, guid: e65a609441703984eb7d2bdcf7dc7153, type: 2}
-  hand: {fileID: 321309855}
-  laser: {fileID: 1322444538}
+  laser: {fileID: 1322444540}
+  preferredHandType: 2
 --- !u!1 &1142954767
 GameObject:
   m_ObjectHideFlags: 0
