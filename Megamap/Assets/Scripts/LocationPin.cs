@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using Valve.VR.InteractionSystem;
 
 namespace Megamap {
 
+    [System.Serializable]
+    public class LocationPinEvent : UnityEvent<LocationPin> { }
+
     public class LocationPin : MonoBehaviour {
 
-        public static void HideAllInfos()
-        {
-            var pins = FindObjectsOfType<LocationPin>();
-            foreach (LocationPin pin in pins) {
-                pin.ShowInfo(false);
-            }
-        }
+        public LocationPinEvent OnSelected = new LocationPinEvent();
+
+        public enum Status { Normal, Error }
 
         [SerializeField]
         private GameObject locationPinInfo;
 
-        [SerializeField]
-        private bool isTargetPin = false;
-        public bool IsTargetPin { get { return isTargetPin; } set { isTargetPin = value; } }
+        public bool isTargetPin = false;
 
         [SerializeField]
         private Button acceptButton;
@@ -32,68 +31,48 @@ namespace Megamap {
 
         // TODO: Rename this to something more semantic.
         public int attribute = 0;
+        public int roomNumber;
 
-        private int roomNumber;
-
-        public bool IsInfoShown() { return locationPinInfo.activeSelf; }
+        public void Select()
+        {
+            OnSelected.Invoke(this);
+        }
 
         public void ShowInfo(bool show)
         {
             if (show) {
                 // Reset info display in case pin was wrongly selected before.
-                locationPinInfo.GetComponent<Image>().color = normalColor;
-                acceptButton.interactable = true;
+                SetStatus(Status.Normal);
 
                 // Initially, rotate canvas towards user's view.
                 var canvas = transform.Find("Canvas");
                 canvas.LookAt(Camera.main.transform);
+
+                // Update string in case something changed.
+                var text = locationPinInfo.GetComponentInChildren<Text>();
+                text.text = "Room " + roomNumber + "\nAttribute: " + attribute;
             }
 
             locationPinInfo.SetActive(show);
         }
 
-        public void CheckIsCorrectPin()
+        public bool IsInfoShown()
         {
-            var pins = FindObjectsOfType<LocationPin>();
-            if (pins.Length == 0) {
-                Debug.LogError("LocationPin: No LocationPins found in scene.");
-                return;
+            return locationPinInfo.activeSelf;
+        }
+
+        public void SetStatus(Status status)
+        {
+            if (status == Status.Normal) {
+                locationPinInfo.GetComponent<Image>().color = normalColor;
+                acceptButton.interactable = true;
             }
-
-            var minimum = pins.Min(p => p.attribute);
-
-            // Selected pin is not correct.
-            if (attribute != minimum) {
-                FindObjectOfType<TaskSwitcher>().SetTaskDescription("Raum hat nicht das niedrigste Attribut. Versuche es weiter.");
+            else {
                 locationPinInfo.GetComponent<Image>().color = errorColor;
                 acceptButton.interactable = false;
-                return;
             }
-
-            var taskSwitcher = FindObjectOfType<TaskSwitcher>();
-            if (taskSwitcher == null) {
-                Debug.LogError("LocationPin: TaskSwitcher not found in scene.");
-                return;
-            }
-
-            taskSwitcher.SwitchTask(TaskSwitcher.Type.Pointing);
         }
-
-        private void Start()
-        {
-            if (locationPinInfo == null) {
-                Debug.LogError("LocationPin: locationPinText reference not set; disabling script.");
-                enabled = false;
-                return;
-            }
-
-            roomNumber = Random.Range(100, 1000);
-            var text = locationPinInfo.GetComponentInChildren<Text>();
-            text.text = "Room " + roomNumber + "\nAttribute: " + attribute;
-
-            ShowInfo(false);
-        }
-
+        
         private void Update()
         {
             // When the user moves behind canvas, contents would be shown mirrored.

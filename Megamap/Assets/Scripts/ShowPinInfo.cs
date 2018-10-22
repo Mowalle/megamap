@@ -45,9 +45,13 @@ namespace Megamap {
             // The GetMouseButtonDown(0) is a workaround for left-click not working currently with SteamVRs fallback hand (in 2D-mode).
             if ((interactable.attachedToHand == null && startingGrabType != GrabTypes.None)
                 || Input.GetMouseButtonDown(0)) {
-                bool alreadyShown = pin.IsInfoShown();
-                LocationPin.HideAllInfos();
-                if (!alreadyShown) {
+                bool shownBefore = pin.IsInfoShown();
+
+                // Hide all other pins.
+                foreach (LocationPin lPin in FindObjectsOfType<LocationPin>()) {
+                    lPin.ShowInfo(false);
+                }
+                if (!shownBefore) {
                     pin.ShowInfo(true);
                 }
             }

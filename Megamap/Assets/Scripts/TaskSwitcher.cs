@@ -29,6 +29,10 @@ namespace Megamap {
         [SerializeField]
         private GameObject pointingTask;
 
+        [Header("Maps"), Space]
+        public GameObject[] indoorMaps;
+        private int currentMap = 0;
+
         public void SetTaskDescription(string description)
         {
             taskDisplay.GetComponent<Text>().text = description;
@@ -56,6 +60,18 @@ namespace Megamap {
                 return;
             }
 
+            if (indoorMaps == null || indoorMaps.Length == 0) {
+                DisableOnError("No maps set");
+                return;
+            }
+
+            foreach (var map in indoorMaps) {
+                if (map == null) {
+                    DisableOnError("One of the maps is null");
+                    return;
+                }
+            }
+
             // Enable first task.
             SwitchTask(currentType);
         }
@@ -77,6 +93,9 @@ namespace Megamap {
                 break;
             case Type.Searching:
                 userPositionSetupTask.SetActive(false);
+                // Sets next map (wraps around to first one).
+                megamapTask.GetComponent<SubtaskMegamap>().SetMap(indoorMaps[currentMap % indoorMaps.Length]);
+                ++currentMap;
                 megamapTask.SetActive(true);
                 pointingTask.SetActive(false);
                 break;

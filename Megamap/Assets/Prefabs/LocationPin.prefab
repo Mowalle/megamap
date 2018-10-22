@@ -831,7 +831,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114786805334776446}
-        m_MethodName: CheckIsCorrectPin
+        m_MethodName: Select
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -881,12 +881,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4641199a400e2d94790e405b4a418479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnSelected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Megamap.LocationPinEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   locationPinInfo: {fileID: 1056733561951998}
   isTargetPin: 0
   acceptButton: {fileID: 114615755040767370}
   normalColor: {r: 0.30286577, g: 0.5894191, b: 0.7735849, a: 1}
   errorColor: {r: 0.8679245, g: 0.46262014, b: 0.46262014, a: 1}
   attribute: 0
+  roomNumber: 0
 --- !u!114 &114869311118534050
 MonoBehaviour:
   m_ObjectHideFlags: 1
