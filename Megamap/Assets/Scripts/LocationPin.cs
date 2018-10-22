@@ -89,6 +89,16 @@ namespace Megamap {
 
             ShowInfo(false);
         }
+
+        private void Update()
+        {
+            // When the user moves behind canvas, contents would be shown mirrored.
+            // So we rotate canvas by 180 degrees.
+            var canvas = transform.Find("Canvas");
+            if (Vector3.Dot(Camera.main.transform.forward, canvas.forward) < 0f) {
+                canvas.GetComponent<RectTransform>().Rotate(0f, 180f, 0f);
+            }
+        }
     }
 
 }
