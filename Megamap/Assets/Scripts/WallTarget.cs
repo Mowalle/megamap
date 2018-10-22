@@ -9,8 +9,13 @@ namespace Megamap {
         private bool onTarget = false;
         public bool OnTarget
         { get { return onTarget; } }
-        
-        void Update()
+
+        private void OnEnable()
+        {
+            onTarget = false;
+        }
+
+        private void Update()
         {
             // Only execute when player should look at wall target.
             var floorTarget = FindObjectOfType<FloorTarget>();

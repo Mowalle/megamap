@@ -18,6 +18,8 @@ namespace Megamap {
             Debug.Log("Starting the subtask \"Megamap\"");
             FindObjectOfType<TaskSwitcher>().SetTaskDescription("Finde den Raum mit dem niedrigsten Attribut.");
 
+            LocationPin.HideAllInfos();
+
             if (maxTargetAttributeValue <= 0) {
                 Debug.LogWarning("SubtaskMegamap: Invalid maxTargetAttributeValue <= 0. Using 1 instead.");
                 maxTargetAttributeValue = 1;

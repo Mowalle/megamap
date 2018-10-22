@@ -10,6 +10,11 @@ namespace Megamap {
         public bool OnTarget
         { get { return onTarget; } }
 
+        private void OnEnable()
+        {
+            onTarget = false;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             onTarget = true;
