@@ -408,9 +408,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a17c0b73c9c379147928fe0a3ce16531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamapConfig: {fileID: 2021292866}
   labReferenceTransform: {fileID: 261835103}
-  mapReferenceTransform: {fileID: 416282860}
-  cam: {fileID: 0}
+  mapReferenceTransform: {fileID: 0}
 --- !u!1 &416282859
 GameObject:
   m_ObjectHideFlags: 0

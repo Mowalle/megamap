@@ -5,28 +5,44 @@ using UnityEngine;
 namespace Megamap {
 
     public class UserMarker : MonoBehaviour {
-        
+
+        [SerializeField]
+        private MegamapConfiguration megamapConfig;
         [SerializeField]
         private Transform labReferenceTransform;
         [SerializeField]
         private Transform mapReferenceTransform;
-        [SerializeField]
-        private Camera cam;
 
         private void Start()
         {
-            if (cam == null) {
-                cam = Camera.main;
+            if (megamapConfig == null) {
+                Debug.LogError("UserMarker: No reference to Megamap; disabling object.");
+                gameObject.SetActive(false);
+                return;
+            }
+
+            if (labReferenceTransform == null) {
+                Debug.LogError("UserMarker: No reference to lab reference point; disabling object.");
+                gameObject.SetActive(false);
+                return;
             }
         }
 
         private void Update()
         {
-            var megamapConfig = FindObjectOfType<MegamapConfiguration>();
-            if (megamapConfig == null) {
-                Debug.LogError("UserMarker: No Megamap object found.");
-                return;
+            if (mapReferenceTransform == null) {
+                var point = megamapConfig.Map.transform.Find("ReferencePoint");
+                if (point != null) {
+                    mapReferenceTransform = point.transform;
+                }
+                else {
+                    Debug.LogError("UserMarker: Map reference point cannot be found; disabling object.");
+                    gameObject.SetActive(false);
+                    return;
+                }
             }
+
+            Camera cam = Camera.main;
 
             var offset = cam.transform.position - labReferenceTransform.position;
             var newPosition = mapReferenceTransform.position + offset * megamapConfig.scale;
