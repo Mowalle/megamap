@@ -39,13 +39,17 @@ namespace Megamap {
 
         public void ShowInfo(bool show)
         {
-            locationPinInfo.SetActive(show);
-
             if (show) {
                 // Reset info display in case pin was wrongly selected before.
                 locationPinInfo.GetComponent<Image>().color = normalColor;
                 acceptButton.interactable = true;
+
+                // Initially, rotate canvas towards user's view.
+                var canvas = transform.Find("Canvas");
+                canvas.LookAt(Camera.main.transform);
             }
+
+            locationPinInfo.SetActive(show);
         }
 
         public void CheckIsCorrectPin()
