@@ -11,6 +11,9 @@ namespace Megamap {
         [SerializeField]
         private SteamVR_Input_Sources preferredHandType = SteamVR_Input_Sources.LeftHand;
 
+        [SerializeField, Range(0f, 90f)]
+        private float displayAngle = 45f;
+
         // Need to use LateUpdate() to follow hand because otherwise hand's position will be constant
         // (probably because it is moved in a script each Update()).
         private void LateUpdate()
@@ -19,6 +22,7 @@ namespace Megamap {
 
             transform.position = hand.transform.position + hand.transform.TransformDirection(Vector3.up * 0.1f);
             transform.rotation = hand.transform.rotation;
+            transform.Rotate(displayAngle, 0f, 0f);
         }
 
         private Hand GetTargetHand()
