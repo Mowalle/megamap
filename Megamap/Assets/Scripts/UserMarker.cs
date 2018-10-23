@@ -45,7 +45,7 @@ namespace Megamap {
             Camera cam = Camera.main;
 
             var offset = cam.transform.position - labReferenceTransform.position;
-            var newPosition = mapReferenceTransform.position + offset * megamap.scale;
+            var newPosition = mapReferenceTransform.localPosition + offset * megamap.scale;
             transform.localPosition = new Vector3(newPosition.x, megamap.heightOffset, newPosition.z);
 
             transform.rotation = Quaternion.Euler(0f, cam.transform.rotation.eulerAngles.y, 0f);
