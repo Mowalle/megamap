@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Megamap {
 
@@ -13,13 +11,13 @@ namespace Megamap {
         [SerializeField]
         private int maxAttributeValue = 1000;
 
+        public Megamap map;
+
         private void OnEnable()
         {
             Debug.Log("Starting the subtask \"Megamap\"");
             FindObjectOfType<TaskSwitcher>().SetTaskDescription("Finde den Raum mit dem niedrigsten Attribut.");
-
-            LocationPin.HideAllInfos();
-
+            
             if (maxTargetAttributeValue <= 0) {
                 Debug.LogWarning("SubtaskMegamap: Invalid maxTargetAttributeValue <= 0. Using 1 instead.");
                 maxTargetAttributeValue = 1;
@@ -31,14 +29,40 @@ namespace Megamap {
                                  + ". Using " + maxAttributeValue + " instead (not a good value).");
             }
 
-            // Determine target pins' attribute value.
-            var targetValue = Random.Range(absoluteMinimum, maxTargetAttributeValue + 1);
-            var pins = FindObjectsOfType<LocationPin>();
-            foreach (LocationPin pin in pins) {
-                pin.attribute = pin.IsTargetPin ? targetValue : Random.Range(maxTargetAttributeValue + 1, maxAttributeValue);
+            // Determine target pins' attribute value (pseudo-randomize).
+            int targetValue = Random.Range(absoluteMinimum, maxTargetAttributeValue + 1);
+            foreach (LocationPin pin in map.LocationPins) {
+                pin.roomNumber = Random.Range(100, 1000);
+                pin.attribute = pin.isTargetPin ? targetValue : Random.Range(maxTargetAttributeValue + 1, maxAttributeValue);
+                pin.OnSelected.AddListener(CheckIsCorrectPin);
             }
         }
 
+        private void OnDisable()
+        {
+            foreach (LocationPin pin in map.LocationPins) {
+                pin.OnSelected.RemoveListener(CheckIsCorrectPin);
+            }
+        }
+
+        private void CheckIsCorrectPin(LocationPin pin)
+        {
+            var taskSwitcher = FindObjectOfType<TaskSwitcher>();
+
+            // Selected pin is not correct.
+            if (!pin.isTargetPin) {
+                taskSwitcher.SetTaskDescription("Raum hat nicht das niedrigste Attribut. Versuche es weiter.");
+                pin.SetStatus(LocationPin.Status.Error);
+                return;
+            }
+
+            taskSwitcher.SwitchTask(TaskSwitcher.Type.Pointing);
+        }
+
+        public void SetMap(GameObject map)
+        {
+            this.map.Map = map;
+        }
     }
 
 }
