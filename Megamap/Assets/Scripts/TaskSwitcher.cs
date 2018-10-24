@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -76,6 +77,7 @@ namespace Megamap {
             }
 
             // Setup first condition.
+            ShuffleMaps();
             conditionSwitcher.CurrentCondition = 0;
             // Enable first task.
             SwitchTask(currentType);
@@ -116,6 +118,7 @@ namespace Megamap {
             if (CurrentType == Type.UserPositionSetup
                 && (currentMap >= indoorMaps.Length)
                 && (currentMap % indoorMaps.Length == 0)) {
+                ShuffleMaps();
                 ++conditionSwitcher.CurrentCondition;
             }
         }
@@ -124,6 +127,12 @@ namespace Megamap {
         {
             Debug.LogError("TaskSwitcher: " + message + " Disabling script.");
             enabled = false;
+        }
+
+        private void ShuffleMaps()
+        {
+            System.Random rnd = new System.Random();
+            indoorMaps = new List<GameObject>(indoorMaps).OrderBy(x => rnd.Next()).ToArray();
         }
     }
 
