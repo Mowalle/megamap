@@ -1,5 +1,6 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Megamap {
@@ -22,6 +23,7 @@ namespace Megamap {
 
         private void Awake()
         {
+            ShuffleConditions();
             CurrentCondition = 0;
         }
 
@@ -35,6 +37,12 @@ namespace Megamap {
             megamap.heightOffset = conditions[currentCondition].z;
 
             currentCondition = condition;
+        }
+
+        private void ShuffleConditions()
+        {
+            System.Random rnd = new System.Random();
+            conditions = new List<Vector3>(conditions).OrderBy(x => rnd.Next()).ToArray();
         }
     }
 
