@@ -11,6 +11,9 @@ namespace Megamap {
             UserPositionSetup, UserGazeSetup, Searching, Pointing
         }
 
+        [SerializeField]
+        private ConditionSwitcher conditionSwitcher;
+
         private Type currentType = Type.UserPositionSetup;
         public Type CurrentType
         {
@@ -72,6 +75,8 @@ namespace Megamap {
                 }
             }
 
+            // Setup first condition.
+            conditionSwitcher.CurrentCondition = 0;
             // Enable first task.
             SwitchTask(currentType);
         }
@@ -105,6 +110,13 @@ namespace Megamap {
                 pointingTask.SetActive(true);
                 break;
             default: break;
+            }
+
+            // If we completed all maps once, switch to next condition.
+            if (CurrentType == Type.UserPositionSetup
+                && (currentMap >= indoorMaps.Length)
+                && (currentMap % indoorMaps.Length == 0)) {
+                ++conditionSwitcher.CurrentCondition;
             }
         }
                 
