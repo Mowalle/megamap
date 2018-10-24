@@ -1,28 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Megamap {
 
     public class FloorTarget : MonoBehaviour {
 
-        private bool onTarget = false;
-        public bool OnTarget
-        { get { return onTarget; } }
-
-        private void OnEnable()
-        {
-            onTarget = false;
-        }
-
+        public UnityEvent OnTargetEnter = new UnityEvent();
+        public UnityEvent OnTargetExit = new UnityEvent();
+        
         private void OnTriggerEnter(Collider other)
         {
-            onTarget = true;
+            OnTargetEnter.Invoke();
         }
 
         private void OnTriggerExit(Collider other)
         {
-            onTarget = false;
+            OnTargetExit.Invoke();
         }
     }
 
