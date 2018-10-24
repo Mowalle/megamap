@@ -25,6 +25,7 @@ namespace Megamap {
             }
 
             var cam = Camera.main;
+            Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 50.0f, Color.magenta, 3.0f);
             RaycastHit hit;
             // Is the player looking at this wall target? -> Start with search task.
             if (Physics.Raycast(cam.transform.position, cam.transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity)) {
