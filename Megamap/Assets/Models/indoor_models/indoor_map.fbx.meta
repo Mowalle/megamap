@@ -389,6 +389,11 @@ ModelImporter:
     100766: WindowFrame.022
     100768: WindowFrame.023
     100770: WindowFrame_Template
+    100772: Baseboard.020
+    100774: Column
+    100776: Hallway_Wall.000
+    100778: Hallway_Wall.001
+    100780: Hallway_Wall.002
     400000: Baseboard
     400002: Baseboard.000
     400004: Baseboard.001
@@ -775,6 +780,11 @@ ModelImporter:
     400766: WindowFrame.022
     400768: WindowFrame.023
     400770: WindowFrame_Template
+    400772: Baseboard.020
+    400774: Column
+    400776: Hallway_Wall.000
+    400778: Hallway_Wall.001
+    400780: Hallway_Wall.002
     2100000: WallMaterial
     2100002: No Name
     2100004: DoorFrameMaterial
@@ -1121,6 +1131,11 @@ ModelImporter:
     2300664: WindowFrame.022
     2300666: WindowFrame.023
     2300668: WindowFrame_Template
+    2300670: Baseboard.020
+    2300672: Column
+    2300674: Hallway_Wall.000
+    2300676: Hallway_Wall.001
+    2300678: Hallway_Wall.002
     3300000: Baseboard
     3300002: Baseboard.000
     3300004: Baseboard.001
@@ -1456,6 +1471,11 @@ ModelImporter:
     3300664: WindowFrame.022
     3300666: WindowFrame.023
     3300668: WindowFrame_Template
+    3300670: Baseboard.020
+    3300672: Column
+    3300674: Hallway_Wall.000
+    3300676: Hallway_Wall.001
+    3300678: Hallway_Wall.002
     4300000: Room.003
     4300002: CTRL_Baseboard.023
     4300004: CTRL_Hole.023
@@ -1607,6 +1627,11 @@ ModelImporter:
     4300296: Floor
     4300298: Baseboard
     4300300: Handle_Template
+    4300302: Hallway_Wall.002
+    4300304: Hallway_Wall.001
+    4300306: Hallway_Wall.000
+    4300308: Baseboard.020
+    4300310: Column
   externalObjects:
   - first:
       type: UnityEngine:Material
