@@ -37,3 +37,6 @@ sysinfo.txt
 
 # Ignore Unity3D Test Scene; used for making intermediate changes.
 TestScene.unity*
+
+# Blender Backup Files
+*.blend[0123456789]*
