@@ -22,9 +22,8 @@ namespace Megamap {
         public float heightOffset = 0f;
 
         [Header("User Marker Settings"), Space]
-        public UserMarker userMarker;
-        public Transform labReferenceTransform;
-        public Transform mapReferencePoint;
+        [SerializeField]
+        private UserMarker userMarker;
 
         public LocationPin[] LocationPins
         {
@@ -50,20 +49,15 @@ namespace Megamap {
             this.map.transform.SetParent(transform);
             this.map.transform.localPosition = Vector3.zero;
             this.map.SetActive(true);
-
-            if (mapReferencePoint == null) {
-                mapReferencePoint = this.map.transform.Find("ReferencePoint");
-            }
-
+            
+            var mapReferencePoint = this.map.transform.Find("ReferencePoint");
             if (mapReferencePoint == null) {
                 Debug.LogWarning("Megamap: Map does not contain a child named \"ReferencePoint\". Disabling UserMarker.");
-                userMarker.gameObject.SetActive(false);
-            }
-            else if (labReferenceTransform == null) {
-                Debug.LogWarning("Megamap: No reference transform to lab environment given. Disabling UserMarker.");
+                userMarker.MapReferenceTransform = null;
                 userMarker.gameObject.SetActive(false);
             }
             else {
+                userMarker.MapReferenceTransform = mapReferencePoint;
                 userMarker.gameObject.SetActive(true);
             }
             
