@@ -88,6 +88,11 @@ namespace Megamap {
 
             // Apply height offset.
             map.transform.position = new Vector3(map.transform.position.x, heightOffset, map.transform.position.z);
+
+            // "Fix" scaling of LocationPins.
+            foreach (var pin in LocationPins) {
+                pin.transform.localScale = new Vector3(1f, (100f / wallHeight) * scale, 1f);
+            }
         }
     }
 
