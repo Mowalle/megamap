@@ -12,13 +12,13 @@ namespace Megamap {
         private Transform previousParent;
         public GameObject Map { get { return map; } set { SetMap(value); } }
 
-        [Range(0f, 1f)]
+        [Range(0.01f, 1f)]
         public float scale = 1f;
 
-        [Range(0, 100)]
+        [Range(1, 100)]
         public int wallHeight = 10;
 
-        [Range(0f, 1.5f)]
+        [Range(0.1f, 1.5f)]
         public float heightOffset = 0f;
 
         [Header("User Marker Settings"), Space]
