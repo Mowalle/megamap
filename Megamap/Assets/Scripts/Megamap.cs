@@ -21,6 +21,10 @@ namespace Megamap {
         [Range(0.1f, 1.5f)]
         public float heightOffset = 0f;
 
+        public bool placeAtPlayerOnEnable = true;
+
+        public Transform labReferenceTransform;
+
         [Header("User Marker Settings"), Space]
         [SerializeField]
         private UserMarker userMarker;
@@ -68,6 +72,19 @@ namespace Megamap {
             }
         }
 
+        public void PlaceAtPlayer()
+        {
+            if (map == null) {
+                return;
+            }
+
+            var player = Camera.main;
+            var offset = player.transform.position - labReferenceTransform.position;
+            offset *= scale;
+
+            map.transform.position = player.transform.position - offset;
+        }
+
         private void Awake()
         {
             if (map != null) {
@@ -75,10 +92,19 @@ namespace Megamap {
             }
         }
 
-        private void Update()
+        private void OnEnable()
+        {
+            UpdateMapTransform();
+        }
+
+        private void UpdateMapTransform()
         {
             // Apply room and wall scale.
             map.transform.localScale = new Vector3(scale, wallHeight / 100f, scale);
+
+            if (placeAtPlayerOnEnable) {
+                PlaceAtPlayer();
+            }
 
             // Apply height offset.
             map.transform.position = new Vector3(map.transform.position.x, heightOffset, map.transform.position.z);

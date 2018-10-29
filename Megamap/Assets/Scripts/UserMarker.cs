@@ -8,8 +8,6 @@ namespace Megamap {
 
         [SerializeField]
         Megamap megamap;
-        [SerializeField]
-        Transform labReferenceTransform;
 
         public Transform MapReferenceTransform { get; set; }
 
@@ -19,7 +17,7 @@ namespace Megamap {
 
             transform.position = new Vector3(MapReferenceTransform.position.x, megamap.heightOffset, MapReferenceTransform.position.z);
 
-            var offset = (cam.transform.position - labReferenceTransform.position) * megamap.scale;
+            var offset = (cam.transform.position - megamap.labReferenceTransform.position) * megamap.scale;
             transform.localPosition += new Vector3(offset.x, 0f, offset.z);
 
             transform.localRotation = Quaternion.Euler(0f, cam.transform.rotation.eulerAngles.y, 0f);
