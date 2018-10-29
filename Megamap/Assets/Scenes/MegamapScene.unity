@@ -4582,6 +4582,10 @@ MonoBehaviour:
   pointingTask: {fileID: 1085460555}
   indoorMaps:
   - {fileID: 1307545847}
+  - {fileID: 1612664325}
+  - {fileID: 1233490120}
+  - {fileID: 1950305823}
+  - {fileID: 1368999350}
 --- !u!1001 &1747886925
 Prefab:
   m_ObjectHideFlags: 0
