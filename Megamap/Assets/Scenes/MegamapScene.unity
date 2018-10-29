@@ -4526,15 +4526,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   megamap: {fileID: 592777135}
+  conditionsJson: {fileID: 4900000, guid: f30838d574e878044bcccc9566b6f47e, type: 3}
   conditions:
-  - {x: 0.05, y: 3, z: 0.5}
-  - {x: 0.05, y: 10, z: 0.5}
-  - {x: 0.05, y: 3, z: 1.2}
-  - {x: 0.05, y: 10, z: 1.2}
-  - {x: 0.1, y: 3, z: 0.5}
-  - {x: 0.1, y: 10, z: 0.5}
-  - {x: 0.1, y: 3, z: 1.2}
-  - {x: 0.1, y: 10, z: 1.2}
+  - scale: 0
+    wallHeight: 0
+    heightOffset: 0
+  - scale: 0
+    wallHeight: 0
+    heightOffset: 0
+  - scale: 0
+    wallHeight: 0
+    heightOffset: 0
+  - scale: 0
+    wallHeight: 0
+    heightOffset: 0
+  - scale: 0
+    wallHeight: 0
+    heightOffset: 0
+  - scale: 0
+    wallHeight: 0
+    heightOffset: 0
+  - scale: 0
+    wallHeight: 0
+    heightOffset: 0
+  - scale: 0
+    wallHeight: 0
+    heightOffset: 0
 --- !u!1 &1733977610
 GameObject:
   m_ObjectHideFlags: 0

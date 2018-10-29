@@ -1,0 +1,44 @@
+{
+    "conditions": [
+        {
+            "scale": 0.1,
+            "wallHeight": 10,
+            "heightOffset": 1.2
+        },
+        {
+            "scale": 0.1,
+            "wallHeight": 10,
+            "heightOffset": 1.2
+        },
+        {
+            "scale": 0.1,
+            "wallHeight": 10,
+            "heightOffset": 1.2
+        },
+        {
+            "scale": 0.1,
+            "wallHeight": 10,
+            "heightOffset": 1.2
+        },
+        {
+            "scale": 0.1,
+            "wallHeight": 10,
+            "heightOffset": 1.2
+        },
+        {
+            "scale": 0.1,
+            "wallHeight": 10,
+            "heightOffset": 1.2
+        },
+        {
+            "scale": 0.1,
+            "wallHeight": 10,
+            "heightOffset": 1.2
+        },
+        {
+            "scale": 0.1,
+            "wallHeight": 10,
+            "heightOffset": 1.2
+        }
+    ]
+}
