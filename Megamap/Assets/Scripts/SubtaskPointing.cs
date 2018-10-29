@@ -12,8 +12,8 @@ namespace Megamap {
         public SteamVR_Action_Boolean backAction;
         public LineRenderer laser;
 
-        private string taskDescription = "Zeige dorthin, wo sich der ausgewählte Raum befindet.";
-        private string confirmation = "OK: Trigger\nKorrigieren: Trackpad";
+        private string taskDescription = "Zeige dorthin, wo sich der ausgewählte Raum befindet.\nBestätige die Richtung mit dem Trigger.";
+        private string confirmation = "Trigger: Annehmen\nTrackpad: Korrigieren";
 
         [SerializeField]
         private SteamVR_Input_Sources preferredHandType = SteamVR_Input_Sources.RightHand;

@@ -15,8 +15,8 @@ namespace Megamap {
 
         private TaskSwitcher switcher;
 
-        private string positionDescription = "Bitte stelle dich auf das 'X'.";
-        private string gazeDescription = "Bitte schaue auf das Ziel an der Wand.";
+        private string positionDescription = "Bitte stelle dich auf das Ziel ('X').";
+        private string gazeDescription = "Schaue das Ziel an, um den Test zu starten.";
 
         private void Awake()
         {
@@ -58,6 +58,7 @@ namespace Megamap {
 
         private void HandleFloorTargetExit()
         {
+            selectionRadial.Hide();
             floorTarget.gameObject.SetActive(true);
             wallTarget.gameObject.SetActive(false);
             switcher.SetTaskDescription(positionDescription);
