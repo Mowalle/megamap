@@ -57,15 +57,19 @@ namespace Megamap {
         {
             if (laserLocked)
                 return;
-            
-            if (!hand.gameObject.name.Equals("FallbackHand")) {
-                laser.SetPosition(0, hand.transform.position);
-                laser.SetPosition(1, hand.transform.TransformDirection(Vector3.forward * 2000));
-            }
-            else {
-                laser.SetPosition(0, Camera.main.transform.position);
-                laser.SetPosition(1, Camera.main.transform.position + Vector3.Normalize(hand.transform.position - Camera.main.transform.position) * 2000);
-            }
+
+
+            //if (!hand.gameObject.name.Equals("FallbackHand")) {
+            //    laser.SetPosition(0, hand.transform.position);
+            //    laser.SetPosition(1, hand.transform.TransformDirection(Vector3.forward * 2000));
+            //}
+            //else {
+            //    laser.SetPosition(0, Camera.main.transform.position);
+            //    laser.SetPosition(1, Camera.main.transform.position + Vector3.Normalize(hand.transform.position - Camera.main.transform.position) * 2000);
+            //}
+
+            laser.transform.position = hand.transform.position;
+            laser.transform.rotation = hand.transform.rotation;
         }
 
         // TODO: Same code as in HandDisplay -> Refactor?
