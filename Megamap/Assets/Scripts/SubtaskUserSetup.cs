@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Megamap {
 
@@ -35,13 +36,6 @@ namespace Megamap {
             floorTarget.gameObject.SetActive(true);
             wallTarget.gameObject.SetActive(false);
             selectionRadial.Hide();
-
-            // Re-Center task display and wall target to be in line with floor target.
-            var taskDisplay = FindObjectOfType<TaskDisplay>();
-            taskDisplay.transform.position = new Vector3(floorTarget.transform.position.x,
-                                                         taskDisplay.transform.position.y,
-                                                         taskDisplay.transform.position.z);
-
 
             wallTarget.transform.position = new Vector3(floorTarget.transform.position.x,
                                                         wallTarget.transform.position.y,
