@@ -13,16 +13,11 @@ namespace Megamap {
         [SerializeField]
         private VRStandardAssets.Utils.SelectionRadial selectionRadial;
 
-        private TaskSwitcher switcher;
-
         private string positionDescription = "Bitte stelle dich auf das Ziel ('X').";
         private string gazeDescription = "Schaue das Ziel an, um den Test zu starten.";
 
-        private void Awake()
-        {
-            switcher = FindObjectOfType<TaskSwitcher>();
-        }
-
+        private Task currentTask;
+        
         private void OnEnable()
         {
             Debug.Log("Starting the subtask \"User Setup\"");
@@ -33,7 +28,10 @@ namespace Megamap {
             wallTarget.OnTargetExit.AddListener(HandleWallTargetExit);
             selectionRadial.OnSelectionComplete += HandleSelectionComplete;
 
-            switcher.SetTaskDescription(positionDescription);
+            // Should return the only active task.
+            currentTask = FindObjectOfType<Task>();
+            currentTask.Description = positionDescription;
+
             floorTarget.gameObject.SetActive(true);
             wallTarget.gameObject.SetActive(false);
             selectionRadial.Hide();
@@ -52,8 +50,8 @@ namespace Megamap {
         {
             floorTarget.gameObject.SetActive(true);
             wallTarget.gameObject.SetActive(true);
-            switcher.SetTaskDescription(gazeDescription);
-            switcher.SwitchTask(TaskSwitcher.Type.UserGazeSetup);
+
+            currentTask.Description = gazeDescription;
         }
 
         private void HandleFloorTargetExit()
@@ -61,8 +59,8 @@ namespace Megamap {
             selectionRadial.Hide();
             floorTarget.gameObject.SetActive(true);
             wallTarget.gameObject.SetActive(false);
-            switcher.SetTaskDescription(positionDescription);
-            switcher.SwitchTask(TaskSwitcher.Type.UserPositionSetup);
+
+            currentTask.Description = positionDescription;
         }
 
         private void HandleWallTargetEnter()
@@ -73,12 +71,12 @@ namespace Megamap {
         private void HandleWallTargetExit()
         {
             selectionRadial.Hide();
-            switcher.SetTaskDescription(gazeDescription);
+            currentTask.Description = gazeDescription;
         }
 
         private void HandleSelectionComplete()
         {
-            switcher.SwitchTask(TaskSwitcher.Type.Searching);
+            currentTask.NextSubtask();
         }
     }
 

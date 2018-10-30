@@ -8,22 +8,23 @@ namespace Megamap {
     public class Megamap : MonoBehaviour {
 
         [Header("Megamap Settings"), Space]
-        private GameObject map;
-        private Transform previousParent;
-        public GameObject Map { get { return map; } set { SetMap(value); } }
-
         [Range(0.01f, 1f)]
         public float scale = 1f;
 
         [Range(1, 100)]
         public int wallHeight = 10;
-
+        
         [Range(0.1f, 1.5f)]
         public float heightOffset = 0f;
 
+        [Space]
+
         public bool placeAtPlayerOnEnable = true;
 
+        [Space]
+
         public Transform labReferenceTransform;
+        public Transform mapReferenceTransform;
 
         [Header("User Marker Settings"), Space]
         [SerializeField]
@@ -32,7 +33,7 @@ namespace Megamap {
         public LocationPin[] LocationPins
         {
             get {
-                var pins = map.GetComponentsInChildren<LocationPin>();
+                var pins = GetComponentsInChildren<LocationPin>();
                 if (pins == null || pins.Length == 0) {
                     Debug.LogWarning("Megamap: Map does not contain any LocationPins.");
                 }
@@ -40,79 +41,46 @@ namespace Megamap {
             }
         }
 
-        public void SetMap(GameObject map)
+        public void PlaceAtPlayer()
         {
-            // 'Reset' previous map object.
-            if (this.map != null) {
-                this.map.SetActive(false);
-                this.map.transform.SetParent(previousParent);
-            }
+            var player = Camera.main;
+            var offset = player.transform.position - labReferenceTransform.position;
+            offset *= scale;
 
-            this.map = map;
-            previousParent = this.map.transform.parent;
-            this.map.transform.SetParent(transform);
-            this.map.transform.localPosition = Vector3.zero;
-            this.map.SetActive(true);
-            
-            var mapReferencePoint = this.map.transform.Find("ReferencePoint");
-            if (mapReferencePoint == null) {
-                Debug.LogWarning("Megamap: Map does not contain a child named \"ReferencePoint\". Disabling UserMarker.");
-                userMarker.MapReferenceTransform = null;
-                userMarker.gameObject.SetActive(false);
-            }
-            else {
-                userMarker.MapReferenceTransform = mapReferencePoint;
-                userMarker.gameObject.SetActive(true);
-            }
-            
+            transform.position = player.transform.position - offset;
+        }
+        
+        private void OnEnable()
+        {
             if (LocationPins != null) {
                 foreach (LocationPin pin in LocationPins) {
                     pin.ShowInfo(false);
                 }
             }
-        }
 
-        public void PlaceAtPlayer()
-        {
-            if (map == null) {
-                return;
-            }
-
-            var player = Camera.main;
-            var offset = player.transform.position - labReferenceTransform.position;
-            offset *= scale;
-
-            map.transform.position = player.transform.position - offset;
-        }
-
-        private void Awake()
-        {
-            if (map != null) {
-                SetMap(map);
-            }
-        }
-
-        private void OnEnable()
-        {
-            UpdateMapTransform();
-        }
-
-        private void UpdateMapTransform()
-        {
-            // Apply room and wall scale.
-            map.transform.localScale = new Vector3(scale, wallHeight / 100f, scale);
+            userMarker.MapReferenceTransform = mapReferenceTransform;
 
             if (placeAtPlayerOnEnable) {
                 PlaceAtPlayer();
             }
+        }
+
+
+        private void Update()
+        {
+            // Apply room and wall scale.
+            transform.localScale = new Vector3(scale, wallHeight / 100f, scale);
 
             // Apply height offset.
-            map.transform.position = new Vector3(map.transform.position.x, heightOffset, map.transform.position.z);
+            transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
 
             // "Fix" scaling of LocationPins.
             foreach (var pin in LocationPins) {
                 pin.transform.localScale = new Vector3(1f, (100f / wallHeight) * scale, 1f);
             }
+
+            // "Fix" scaling of UserMarker.
+            userMarker.transform.localScale = new Vector3(1f, (100f / wallHeight) * scale, 1f);
         }
     }
 

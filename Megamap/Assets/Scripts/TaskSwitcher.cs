@@ -8,131 +8,65 @@ namespace Megamap {
 
     public class TaskSwitcher : MonoBehaviour {
 
-        public enum Type {
-            UserPositionSetup, UserGazeSetup, Searching, Pointing
-        }
+        public Task[] tasks = new Task[5];
+        
+        private int currentTask = 0;
 
-        [SerializeField]
-        private ConditionSwitcher conditionSwitcher;
-
-        private Type currentType = Type.UserPositionSetup;
-        public Type CurrentType
+        public void NextTask()
         {
-            get { return currentType; }
+            if (currentTask == tasks.Length - 1) {
+                var conditionSwitcher = FindObjectOfType<ConditionSwitcher>();
+                if (conditionSwitcher != null) {
+                    conditionSwitcher.NextCondition();
+                }
+                return;
+            }
+
+            ++currentTask;
+            UpdateTasks();
         }
 
-        [SerializeField]
-        private GameObject taskDisplay;
-
-        [Header("Subtasks"), Space]
-
-        [SerializeField]
-        private GameObject userPositionSetupTask;
-        [SerializeField]
-        private GameObject megamapTask;
-        [SerializeField]
-        private GameObject pointingTask;
-
-        [Header("Maps"), Space]
-        public GameObject[] indoorMaps;
-        private int currentMap = 0;
-
-        public void SetTaskDescription(string description)
+        public void PreviousTask()
         {
-            taskDisplay.GetComponent<Text>().text = description;
+            if (currentTask == 0) {
+                return;
+            }
+
+            --currentTask;
+            UpdateTasks();
         }
+
+        public void ResetTasks()
+        {
+            foreach (Task t in tasks) {
+                t.ResetSubtasks();
+            }
+
+            ShuffleTasks();
+            currentTask = 0;
+            UpdateTasks();
+        }
+
+        private void UpdateTasks()
+        {
+            foreach (Task t in tasks) {
+                if (t.gameObject.activeSelf) {
+                    t.gameObject.SetActive(false);
+                }
+            }
+            tasks[currentTask].gameObject.SetActive(true);
+        }
+        
+        private void ShuffleTasks()
+        {
+            System.Random rnd = new System.Random();
+            tasks = new List<Task>(tasks).OrderBy(x => rnd.Next()).ToArray();
+        }
+
 
         private void Start()
         {
-            if (taskDisplay == null) {
-                DisableOnError("Reference to taskDisplay not set");
-                return;
-            }
-
-            if (userPositionSetupTask == null) {
-                DisableOnError("Reference to user position setup task not set");
-                return;
-            }
-
-            if (megamapTask == null) {
-                DisableOnError("Reference to megamap task no set");
-                return;
-            }
-
-            if (pointingTask == null) {
-                DisableOnError("Reference to pointing task no set");
-                return;
-            }
-
-            if (indoorMaps == null || indoorMaps.Length == 0) {
-                DisableOnError("No maps set");
-                return;
-            }
-
-            foreach (var map in indoorMaps) {
-                if (map == null) {
-                    DisableOnError("One of the maps is null");
-                    return;
-                }
-            }
-
-            // Setup first condition.
-            ShuffleMaps();
-            conditionSwitcher.CurrentCondition = 0;
-            // Enable first task.
-            SwitchTask(currentType);
-        }
-
-        public void SwitchTask(Type taskType)
-        {
-            currentType = taskType;
-
-            switch (currentType) {
-            case Type.UserPositionSetup:
-                userPositionSetupTask.SetActive(true);
-                megamapTask.SetActive(false);
-                pointingTask.SetActive(false);
-                break;
-            case Type.UserGazeSetup:
-                userPositionSetupTask.SetActive(true);
-                megamapTask.SetActive(false);
-                pointingTask.SetActive(false);
-                break;
-            case Type.Searching:
-                userPositionSetupTask.SetActive(false);
-                // Sets next map (wraps around to first one).
-                megamapTask.GetComponent<SubtaskMegamap>().SetMap(indoorMaps[currentMap % indoorMaps.Length]);
-                ++currentMap;
-                megamapTask.SetActive(true);
-                pointingTask.SetActive(false);
-                break;
-            case Type.Pointing:
-                userPositionSetupTask.SetActive(false);
-                megamapTask.SetActive(false);
-                pointingTask.SetActive(true);
-                break;
-            default: break;
-            }
-
-            // If we completed all maps once, switch to next condition.
-            if (CurrentType == Type.UserPositionSetup
-                && (currentMap >= indoorMaps.Length)
-                && (currentMap % indoorMaps.Length == 0)) {
-                ShuffleMaps();
-                ++conditionSwitcher.CurrentCondition;
-            }
-        }
-                
-        private void DisableOnError(string message)
-        {
-            Debug.LogError("TaskSwitcher: " + message + " Disabling script.");
-            enabled = false;
-        }
-
-        private void ShuffleMaps()
-        {
-            System.Random rnd = new System.Random();
-            indoorMaps = new List<GameObject>(indoorMaps).OrderBy(x => rnd.Next()).ToArray();
+            ResetTasks();
         }
     }
 

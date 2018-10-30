@@ -20,9 +20,6 @@ namespace Megamap {
 
         private void Update()
         {
-            if (FindObjectOfType<TaskSwitcher>().CurrentType != TaskSwitcher.Type.UserGazeSetup)
-                return;
-
             var cam = Camera.main;
             Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 50.0f, Color.magenta, 3.0f);
 

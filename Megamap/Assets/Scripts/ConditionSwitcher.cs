@@ -10,7 +10,7 @@ namespace Megamap {
         // For .json loading
 
         [Serializable]
-        private struct Condition {
+        public struct Condition {
             public float scale;
             public int wallHeight;
             public float heightOffset;
@@ -23,15 +23,9 @@ namespace Megamap {
 
         //------------------
 
-        private int currentCondition = 0;
-        public int CurrentCondition
-        {
-            get { return currentCondition; }
-            set { SwitchCondition(value); }
-        }
+        public Condition CurrentCondition { get { return conditions[currentCondition]; } }
 
-        [SerializeField]
-        private Megamap megamap;
+        private int currentCondition = 0;
 
         [Header("Condition Settings"), Space]
         [SerializeField]
@@ -39,6 +33,37 @@ namespace Megamap {
         [SerializeField]
         private Condition[] conditions = new Condition[0];
         
+        public void NextCondition()
+        {
+            if (currentCondition == conditions.Length - 1) {
+                return;
+            }
+
+            ++currentCondition;
+
+            var switcher = FindObjectOfType<TaskSwitcher>();
+            switcher.ResetTasks();
+        }
+
+        public void PreviousCondition()
+        {
+            if (currentCondition == 0) {
+                return;
+            }
+
+            --currentCondition;
+
+            var switcher = FindObjectOfType<TaskSwitcher>();
+            switcher.ResetTasks();
+        }
+        
+        private void ShuffleConditions()
+        {
+            System.Random rnd = new System.Random();
+            conditions = new List<Condition>(conditions).OrderBy(x => rnd.Next()).ToArray();
+        }
+
+
         private void Awake()
         {
             var json = conditionsJson.text;
@@ -46,25 +71,6 @@ namespace Megamap {
             conditions = config.conditions;
 
             ShuffleConditions();
-            CurrentCondition = 0;
-        }
-
-        private void SwitchCondition(int condition)
-        {
-            if (condition < 0 || condition >= conditions.Length)
-                return;
-
-            megamap.scale = conditions[currentCondition].scale;
-            megamap.wallHeight = (int)conditions[currentCondition].wallHeight;
-            megamap.heightOffset = conditions[currentCondition].heightOffset;
-
-            currentCondition = condition;
-        }
-
-        private void ShuffleConditions()
-        {
-            System.Random rnd = new System.Random();
-            conditions = new List<Condition>(conditions).OrderBy(x => rnd.Next()).ToArray();
         }
     }
 

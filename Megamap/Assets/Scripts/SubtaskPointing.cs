@@ -12,19 +12,21 @@ namespace Megamap {
         public SteamVR_Action_Boolean backAction;
         public LineRenderer laser;
 
-        private string taskDescription = "Zeige dorthin, wo sich der ausgewählte Raum befindet.\nBestätige die Richtung mit dem Trigger.";
-        private string confirmation = "Trigger: Annehmen\nTrackpad: Korrigieren";
-
         [SerializeField]
         private SteamVR_Input_Sources preferredHandType = SteamVR_Input_Sources.RightHand;
         private Hand hand;
 
+        private readonly string taskDescription = "Zeige dorthin, wo sich der ausgewählte Raum befindet.\nBestätige die Richtung mit dem Trigger.";
+        private readonly string confirmation = "Trigger: Annehmen\nTrackpad: Korrigieren";
+
         private bool laserLocked = false;
 
+        private Task currentTask;
                
         private void OnEnable()
         {
-            FindObjectOfType<TaskSwitcher>().SetTaskDescription(taskDescription);
+            currentTask = FindObjectOfType<Task>();
+            currentTask.Description = taskDescription;
 
             hand = GetTargetHand();
             laserLocked = false;
@@ -35,19 +37,19 @@ namespace Megamap {
             if (acceptAction.GetStateDown(hand.handType) || Input.GetMouseButtonDown(0)) {
                 if (!laserLocked) {
                     laserLocked = true;
-                    FindObjectOfType<TaskSwitcher>().SetTaskDescription(confirmation);
+                    currentTask.Description = confirmation;
                 } 
                 else {
                     // TODO: Record data etc...
                     // ...
 
                     // Do next trial.
-                    FindObjectOfType<TaskSwitcher>().SwitchTask(TaskSwitcher.Type.UserPositionSetup);
+                    FindObjectOfType<TaskSwitcher>().NextTask();
                 }
             }
             else if ((backAction.GetStateDown(hand.handType) || Input.GetKeyDown(KeyCode.Backspace)) && laserLocked) {
                 laserLocked = false;
-                FindObjectOfType<TaskSwitcher>().SetTaskDescription(taskDescription);
+                currentTask.Description = taskDescription;
             }
         }
 

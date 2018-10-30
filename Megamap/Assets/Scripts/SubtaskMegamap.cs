@@ -4,6 +4,7 @@ namespace Megamap {
 
     public class SubtaskMegamap : MonoBehaviour {
 
+        [Header("Pin randomization values")]
         [SerializeField]
         private int absoluteMinimum = 50;
         [SerializeField]
@@ -13,10 +14,12 @@ namespace Megamap {
 
         public Megamap map;
 
+        private readonly string description = "Finde den Raum mit dem niedrigsten Attribut.";
+
         private void OnEnable()
         {
             Debug.Log("Starting the subtask \"Megamap\"");
-            FindObjectOfType<TaskSwitcher>().SetTaskDescription("Finde den Raum mit dem niedrigsten Attribut.");
+            FindObjectOfType<Task>().Description = description;
             
             if (maxTargetAttributeValue <= 0) {
                 Debug.LogWarning("SubtaskMegamap: Invalid maxTargetAttributeValue <= 0. Using 1 instead.");
@@ -36,6 +39,12 @@ namespace Megamap {
                 pin.attribute = pin.isTargetPin ? targetValue : Random.Range(maxTargetAttributeValue + 1, maxAttributeValue);
                 pin.OnSelected.AddListener(CheckIsCorrectPin);
             }
+
+            // Update Megamap with values from condition.
+            var condition = FindObjectOfType<ConditionSwitcher>().CurrentCondition;
+            map.scale = condition.scale;
+            map.wallHeight = condition.wallHeight;
+            map.heightOffset = condition.heightOffset;
         }
 
         private void OnDisable()
@@ -47,21 +56,16 @@ namespace Megamap {
 
         private void CheckIsCorrectPin(LocationPin pin)
         {
-            var taskSwitcher = FindObjectOfType<TaskSwitcher>();
+            var task = FindObjectOfType<Task>();
 
             // Selected pin is not correct.
             if (!pin.isTargetPin) {
-                taskSwitcher.SetTaskDescription("Raum hat nicht das niedrigste Attribut. Versuche es weiter.");
+                task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
                 pin.SetStatus(LocationPin.Status.Error);
-                return;
             }
-
-            taskSwitcher.SwitchTask(TaskSwitcher.Type.Pointing);
-        }
-
-        public void SetMap(GameObject map)
-        {
-            this.map.Map = map;
+            else {
+                task.NextSubtask();
+            }
         }
     }
 
