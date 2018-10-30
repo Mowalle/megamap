@@ -16,11 +16,26 @@ namespace Megamap {
 
         private readonly string description = "Finde den Raum mit dem niedrigsten Attribut.";
 
+        private void CheckIsCorrectPin(LocationPin pin)
+        {
+            var task = FindObjectOfType<Task>();
+
+            // Selected pin is not correct.
+            if (!pin.isTargetPin) {
+                task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
+                pin.SetStatus(LocationPin.Status.Error);
+            }
+            else {
+                task.NextSubtask();
+            }
+        }
+
+
         private void OnEnable()
         {
             Debug.Log("Starting the subtask \"Megamap\"");
             FindObjectOfType<Task>().Description = description;
-            
+
             if (maxTargetAttributeValue <= 0) {
                 Debug.LogWarning("SubtaskMegamap: Invalid maxTargetAttributeValue <= 0. Using 1 instead.");
                 maxTargetAttributeValue = 1;
@@ -45,26 +60,18 @@ namespace Megamap {
             map.scale = condition.scale;
             map.wallHeight = condition.wallHeight;
             map.heightOffset = condition.heightOffset;
+
+            // Because the scale is changed (see above) AFTER Megamap's OnEnable(), we need to place it again at the player's position.
+            // Otherwise, the old scale will be used for calculating the offset, which would lead to a wrongly placed map.
+            if (map.placeAtPlayerOnEnable)
+                map.PlaceAtPlayer();
         }
 
         private void OnDisable()
         {
+            map.gameObject.SetActive(false);
             foreach (LocationPin pin in map.LocationPins) {
                 pin.OnSelected.RemoveListener(CheckIsCorrectPin);
-            }
-        }
-
-        private void CheckIsCorrectPin(LocationPin pin)
-        {
-            var task = FindObjectOfType<Task>();
-
-            // Selected pin is not correct.
-            if (!pin.isTargetPin) {
-                task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
-                pin.SetStatus(LocationPin.Status.Error);
-            }
-            else {
-                task.NextSubtask();
             }
         }
     }
