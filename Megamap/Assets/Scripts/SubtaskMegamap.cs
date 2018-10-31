@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Megamap {
 
@@ -15,21 +16,6 @@ namespace Megamap {
         public Megamap map;
 
         private readonly string description = "Finde den Raum mit dem niedrigsten Attribut.";
-
-        private void CheckIsCorrectPin(LocationPin pin)
-        {
-            var task = FindObjectOfType<Task>();
-
-            // Selected pin is not correct.
-            if (!pin.isTargetPin) {
-                task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
-                pin.SetStatus(LocationPin.Status.Error);
-            }
-            else {
-                task.NextSubtask();
-            }
-        }
-
 
         private void OnEnable()
         {
@@ -61,19 +47,37 @@ namespace Megamap {
             map.wallHeight = condition.wallHeight;
             map.heightOffset = condition.heightOffset;
 
-            // Because the scale is changed (see above) AFTER Megamap's OnEnable(), we need to place it again at the player's position.
-            // Otherwise, the old scale will be used for calculating the offset, which would lead to a wrongly placed map.
-            if (map.placeAtPlayerOnEnable)
-                map.PlaceAtPlayer();
+            StartCoroutine(map.Show());
         }
 
         private void OnDisable()
         {
-            map.gameObject.SetActive(false);
             foreach (LocationPin pin in map.LocationPins) {
                 pin.OnSelected.RemoveListener(CheckIsCorrectPin);
             }
         }
+
+        private void CheckIsCorrectPin(LocationPin pin)
+        {
+            var task = FindObjectOfType<Task>();
+
+            // Selected pin is not correct.
+            if (!pin.isTargetPin) {
+                task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
+                pin.SetStatus(LocationPin.Status.Error);
+            }
+            else {
+                StartCoroutine(CompleteTask());
+            }
+        }
+
+        private IEnumerator CompleteTask()
+        {
+            yield return StartCoroutine(map.Hide());
+            FindObjectOfType<Task>().NextSubtask();
+        }
+        
+       
     }
 
 }
