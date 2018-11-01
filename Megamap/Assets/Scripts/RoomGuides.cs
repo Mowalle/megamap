@@ -4,17 +4,8 @@ using UnityEngine;
 
 public class RoomGuides : MonoBehaviour {
 
-    public GameObject labRoom;
-    public GameObject mapRoom;
-
-    private Renderer labRoomRenderer;
-    private Renderer mapRoomRenderer;
-
-    private void Awake()
-    {
-        labRoomRenderer = labRoom.GetComponent<Renderer>();
-        mapRoomRenderer = mapRoom.GetComponent<Renderer>();
-    }
+    [SerializeField] private Renderer labRoomRenderer;
+    [SerializeField] private Renderer mapRoomRenderer;
 
     private void Update()
     {
