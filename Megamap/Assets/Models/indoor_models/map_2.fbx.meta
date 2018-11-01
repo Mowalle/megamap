@@ -1134,52 +1134,52 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: BaseboardMaterial
-    second: {fileID: 2100000, guid: b8e34083ac2c2144b8675d7e6deb074f, type: 2}
+    second: {fileID: 2100000, guid: 3620ec65e76bfb244bf3a0ade32779d3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: DoorFrameMaterial
-    second: {fileID: 2100000, guid: b4692e703e0544b43bf3623d2f87cb97, type: 2}
+    second: {fileID: 2100000, guid: fe2066e8fe061184ab47ddea25ff7192, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: DoorMaterial
-    second: {fileID: 2100000, guid: b4692e703e0544b43bf3623d2f87cb97, type: 2}
+    second: {fileID: 2100000, guid: fe2066e8fe061184ab47ddea25ff7192, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: FloorMaterial
-    second: {fileID: 2100000, guid: b5e32be53613dc446b6b3cb73e2f0d3f, type: 2}
+    second: {fileID: 2100000, guid: a88ebeb4e6697be409edde8c4357ff7f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: HandleMaterial
-    second: {fileID: 2100000, guid: f6151d1bb44132a419d8d6f7d03df962, type: 2}
+    second: {fileID: 2100000, guid: 218be08d38872954bb63163fd97117c5, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WallMaterial
-    second: {fileID: 2100000, guid: b8e34083ac2c2144b8675d7e6deb074f, type: 2}
+    second: {fileID: 2100000, guid: 3620ec65e76bfb244bf3a0ade32779d3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WindowFrameMaterial
-    second: {fileID: 2100000, guid: b4692e703e0544b43bf3623d2f87cb97, type: 2}
+    second: {fileID: 2100000, guid: fe2066e8fe061184ab47ddea25ff7192, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WindowGlassMaterial
-    second: {fileID: 2100000, guid: 363b15303b9050f4cb0a48cdb2353a05, type: 2}
+    second: {fileID: 2100000, guid: 4cc46d92e6a442d498904df223931513, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WindowLMaterial
-    second: {fileID: 2100000, guid: b4692e703e0544b43bf3623d2f87cb97, type: 2}
+    second: {fileID: 2100000, guid: fe2066e8fe061184ab47ddea25ff7192, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WindowRMaterial
-    second: {fileID: 2100000, guid: b4692e703e0544b43bf3623d2f87cb97, type: 2}
+    second: {fileID: 2100000, guid: fe2066e8fe061184ab47ddea25ff7192, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
