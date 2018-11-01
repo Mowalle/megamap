@@ -1,44 +1,44 @@
 {
     "conditions": [
         {
-            "scale": 0.05,
-            "wallHeight": 3,
-            "heightOffset": 0.9
+            "scale": 0.04,
+            "wallHeight": 2,
+            "heightOffset": 0.25
         },
         {
-            "scale": 0.05,
-            "wallHeight": 10,
-            "heightOffset": 0.9
+            "scale": 0.04,
+            "wallHeight": 8,
+            "heightOffset": 0.25
         },
         {
-            "scale": 0.05,
-            "wallHeight": 3,
-            "heightOffset": 1.3
+            "scale": 0.04,
+            "wallHeight": 2,
+            "heightOffset": 0.75
         },
         {
-            "scale": 0.05,
-            "wallHeight": 10,
-            "heightOffset": 1.3
+            "scale": 0.04,
+            "wallHeight": 8,
+            "heightOffset": 0.75
         },
         {
-            "scale": 0.1,
-            "wallHeight": 3,
-            "heightOffset": 0.9
+            "scale": 0.075,
+            "wallHeight": 2,
+            "heightOffset": 0.25
         },
         {
-            "scale": 0.1,
-            "wallHeight": 10,
-            "heightOffset": 0.9
+            "scale": 0.075,
+            "wallHeight": 8,
+            "heightOffset": 0.25
         },
         {
-            "scale": 0.1,
-            "wallHeight": 3,
-            "heightOffset": 1.3
+            "scale": 0.075,
+            "wallHeight": 2,
+            "heightOffset": 0.75
         },
         {
-            "scale": 0.1,
-            "wallHeight": 10,
-            "heightOffset": 1.3
+            "scale": 0.075,
+            "wallHeight": 8,
+            "heightOffset": 0.75
         }
     ]
 }
