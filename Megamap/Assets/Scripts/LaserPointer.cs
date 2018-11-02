@@ -21,15 +21,18 @@ namespace Megamap {
         private void Awake()
         {
             line = GetComponent<LineRenderer>();
+            line.enabled = false;
         }
 
         private void OnEnable()
         {
+            line.enabled = true;
             StartCoroutine("LinkToHand");
         }
 
         private void OnDisable()
         {
+            line.enabled = false;
             StopCoroutine("LinkToHand");
         }
 
