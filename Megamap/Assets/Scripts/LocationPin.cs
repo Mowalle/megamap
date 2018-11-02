@@ -30,7 +30,6 @@ namespace Megamap {
         [SerializeField] private Color normalColor;
         [SerializeField] private Color errorColor;
 
-        private Interactable interactable;
         private bool isShown = false;
 
         public void Show()
@@ -78,11 +77,6 @@ namespace Megamap {
                 SetStatus(Status.Error);
                 OnWrongPinSelected.Invoke();
             }
-        }
-
-        private void Awake()
-        {
-            interactable = GetComponent<Interactable>();
         }
 
         private void OnEnable()
