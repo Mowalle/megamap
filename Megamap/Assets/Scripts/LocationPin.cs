@@ -11,54 +11,49 @@ namespace Megamap {
     [System.Serializable]
     public class LocationPinEvent : UnityEvent<LocationPin> { }
 
+    [RequireComponent(typeof(Interactable))]
     public class LocationPin : MonoBehaviour {
-
-        public LocationPinEvent OnSelected = new LocationPinEvent();
-
+        
         public enum Status { Normal, Error }
 
-        [SerializeField]
-        private GameObject locationPinInfo;
+        public UnityEvent OnTargetPinSelected = new UnityEvent();
+        public UnityEvent OnWrongPinSelected = new UnityEvent();
 
         public bool isTargetPin = false;
-
-        [SerializeField]
-        private Button acceptButton;
-        [SerializeField]
-        private Color normalColor;
-        [SerializeField]
-        private Color errorColor;
 
         // TODO: Rename this to something more semantic.
         public int attribute = 0;
         public int roomNumber;
 
-        public void Select()
+        [SerializeField] private GameObject locationPinInfo;
+        [SerializeField] private Button acceptButton;
+        [SerializeField] private Color normalColor;
+        [SerializeField] private Color errorColor;
+
+        private Interactable interactable;
+        private bool isShown = false;
+
+        public void Show()
         {
-            OnSelected.Invoke(this);
+            // Initially, rotate canvas towards user's view.
+            var canvas = transform.Find("Canvas");
+            canvas.LookAt(Camera.main.transform);
+
+            KeepFacingUser();
+
+            // Update string in case something changed.
+            var text = locationPinInfo.GetComponentInChildren<Text>();
+            text.text = "Room " + roomNumber + "\nAttribute: " + attribute;
+
+            locationPinInfo.SetActive(true);
+            isShown = true;
         }
 
-        public void ShowInfo(bool show)
+        public void Hide()
         {
-            if (show) {
-                // Reset info display in case pin was wrongly selected before.
-                SetStatus(Status.Normal);
+            locationPinInfo.SetActive(false);
 
-                // Initially, rotate canvas towards user's view.
-                var canvas = transform.Find("Canvas");
-                canvas.LookAt(Camera.main.transform);
-
-                // Update string in case something changed.
-                var text = locationPinInfo.GetComponentInChildren<Text>();
-                text.text = "Room " + roomNumber + "\nAttribute: " + attribute;
-            }
-
-            locationPinInfo.SetActive(show);
-        }
-
-        public bool IsInfoShown()
-        {
-            return locationPinInfo.activeSelf;
+            isShown = false;
         }
 
         public void SetStatus(Status status)
@@ -72,8 +67,81 @@ namespace Megamap {
                 acceptButton.interactable = false;
             }
         }
-        
+
+        public void Select()
+        {
+            if (isTargetPin) {
+                Hide();
+                OnTargetPinSelected.Invoke();
+            }
+            else {
+                SetStatus(Status.Error);
+                OnWrongPinSelected.Invoke();
+            }
+        }
+
+        private void Awake()
+        {
+            interactable = GetComponent<Interactable>();
+        }
+
+        private void OnEnable()
+        {
+            Hide();
+            SetStatus(Status.Normal);
+        }
+
         private void Update()
+        {
+            if (!isShown)
+                return;
+
+            KeepFacingUser();
+        }
+
+        //-------------------------------------------------
+        // Called when a Hand starts hovering over this object
+        //-------------------------------------------------
+        private void OnHandHoverBegin(Hand hand)
+        {
+            foreach (LocationPin pin in FindObjectsOfType<LocationPin>())
+                pin.Hide();
+            Show();
+        }
+
+
+        //-------------------------------------------------
+        // Called when a Hand stops hovering over this object
+        //-------------------------------------------------
+        private void OnHandHoverEnd(Hand hand)
+        {
+        }
+
+
+        //-------------------------------------------------
+        // Called every Update() while a Hand is hovering over this object
+        //-------------------------------------------------
+        private void HandHoverUpdate(Hand hand)
+        {
+            GrabTypes startingGrabType = hand.GetGrabStarting();
+            //bool isGrabEnding = hand.IsGrabEnding(this.gameObject);
+
+            // The GetMouseButtonDown(0) is a workaround for left-click not working currently with SteamVRs fallback hand (in 2D-mode).
+            if (startingGrabType != GrabTypes.None || Input.GetMouseButtonDown(0)) {
+                if (isShown) {
+                    Hide();
+                }
+                else {
+                    foreach (LocationPin pin in FindObjectsOfType<LocationPin>())
+                        pin.Hide();
+                    Show();
+                }
+            }
+            //else if (isGrabEnding) {
+            //}
+        }
+
+        private void KeepFacingUser()
         {
             // When the user moves behind canvas, contents would be shown mirrored.
             // So we rotate canvas by 180 degrees.

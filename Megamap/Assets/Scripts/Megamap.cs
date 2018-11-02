@@ -75,12 +75,6 @@ namespace Megamap {
             mapModel.SetActive(true);
             pins.SetActive(true);
 
-            if (LocationPins != null) {
-                foreach (LocationPin pin in LocationPins) {
-                    pin.ShowInfo(false);
-                }
-            }
-
             var targetPosition = placeAtPlayer ? GetPlayerOffsetPosition() : transform.position;
             targetPosition.y = heightOffset;
             yield return StartCoroutine(Transition(
@@ -110,12 +104,6 @@ namespace Megamap {
                 new Vector3(scale, wallHeight / 100f, scale),
                 Vector3.one,
                 transitionDuration));
-
-            if (LocationPins != null) {
-                foreach (LocationPin pin in LocationPins) {
-                    pin.ShowInfo(false);
-                }
-            }
 
             mapModel.SetActive(false);
             pins.SetActive(false);

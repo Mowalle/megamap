@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Megamap {
 
@@ -17,11 +18,22 @@ namespace Megamap {
 
         private readonly string description = "Finde den Raum mit dem niedrigsten Attribut.";
 
+        private LaserPointer laser;
+
+        private void Awake()
+        {
+            laser = FindObjectOfType<LaserPointer>();
+            laser.enabled = false;
+        }
+
         private void OnEnable()
         {
             Debug.Log("Starting the subtask \"Megamap\"");
             FindObjectOfType<Task>().Description = description;
 
+            laser.enabled = true;
+
+            // Randomization of LocationPins.
             if (maxTargetAttributeValue <= 0) {
                 Debug.LogWarning("SubtaskMegamap: Invalid maxTargetAttributeValue <= 0. Using 1 instead.");
                 maxTargetAttributeValue = 1;
@@ -38,7 +50,8 @@ namespace Megamap {
             foreach (LocationPin pin in map.LocationPins) {
                 pin.roomNumber = Random.Range(100, 1000);
                 pin.attribute = pin.isTargetPin ? targetValue : Random.Range(maxTargetAttributeValue + 1, maxAttributeValue);
-                pin.OnSelected.AddListener(CheckIsCorrectPin);
+                pin.OnTargetPinSelected.AddListener(HandleTargetPinSelected);
+                pin.OnWrongPinSelected.AddListener(HandleWrongPinSelected);
             }
 
             // Update Megamap with values from condition.
@@ -47,28 +60,30 @@ namespace Megamap {
             map.wallHeight = condition.wallHeight;
             map.heightOffset = condition.heightOffset;
 
+            // Map animation.
             StartCoroutine(map.Show());
         }
 
         private void OnDisable()
         {
+            laser.enabled = false;
+
             foreach (LocationPin pin in map.LocationPins) {
-                pin.OnSelected.RemoveListener(CheckIsCorrectPin);
+                pin.OnTargetPinSelected.RemoveListener(HandleTargetPinSelected);
+                pin.OnWrongPinSelected.RemoveListener(HandleWrongPinSelected);
             }
         }
 
-        private void CheckIsCorrectPin(LocationPin pin)
+        private void HandleTargetPinSelected()
+        {
+            StopCoroutine("CompleteTask");
+            StartCoroutine("CompleteTask");
+        }
+
+        private void HandleWrongPinSelected()
         {
             var task = FindObjectOfType<Task>();
-
-            // Selected pin is not correct.
-            if (!pin.isTargetPin) {
-                task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
-                pin.SetStatus(LocationPin.Status.Error);
-            }
-            else {
-                StartCoroutine(CompleteTask());
-            }
+            task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
         }
 
         private IEnumerator CompleteTask()
