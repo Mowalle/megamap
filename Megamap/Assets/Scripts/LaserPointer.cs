@@ -14,18 +14,38 @@ namespace Megamap {
     public class LaserPointer : MonoBehaviour {
 
         public SteamVR_Input_Sources preferredHand;
-        
+
+        [SerializeField] private Material normalMaterial;
+        [SerializeField] private Material frozenMaterial;
+
         private LineRenderer line;
         private Hand hand;
+        public Hand GetHand() {  return hand; }
+
+        private bool isFrozen = false;
+        public bool IsFrozen
+        {
+            get { return isFrozen; }
+            set { Freeze(value); }
+        }
+
+        public void Freeze(bool freeze)
+        {
+            isFrozen = freeze;
+
+            line.material = isFrozen ? frozenMaterial : normalMaterial;
+        }
 
         private void Awake()
         {
             line = GetComponent<LineRenderer>();
             line.enabled = false;
+            IsFrozen = false;
         }
 
         private void OnEnable()
         {
+            IsFrozen = false;
             line.enabled = true;
             StartCoroutine("LinkToHand");
         }
@@ -39,6 +59,9 @@ namespace Megamap {
         // Have to use LateUpdate because hand position is updated via script, which is too late for Update apparently.
         private void LateUpdate()
         {
+            if (isFrozen)
+                return;
+
             Vector3 start, dir;
             if (hand.gameObject.name.Equals("FallbackHand")) {
                 start = Camera.main.transform.position;

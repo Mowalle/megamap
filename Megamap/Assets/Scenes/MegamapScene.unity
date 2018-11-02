@@ -1782,8 +1782,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceptAction: {fileID: 11400000, guid: e65a609441703984eb7d2bdcf7dc7153, type: 2}
   backAction: {fileID: 11400000, guid: ac7695c369b505d478e6ea9adc8eba98, type: 2}
-  laser: {fileID: 2018650822}
-  preferredHandType: 2
+  laser: {fileID: 1429894578}
 --- !u!4 &156479584
 Transform:
   m_ObjectHideFlags: 0
@@ -3028,8 +3027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceptAction: {fileID: 11400000, guid: e65a609441703984eb7d2bdcf7dc7153, type: 2}
   backAction: {fileID: 11400000, guid: ac7695c369b505d478e6ea9adc8eba98, type: 2}
-  laser: {fileID: 2031696203}
-  preferredHandType: 2
+  laser: {fileID: 1429894578}
 --- !u!4 &531119458
 Transform:
   m_ObjectHideFlags: 0
@@ -6476,6 +6474,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preferredHand: 2
+  normalMaterial: {fileID: 2100000, guid: 662312fd849edf94a97a91fedc4d5656, type: 2}
+  frozenMaterial: {fileID: 2100000, guid: 194246134bb38a849a794bacf97dca09, type: 2}
 --- !u!120 &1429894579
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -6925,8 +6925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceptAction: {fileID: 11400000, guid: e65a609441703984eb7d2bdcf7dc7153, type: 2}
   backAction: {fileID: 11400000, guid: ac7695c369b505d478e6ea9adc8eba98, type: 2}
-  laser: {fileID: 768041638}
-  preferredHandType: 2
+  laser: {fileID: 1429894578}
 --- !u!4 &1457802564
 Transform:
   m_ObjectHideFlags: 0
@@ -7036,8 +7035,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceptAction: {fileID: 11400000, guid: e65a609441703984eb7d2bdcf7dc7153, type: 2}
   backAction: {fileID: 11400000, guid: ac7695c369b505d478e6ea9adc8eba98, type: 2}
-  laser: {fileID: 1865283067}
-  preferredHandType: 2
+  laser: {fileID: 1429894578}
 --- !u!4 &1498613754
 Transform:
   m_ObjectHideFlags: 0
@@ -8429,8 +8427,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceptAction: {fileID: 11400000, guid: e65a609441703984eb7d2bdcf7dc7153, type: 2}
   backAction: {fileID: 11400000, guid: ac7695c369b505d478e6ea9adc8eba98, type: 2}
-  laser: {fileID: 950270510}
-  preferredHandType: 2
+  laser: {fileID: 1429894578}
 --- !u!4 &1858853353
 Transform:
   m_ObjectHideFlags: 0
@@ -9028,7 +9025,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!120 &2018650822
 LineRenderer:
   m_ObjectHideFlags: 0
