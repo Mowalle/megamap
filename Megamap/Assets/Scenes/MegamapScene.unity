@@ -973,7 +973,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &80827678
 Prefab:
@@ -1509,6 +1509,7 @@ MonoBehaviour:
   floorTarget: {fileID: 406015721}
   wallTarget: {fileID: 822050058}
   selectionRadial: {fileID: 822050052}
+  taskDisplay: {fileID: 874941918}
 --- !u!4 &112067911
 Transform:
   m_ObjectHideFlags: 0
@@ -1640,7 +1641,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 5.6, y: 1.78}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!65 &133572547
 BoxCollider:
@@ -2212,6 +2213,7 @@ MonoBehaviour:
   floorTarget: {fileID: 1256795318}
   wallTarget: {fileID: 1052995181}
   selectionRadial: {fileID: 1052995175}
+  taskDisplay: {fileID: 874941918}
 --- !u!4 &279559422
 Transform:
   m_ObjectHideFlags: 0
@@ -2329,7 +2331,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0.4, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &316075197
 MonoBehaviour:
@@ -2446,7 +2448,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0.4, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &343165875
 MonoBehaviour:
@@ -3113,6 +3115,7 @@ MonoBehaviour:
   floorTarget: {fileID: 368171085}
   wallTarget: {fileID: 862763595}
   selectionRadial: {fileID: 862763589}
+  taskDisplay: {fileID: 874941918}
 --- !u!4 &443959074
 Transform:
   m_ObjectHideFlags: 0
@@ -3552,7 +3555,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0.4, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &664336752
 MonoBehaviour:
@@ -3868,7 +3871,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0.4, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &806833317
 MonoBehaviour:
@@ -3977,7 +3980,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &822050051
 GameObject:
@@ -4036,7 +4039,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 5.6, y: 1.78}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!65 &822050054
 BoxCollider:
@@ -4299,7 +4302,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 5.6, y: 1.78}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!65 &862763591
 BoxCollider:
@@ -4401,6 +4404,11 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!1 &874941918 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 23e5f126029186c47a301cb4c506b280,
+    type: 3}
+  m_PrefabInternal: {fileID: 1993579666}
 --- !u!1001 &906366412
 Prefab:
   m_ObjectHideFlags: 0
@@ -4931,7 +4939,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 5.6, y: 1.78}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!65 &1052995177
 BoxCollider:
@@ -5696,7 +5704,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 5.6, y: 1.78}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!65 &1240855640
 BoxCollider:
@@ -6873,7 +6881,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1400593899
 GameObject:
@@ -7161,6 +7169,7 @@ MonoBehaviour:
   floorTarget: {fileID: 1400593904}
   wallTarget: {fileID: 1240855644}
   selectionRadial: {fileID: 1240855638}
+  taskDisplay: {fileID: 874941918}
 --- !u!4 &1435643418
 Transform:
   m_ObjectHideFlags: 0
@@ -8617,7 +8626,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0.4, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1628113387
 MonoBehaviour:
@@ -10005,6 +10014,7 @@ MonoBehaviour:
   floorTarget: {fileID: 388767378}
   wallTarget: {fileID: 133572551}
   selectionRadial: {fileID: 133572545}
+  taskDisplay: {fileID: 874941918}
 --- !u!4 &2024902421
 Transform:
   m_ObjectHideFlags: 0
@@ -10287,7 +10297,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2055903683
 GameObject:
@@ -10360,5 +10370,5 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0.5}
