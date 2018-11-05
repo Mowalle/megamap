@@ -14,6 +14,8 @@ namespace Megamap {
         [SerializeField]
         private VRStandardAssets.Utils.SelectionRadial selectionRadial;
 
+        [SerializeField] private GameObject taskDisplay;
+
         private string positionDescription = "Bitte stelle dich auf das Ziel ('X').";
         private string gazeDescription = "Schaue das Ziel an, um den Test zu starten.";
 
@@ -40,6 +42,12 @@ namespace Megamap {
             wallTarget.transform.position = new Vector3(floorTarget.transform.position.x,
                                                         wallTarget.transform.position.y,
                                                         wallTarget.transform.position.z);
+
+            // Re-Center TaskDisplay (TV) at WallTarget position.
+            taskDisplay.transform.position = new Vector3(
+                wallTarget.transform.position.x,
+                wallTarget.transform.position.y,
+                taskDisplay.transform.position.z);
         }
 
         private void OnDisable()
