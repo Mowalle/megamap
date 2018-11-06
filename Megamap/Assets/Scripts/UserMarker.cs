@@ -7,6 +7,17 @@ namespace Megamap {
     public class UserMarker : MonoBehaviour {
 
         [SerializeField] private Megamap megamap;
+        [SerializeField] private GameObject usermarkerInEnvironment;
+
+        private void OnEnable()
+        {
+            usermarkerInEnvironment.GetComponent<Renderer>().enabled = true;
+        }
+
+        private void OnDisable()
+        {
+            usermarkerInEnvironment.GetComponent<Renderer>().enabled = false;
+        }
 
         private void Update()
         {
@@ -18,6 +29,12 @@ namespace Megamap {
             transform.localPosition += new Vector3(offset.x, 0f, offset.z);
 
             transform.localRotation = Quaternion.Euler(0f, cam.transform.rotation.eulerAngles.y, 0f);
+
+            // Update the user marker circle that is placed in the VE (lab).
+            var newPosition = usermarkerInEnvironment.transform.position;
+            newPosition.x = Camera.main.transform.position.x;
+            newPosition.z = Camera.main.transform.position.z;
+            usermarkerInEnvironment.transform.position = newPosition;
         }
     }
 
