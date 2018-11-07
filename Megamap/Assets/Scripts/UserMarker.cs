@@ -16,7 +16,8 @@ namespace Megamap {
 
         private void OnDisable()
         {
-            usermarkerInEnvironment.GetComponent<Renderer>().enabled = false;
+            if (usermarkerInEnvironment != null)
+                usermarkerInEnvironment.GetComponent<Renderer>().enabled = false;
         }
 
         private void Update()

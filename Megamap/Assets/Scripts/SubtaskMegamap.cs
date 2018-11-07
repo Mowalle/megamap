@@ -65,7 +65,8 @@ namespace Megamap {
 
         private void OnDisable()
         {
-            laser.enabled = false;
+            if (laser != null)
+                laser.enabled = false;
 
             foreach (LocationPin pin in map.LocationPins) {
                 pin.OnTargetPinSelected.RemoveListener(HandleTargetPinSelected);
