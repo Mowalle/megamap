@@ -18,9 +18,6 @@ namespace Megamap {
         [Range(0.01f, 1f)]
         public float scale = 1f;
 
-        [Range(1, 100)]
-        public int wallHeight = 10;
-        
         [Range(0.1f, 1.5f)]
         public float heightOffset = 0f;
 
@@ -82,7 +79,7 @@ namespace Megamap {
                 labReference.position,
                 targetPosition,
                 Vector3.one,
-                new Vector3(scale, wallHeight / 100f, scale),
+                new Vector3(scale, scale, scale),
                 transitionDuration));
 
             userMarker.gameObject.SetActive(true);
@@ -101,7 +98,7 @@ namespace Megamap {
                 transform,
                 transform.position,
                 labReference.position,
-                new Vector3(scale, wallHeight / 100f, scale),
+                new Vector3(scale, scale, scale),
                 Vector3.one,
                 transitionDuration));
 
@@ -140,18 +137,10 @@ namespace Megamap {
                 return;
 
             // Apply room and wall scale.
-            transform.localScale = new Vector3(scale, wallHeight / 100f, scale);
+            transform.localScale = new Vector3(scale, scale, scale);
 
             // Apply height offset.
             transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
-
-            // "Fix" scaling of LocationPins.
-            foreach (var pin in LocationPins) {
-                pin.transform.localScale = new Vector3(1f, (100f / wallHeight) * scale, 1f);
-            }
-
-            // "Fix" scaling of UserMarker.
-            userMarker.transform.localScale = new Vector3(1f, (100f / wallHeight) * scale, 1f);
         }
 
         private IEnumerator Transition(

@@ -57,7 +57,6 @@ namespace Megamap {
             // Update Megamap with values from condition.
             var condition = FindObjectOfType<ConditionSwitcher>().CurrentCondition;
             map.scale = condition.scale;
-            map.wallHeight = condition.wallHeight;
             map.heightOffset = condition.heightOffset;
 
             // Map animation.
