@@ -2,42 +2,18 @@
     "conditions": [
         {
             "scale": 0.04,
-            "wallHeight": 2,
             "heightOffset": 0.25
         },
         {
             "scale": 0.04,
-            "wallHeight": 8,
-            "heightOffset": 0.25
-        },
-        {
-            "scale": 0.04,
-            "wallHeight": 2,
-            "heightOffset": 0.75
-        },
-        {
-            "scale": 0.04,
-            "wallHeight": 8,
             "heightOffset": 0.75
         },
         {
             "scale": 0.075,
-            "wallHeight": 2,
             "heightOffset": 0.25
         },
         {
             "scale": 0.075,
-            "wallHeight": 8,
-            "heightOffset": 0.25
-        },
-        {
-            "scale": 0.075,
-            "wallHeight": 2,
-            "heightOffset": 0.75
-        },
-        {
-            "scale": 0.075,
-            "wallHeight": 8,
             "heightOffset": 0.75
         }
     ]

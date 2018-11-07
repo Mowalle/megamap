@@ -10672,31 +10672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   randomizeConditions: 1
   conditionsJson: {fileID: 4900000, guid: f30838d574e878044bcccc9566b6f47e, type: 3}
-  conditions:
-  - scale: 0
-    wallHeight: 0
-    heightOffset: 0
-  - scale: 0
-    wallHeight: 0
-    heightOffset: 0
-  - scale: 0
-    wallHeight: 0
-    heightOffset: 0
-  - scale: 0
-    wallHeight: 0
-    heightOffset: 0
-  - scale: 0
-    wallHeight: 0
-    heightOffset: 0
-  - scale: 0
-    wallHeight: 0
-    heightOffset: 0
-  - scale: 0
-    wallHeight: 0
-    heightOffset: 0
-  - scale: 0
-    wallHeight: 0
-    heightOffset: 0
+  conditions: []
 --- !u!1001 &1728092383
 Prefab:
   m_ObjectHideFlags: 0
