@@ -72,6 +72,14 @@ namespace Megamap {
             mapModel.SetActive(true);
             pins.SetActive(true);
 
+            // Deactivate colliders on all pins during transition,
+            // so that a pin does not show its info by accident.
+            foreach (var pin in LocationPins) {
+                var colliders = pin.GetComponents<Collider>();
+                foreach (var collider in colliders)
+                    collider.enabled = false;
+            }
+
             var targetPosition = placeAtPlayer ? GetPlayerOffsetPosition() : transform.position;
             targetPosition.y = heightOffset;
             yield return StartCoroutine(Transition(
@@ -82,6 +90,12 @@ namespace Megamap {
                 new Vector3(scale, scale, scale),
                 transitionDuration));
 
+            // Re-Activate colliders so pin-info can be shown.
+            foreach (var pin in LocationPins) {
+                var colliders = pin.GetComponents<Collider>();
+                foreach (var collider in colliders)
+                    collider.enabled = true;
+            }
             userMarker.gameObject.SetActive(true);
 
             isShown = true;
