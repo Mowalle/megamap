@@ -38,7 +38,10 @@ namespace Megamap {
         
         public void NextCondition()
         {
+            // Last condition was reached -> experiment is over!
             if (currentCondition == conditions.Length - 1) {
+                var task = FindObjectOfType<Task>();
+                task.Description = "Geschafft!\nDas Experiment ist vorbei.";
                 return;
             }
 
