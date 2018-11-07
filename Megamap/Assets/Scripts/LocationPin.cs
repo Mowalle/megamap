@@ -25,10 +25,10 @@ namespace Megamap {
         public int attribute = 0;
         public int roomNumber;
 
-        [SerializeField] private GameObject locationPinInfo;
-        [SerializeField] private Button acceptButton;
-        [SerializeField] private Color normalColor;
-        [SerializeField] private Color errorColor;
+        [SerializeField] private GameObject locationPinInfo = null;
+        [SerializeField] private Button acceptButton = null;
+        [SerializeField] private Color normalColor = new Color();
+        [SerializeField] private Color errorColor = new Color();
 
         private bool isShown = false;
 

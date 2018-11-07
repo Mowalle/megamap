@@ -15,8 +15,8 @@ namespace Megamap {
 
         public SteamVR_Input_Sources preferredHand;
 
-        [SerializeField] private Material normalMaterial;
-        [SerializeField] private Material frozenMaterial;
+        [SerializeField] private Material normalMaterial = null;
+        [SerializeField] private Material frozenMaterial = null;
 
         private LineRenderer line;
         private Hand hand;

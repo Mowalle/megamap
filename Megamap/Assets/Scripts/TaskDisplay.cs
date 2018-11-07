@@ -8,7 +8,7 @@ namespace Megamap {
     public class TaskDisplay : MonoBehaviour {
 
         [SerializeField]
-        private Text taskDisplay;
+        private Text taskDisplay = null;
 
         private void Update()
         {

@@ -8,11 +8,11 @@ namespace Megamap {
     public class Megamap : MonoBehaviour {
 
         [Header("References"), Space]
-        [SerializeField] private GameObject mapModel;
-        [SerializeField] private UserMarker userMarker;
-        [SerializeField] private Transform labReference;
-        [SerializeField] private Transform mapReference;
-        [SerializeField] private GameObject pins;
+        [SerializeField] private GameObject mapModel = null;
+        [SerializeField] private UserMarker userMarker = null;
+        [SerializeField] private Transform labReference = null;
+        [SerializeField] private Transform mapReference = null;
+        [SerializeField] private GameObject pins = null;
 
         [Header("Megamap Settings"), Space]
         [Range(0.01f, 1f)]

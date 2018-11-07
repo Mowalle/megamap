@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RoomGuides : MonoBehaviour {
 
-    [SerializeField] private Renderer labRoomRenderer;
-    [SerializeField] private Renderer mapRoomRenderer;
+    [SerializeField] private Renderer labRoomRenderer = null;
+    [SerializeField] private Renderer mapRoomRenderer = null;
     [SerializeField] private bool showUpperOnly = true;
 
     private LineRenderer[] lines;

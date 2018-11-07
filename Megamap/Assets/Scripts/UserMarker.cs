@@ -6,8 +6,8 @@ namespace Megamap {
 
     public class UserMarker : MonoBehaviour {
 
-        [SerializeField] private Megamap megamap;
-        [SerializeField] private GameObject usermarkerInEnvironment;
+        [SerializeField] private Megamap megamap = null;
+        [SerializeField] private GameObject usermarkerInEnvironment = null;
 
         private void OnEnable()
         {

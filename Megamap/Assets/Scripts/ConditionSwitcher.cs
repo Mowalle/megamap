@@ -31,7 +31,7 @@ namespace Megamap {
         [SerializeField] private bool randomizeConditions = true;
 
         [SerializeField]
-        private TextAsset conditionsJson;
+        private TextAsset conditionsJson = null;
         [SerializeField]
         private Condition[] conditions = new Condition[0];
 

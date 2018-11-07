@@ -8,13 +8,13 @@ namespace Megamap {
     public class SubtaskUserSetup : MonoBehaviour {
 
         [SerializeField]
-        private FloorTarget floorTarget;
+        private FloorTarget floorTarget = null;
         [SerializeField]
-        private WallTarget wallTarget;
+        private WallTarget wallTarget = null;
         [SerializeField]
-        private VRStandardAssets.Utils.SelectionRadial selectionRadial;
+        private VRStandardAssets.Utils.SelectionRadial selectionRadial = null;
 
-        [SerializeField] private GameObject taskDisplay;
+        [SerializeField] private GameObject taskDisplay = null;
 
         private string positionDescription = "Bitte stelle dich auf das Ziel ('X').";
         private string gazeDescription = "Schaue das Ziel an, um den Test zu starten.";
