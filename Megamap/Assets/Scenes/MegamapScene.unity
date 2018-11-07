@@ -10670,6 +10670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d75ac91edd52664d80d3b57c48f491b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomizeConditions: 1
   conditionsJson: {fileID: 4900000, guid: f30838d574e878044bcccc9566b6f47e, type: 3}
   conditions:
   - scale: 0

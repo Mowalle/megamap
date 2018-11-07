@@ -28,10 +28,13 @@ namespace Megamap {
         private int currentCondition = 0;
 
         [Header("Condition Settings"), Space]
+        [SerializeField] private bool randomizeConditions = true;
+
         [SerializeField]
         private TextAsset conditionsJson;
         [SerializeField]
         private Condition[] conditions = new Condition[0];
+
         
         public void NextCondition()
         {
@@ -70,7 +73,8 @@ namespace Megamap {
             var config = JsonUtility.FromJson<ConditionConfiguration>(json);
             conditions = config.conditions;
 
-            ShuffleConditions();
+            if (randomizeConditions)
+                ShuffleConditions();
         }
     }
 
