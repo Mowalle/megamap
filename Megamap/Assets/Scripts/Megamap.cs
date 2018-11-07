@@ -165,8 +165,6 @@ namespace Megamap {
             Vector3 endScale,
             float duration)
         {
-            var materials = mapModel.GetComponentsInChildren<MeshRenderer>();
-
             // Lerp position, scale and alpha (transparency).
             float rate = 1.0f / duration;
             float t = 0f;
