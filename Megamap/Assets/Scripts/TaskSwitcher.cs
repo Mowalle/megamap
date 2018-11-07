@@ -9,14 +9,17 @@ namespace Megamap {
     public class TaskSwitcher : MonoBehaviour {
 
         [SerializeField] private bool randomizeTasks = true;
+        [SerializeField] private bool preventDirectRepitition = true;
 
         public Task[] tasks = new Task[5];
+        private int[] taskOrder = null;
         
-        private int currentTask = 0;
+        private int currentTaskIdx = 0;
+        private int lastTask = -1;
 
         public void NextTask()
         {
-            if (currentTask == tasks.Length - 1) {
+            if (currentTaskIdx == tasks.Length - 1) {
                 var conditionSwitcher = FindObjectOfType<ConditionSwitcher>();
                 if (conditionSwitcher != null) {
                     conditionSwitcher.NextCondition();
@@ -24,17 +27,19 @@ namespace Megamap {
                 return;
             }
 
-            ++currentTask;
+            lastTask = taskOrder[currentTaskIdx];
+            ++currentTaskIdx;
             UpdateTasks();
         }
 
         public void PreviousTask()
         {
-            if (currentTask == 0) {
+            if (currentTaskIdx == 0) {
                 return;
             }
 
-            --currentTask;
+            lastTask = taskOrder[currentTaskIdx];
+            --currentTaskIdx;
             UpdateTasks();
         }
 
@@ -44,11 +49,26 @@ namespace Megamap {
                 t.ResetSubtasks();
             }
 
+            lastTask = taskOrder[currentTaskIdx];
+            currentTaskIdx = 0;
+
             if (randomizeTasks)
                 ShuffleTasks();
 
-            currentTask = 0;
             UpdateTasks();
+        }
+
+        private void Awake()
+        {
+            taskOrder = new int[tasks.Length];
+            for (int i = 0; i < taskOrder.Length; ++i) {
+                taskOrder[i] = i;
+            }
+        }
+
+        private void Start()
+        {
+            ResetTasks();
         }
 
         private void UpdateTasks()
@@ -58,19 +78,21 @@ namespace Megamap {
                     t.gameObject.SetActive(false);
                 }
             }
-            tasks[currentTask].gameObject.SetActive(true);
+            tasks[taskOrder[currentTaskIdx]].gameObject.SetActive(true);
         }
-        
+
         private void ShuffleTasks()
         {
-            System.Random rnd = new System.Random();
-            tasks = new List<Task>(tasks).OrderBy(x => rnd.Next()).ToArray();
-        }
+            if (taskOrder.Length <= 1)
+                return;
 
+            do {
+                Debug.Log("Shuffling tasks...");
+                System.Random rnd = new System.Random();
+                taskOrder = new List<int>(taskOrder).OrderBy(x => rnd.Next()).ToArray();
+            } while (preventDirectRepitition && lastTask == taskOrder[currentTaskIdx]);
 
-        private void Start()
-        {
-            ResetTasks();
+            Debug.Log("New task order: " + string.Join(", ", new List<int>(taskOrder).ConvertAll(i => i.ToString()).ToArray()));
         }
     }
 
