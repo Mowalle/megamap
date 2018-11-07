@@ -8,6 +8,8 @@ namespace Megamap {
 
     public class TaskSwitcher : MonoBehaviour {
 
+        [SerializeField] private bool randomizeTasks = true;
+
         public Task[] tasks = new Task[5];
         
         private int currentTask = 0;
@@ -42,7 +44,9 @@ namespace Megamap {
                 t.ResetSubtasks();
             }
 
-            ShuffleTasks();
+            if (randomizeTasks)
+                ShuffleTasks();
+
             currentTask = 0;
             UpdateTasks();
         }

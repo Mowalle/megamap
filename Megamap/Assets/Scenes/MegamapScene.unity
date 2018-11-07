@@ -10815,6 +10815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d67049a8c420c4ca7cb527b7ac06b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomizeTasks: 1
   tasks:
   - {fileID: 919861994}
   - {fileID: 1544529221}
