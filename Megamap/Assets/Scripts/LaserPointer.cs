@@ -29,6 +29,8 @@ namespace Megamap {
             set { Freeze(value); }
         }
 
+        private Coroutine linkToHandRoutine = null;
+
         public void Freeze(bool freeze)
         {
             isFrozen = freeze;
@@ -36,24 +38,28 @@ namespace Megamap {
             line.material = isFrozen ? frozenMaterial : normalMaterial;
         }
 
+        public void Show(bool show)
+        {
+            // Reset freeze status when hiding.
+            if (!show)
+                IsFrozen = false;
+
+            line.enabled = show;
+
+            if (show && linkToHandRoutine == null)
+                linkToHandRoutine = StartCoroutine(LinkToHand());
+            else if (!show && linkToHandRoutine != null)
+                StopCoroutine(linkToHandRoutine);
+        }
+
         private void Awake()
         {
             line = GetComponent<LineRenderer>();
-            line.enabled = false;
-            IsFrozen = false;
         }
 
-        private void OnEnable()
+        private void Start()
         {
-            IsFrozen = false;
-            line.enabled = true;
-            StartCoroutine("LinkToHand");
-        }
-
-        private void OnDisable()
-        {
-            line.enabled = false;
-            StopCoroutine("LinkToHand");
+            Show(false);
         }
 
         // Have to use LateUpdate because hand position is updated via script, which is too late for Update apparently.

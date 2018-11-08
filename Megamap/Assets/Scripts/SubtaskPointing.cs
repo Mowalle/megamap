@@ -21,7 +21,7 @@ namespace Megamap {
         {
             currentTask = FindObjectOfType<Task>();
             currentTask.Description = taskDescription;
-            laser.enabled = true;
+            laser.Show(true);
         }
 
         private void Update()
@@ -37,7 +37,7 @@ namespace Megamap {
                     // ...
 
                     // Do next trial.
-                    laser.enabled = false;
+                    laser.Show(false);
                     FindObjectOfType<TaskSwitcher>().NextTask();
                 }
             }

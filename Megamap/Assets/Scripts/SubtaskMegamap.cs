@@ -23,7 +23,7 @@ namespace Megamap {
         private void Awake()
         {
             laser = FindObjectOfType<LaserPointer>();
-            laser.enabled = false;
+            laser.Show(false);
         }
 
         private void OnEnable()
@@ -31,7 +31,7 @@ namespace Megamap {
             Debug.Log("Starting the subtask \"Megamap\"");
             FindObjectOfType<Task>().Description = description;
 
-            laser.enabled = true;
+            laser.Show(true);
 
             // Randomization of LocationPins.
             if (maxTargetAttributeValue <= 0) {
@@ -66,7 +66,7 @@ namespace Megamap {
         private void OnDisable()
         {
             if (laser != null)
-                laser.enabled = false;
+                laser.Show(false);
 
             foreach (LocationPin pin in map.LocationPins) {
                 pin.OnTargetPinSelected.RemoveListener(HandleTargetPinSelected);
