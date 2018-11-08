@@ -10937,6 +10937,8 @@ MonoBehaviour:
   randomizeConditions: 1
   conditionsJson: {fileID: 4900000, guid: f30838d574e878044bcccc9566b6f47e, type: 3}
   conditions: []
+  conditionSequenceFile: {fileID: 4900000, guid: b92930419ac985a43bbef46635657a7d,
+    type: 3}
 --- !u!1001 &1728092383
 Prefab:
   m_ObjectHideFlags: 0
