@@ -68,6 +68,9 @@ namespace Megamap {
             if (isFrozen)
                 return;
 
+            if (hand == null)
+                return;
+
             Vector3 start, dir;
             if (hand.gameObject.name.Equals("FallbackHand")) {
                 start = Camera.main.transform.position;
