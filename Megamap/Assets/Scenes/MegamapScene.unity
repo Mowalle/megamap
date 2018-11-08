@@ -835,7 +835,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 31391678}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2024902421}
@@ -2661,6 +2661,46 @@ Prefab:
       propertyPath: labRoomRenderer
       value: 
       objectReference: {fileID: 804468301}
+    - target: {fileID: 120467243232178332, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120980312518390122, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120804725960857388, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120139766208639924, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120376204825396336, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120811604473319096, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120648296264840842, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120904675578050106, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 145095c4103356a4fb82675fe7b57bfe, type: 2}
   m_IsPrefabAsset: 0
@@ -2935,7 +2975,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 253640446}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1435643418}
@@ -4441,6 +4481,46 @@ Prefab:
       propertyPath: labRoomRenderer
       value: 
       objectReference: {fileID: 804468301}
+    - target: {fileID: 120980312518390122, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120376204825396336, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120904675578050106, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120648296264840842, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120139766208639924, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120804725960857388, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120811604473319096, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120467243232178332, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 145095c4103356a4fb82675fe7b57bfe, type: 2}
   m_IsPrefabAsset: 0
@@ -6359,6 +6439,46 @@ Prefab:
       propertyPath: mapRoomRenderer
       value: 
       objectReference: {fileID: 1121257248}
+    - target: {fileID: 120376204825396336, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120980312518390122, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120904675578050106, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120804725960857388, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120811604473319096, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120139766208639924, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120467243232178332, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120648296264840842, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 145095c4103356a4fb82675fe7b57bfe, type: 2}
   m_IsPrefabAsset: 0
@@ -7169,7 +7289,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1323486662}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 443959074}
@@ -8156,6 +8276,46 @@ Prefab:
       propertyPath: labRoomRenderer
       value: 
       objectReference: {fileID: 804468301}
+    - target: {fileID: 120139766208639924, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120376204825396336, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120648296264840842, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120811604473319096, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120980312518390122, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120467243232178332, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120904675578050106, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120804725960857388, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 145095c4103356a4fb82675fe7b57bfe, type: 2}
   m_IsPrefabAsset: 0
@@ -9952,7 +10112,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1544529220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 279559422}
@@ -10150,7 +10310,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1573455971}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1441983284}
@@ -10559,6 +10719,46 @@ Prefab:
       propertyPath: labRoomRenderer
       value: 
       objectReference: {fileID: 804468301}
+    - target: {fileID: 120804725960857388, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120980312518390122, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120139766208639924, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120467243232178332, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120811604473319096, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120648296264840842, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120904675578050106, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 120376204825396336, guid: 145095c4103356a4fb82675fe7b57bfe,
+        type: 2}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 145095c4103356a4fb82675fe7b57bfe, type: 2}
   m_IsPrefabAsset: 0
@@ -10976,7 +11176,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1769133628}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 112067911}

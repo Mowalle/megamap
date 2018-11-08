@@ -170,7 +170,7 @@ namespace Megamap {
             float t = 0f;
             while (t < 1f) {
                 t += Time.deltaTime * rate;
-                transform.localPosition = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0f, 1f, t));
+                transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0f, 1f, t));
                 transform.localScale = Vector3.Lerp(startScale, endScale, Mathf.SmoothStep(0f, 1f, t));
                 yield return null;
             }
