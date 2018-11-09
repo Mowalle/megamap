@@ -11,7 +11,7 @@ namespace Megamap {
     [System.Serializable]
     public class LocationPinEvent : UnityEvent<LocationPin> { }
 
-    [RequireComponent(typeof(Interactable))]
+    [RequireComponent(typeof(Interactable), typeof(BoxCollider))]
     public class LocationPin : MonoBehaviour {
         
         public enum Status { Normal, Error }
@@ -77,6 +77,12 @@ namespace Megamap {
                 SetStatus(Status.Error);
                 OnWrongPinSelected.Invoke();
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            var coll = GetComponent<BoxCollider>();
+            Gizmos.DrawWireCube(transform.position + coll.center, coll.size);
         }
 
         private void OnEnable()
