@@ -12,6 +12,9 @@ namespace Megamap {
             var sequences = new int[lines.Length][];
 
             for (int i = 0; i < lines.Length; ++i) {
+                if (lines[i].Equals(""))
+                    continue;
+
                 var numbers = lines[i].Split(new string[] { ", " }, StringSplitOptions.None);
                 sequences[i] = new int[numbers.Length];
                 for (int j = 0; j < numbers.Length; ++j) {
