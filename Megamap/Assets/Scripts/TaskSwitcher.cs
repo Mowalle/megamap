@@ -80,7 +80,7 @@ namespace Megamap {
             Debug.Log("Task sequence is "
                 + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray())
                 + ", starting with task "
-                + currentSequence[startOffset]
+                + (currentSequence[startOffset] + 1) + "/" + currentSequence.Length
                 + ".");
 
             UpdateTasks();
