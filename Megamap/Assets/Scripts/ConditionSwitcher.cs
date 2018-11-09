@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -25,7 +26,7 @@ namespace Megamap {
         public Condition CurrentCondition
         {
             get {
-                return randomizeConditions ? conditions[mySequence[currentConditionIdx]] : conditions[currentConditionIdx];
+                return conditions[mySequence[(startOffset + numConditionsFinished) % conditions.Length]];
             }
         }
 
@@ -39,18 +40,19 @@ namespace Megamap {
         [SerializeField] private Condition[] conditions = null;
 
         private int[] mySequence = null;
-        private int currentConditionIdx = 0;
+        private int startOffset = 0;
+        private int numConditionsFinished = 0;
 
         public void NextCondition()
         {
             // Last condition was reached -> experiment is over!
-            if (currentConditionIdx == conditions.Length - 1) {
+            if (numConditionsFinished == conditions.Length - 1) {
                 var task = FindObjectOfType<Task>();
                 task.Description = "Geschafft!\nDas Experiment ist vorbei.";
                 return;
             }
 
-            ++currentConditionIdx;
+            ++numConditionsFinished;
 
             var switcher = FindObjectOfType<TaskSwitcher>();
             switcher.ResetTasks();
@@ -58,11 +60,11 @@ namespace Megamap {
 
         public void PreviousCondition()
         {
-            if (currentConditionIdx == 0) {
+            if (numConditionsFinished == 0) {
                 return;
             }
 
-            --currentConditionIdx;
+            --numConditionsFinished;
 
             var switcher = FindObjectOfType<TaskSwitcher>();
             switcher.ResetTasks();
@@ -81,7 +83,16 @@ namespace Megamap {
                 var conditionSequences = SequenceLoader.LoadSequences(conditionSequenceFile);
                 mySequence = conditionSequences[UnityEngine.Random.Range(0, conditionSequences.GetLength(0))];
                 Assert.AreEqual(conditions.Length, mySequence.Length);
+                startOffset = UnityEngine.Random.Range(0, mySequence.Length);
             }
+            else {
+                mySequence = new int[conditions.Length];
+                for (int i = 0; i < mySequence.Length; ++i) {
+                    mySequence[i] = i;
+                }
+            }
+
+            Debug.Log("Condition sequence is " + string.Join(", ", new List<int>(mySequence).ConvertAll(i => i.ToString()).ToArray()) + ", starting with condition " + mySequence[startOffset] + ".");
         }
     }
 
