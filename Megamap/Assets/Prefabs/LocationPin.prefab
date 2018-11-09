@@ -20,9 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4457109188305766}
   - component: {fileID: 114786805334776446}
-  - component: {fileID: 65794524127106656}
   - component: {fileID: 114676571431403758}
-  - component: {fileID: 65378285291121638}
+  - component: {fileID: 135442459560335626}
   m_Layer: 0
   m_Name: LocationPin
   m_TagString: LocationPin
@@ -185,7 +184,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1017693297674044}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.879, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4877935696058098}
@@ -261,18 +260,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 275, y: 120, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65378285291121638
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1017693297674044}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.16, z: 0.04}
-  m_Center: {x: 0, y: 0.08, z: 0}
 --- !u!65 &65533167953696152
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -285,18 +272,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 275, y: 120, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65794524127106656
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1017693297674044}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.14, y: 0.1, z: 0.04}
-  m_Center: {x: 0, y: 0.18, z: 0}
 --- !u!114 &114079849364577046
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -791,6 +766,18 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: Valve.VR.InteractionSystem.CustomEvents+UnityEventHand, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!135 &135442459560335626
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1017693297674044}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.13
+  m_Center: {x: 0, y: 0.12, z: 0}
 --- !u!222 &222006707523989242
 CanvasRenderer:
   m_ObjectHideFlags: 1
