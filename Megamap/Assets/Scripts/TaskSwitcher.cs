@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Assertions;
 
 namespace Megamap {
 
@@ -11,15 +9,17 @@ namespace Megamap {
         [SerializeField] private bool randomizeTasks = true;
         [SerializeField] private bool preventDirectRepitition = true;
 
-        public Task[] tasks = new Task[5];
-        private int[] taskOrder = null;
-        
-        private int currentTaskIdx = 0;
-        private int lastTask = -1;
+        [SerializeField] private Task[] tasks = new Task[5];
+
+        [SerializeField] private TextAsset taskSequenceFile = null;
+        private int[][] sequences = null;
+        private int[] currentSequence = null;
+        private int startOffset = -1;
+        private int numTasksFinished = 0;
 
         public void NextTask()
         {
-            if (currentTaskIdx == tasks.Length - 1) {
+            if (numTasksFinished == tasks.Length - 1) {
                 var conditionSwitcher = FindObjectOfType<ConditionSwitcher>();
                 if (conditionSwitcher != null) {
                     conditionSwitcher.NextCondition();
@@ -27,43 +27,68 @@ namespace Megamap {
                 return;
             }
 
-            lastTask = taskOrder[currentTaskIdx];
-            ++currentTaskIdx;
+            ++numTasksFinished;
             UpdateTasks();
         }
 
         public void PreviousTask()
         {
-            if (currentTaskIdx == 0) {
+            if (numTasksFinished == 0) {
                 return;
             }
 
-            lastTask = taskOrder[currentTaskIdx];
-            --currentTaskIdx;
+            --numTasksFinished;
             UpdateTasks();
         }
 
         public void ResetTasks()
         {
+            // Remember previous task in case we don't want to repeat it. 
+            int lastTask = (startOffset == -1) ? -1 : currentSequence[(startOffset + numTasksFinished) % tasks.Length];
+
             foreach (Task t in tasks) {
                 t.ResetSubtasks();
             }
 
-            lastTask = taskOrder[currentTaskIdx];
-            currentTaskIdx = 0;
+            numTasksFinished = 0;
 
-            if (randomizeTasks)
-                ShuffleTasks();
+            // Load new sequences in case old ones are all used up, which should not be a problem when using a file with all possible permutations.
+            if (sequences.GetLength(0) == 0)
+                LoadSequences();
+
+            // Pick sequence and remove it from list of available sequences.
+            {
+                var sequenceIndex = Random.Range(0, sequences.GetLength(0));
+                currentSequence = sequences[sequenceIndex];
+                Assert.AreEqual(currentSequence.Length, tasks.Length);
+
+                // This remove the used element, but it's quite ugly...
+                var tmp = new List<int[]>(sequences);
+                tmp.RemoveAt(sequenceIndex);
+                sequences = tmp.ToArray();
+            }
+
+            if (randomizeTasks) {
+                do {
+                    startOffset = Random.Range(0, currentSequence.Length);
+                } while (preventDirectRepitition && lastTask == currentSequence[startOffset]);
+            }
+            else {
+                startOffset = 0;
+            }
+
+            Debug.Log("Task sequence is "
+                + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray())
+                + ", starting with task "
+                + currentSequence[startOffset]
+                + ".");
 
             UpdateTasks();
         }
 
         private void Awake()
         {
-            taskOrder = new int[tasks.Length];
-            for (int i = 0; i < taskOrder.Length; ++i) {
-                taskOrder[i] = i;
-            }
+            LoadSequences();
         }
 
         private void Start()
@@ -78,24 +103,24 @@ namespace Megamap {
                     t.gameObject.SetActive(false);
                 }
             }
-            tasks[taskOrder[currentTaskIdx]].gameObject.SetActive(true);
+            tasks[currentSequence[(startOffset + numTasksFinished) % tasks.Length]].gameObject.SetActive(true);
         }
 
-        private void ShuffleTasks()
+        private void LoadSequences()
         {
-            if (taskOrder.Length <= 1)
-                return;
-
-            do {
-                Debug.Log("Shuffling tasks...");
-                System.Random rnd = new System.Random();
-                taskOrder = new List<int>(taskOrder).OrderBy(x => rnd.Next()).ToArray();
-            } while (preventDirectRepitition && lastTask == taskOrder[currentTaskIdx]);
-
-            Debug.Log("New task order: " + string.Join(", ", new List<int>(taskOrder).ConvertAll(i => i.ToString()).ToArray()));
+            if (taskSequenceFile != null) {
+                sequences = SequenceLoader.LoadSequences(taskSequenceFile);
+            }
+            else {
+                // In case file is not setup, just do [0, 1, 2, 3, ...].
+                sequences = new int[1][];
+                sequences[0] = new int[tasks.Length];
+                for (int i = 0; i < sequences[0].Length; ++i) {
+                    sequences[0][i] = i;
+                }
+            }
         }
     }
-
 }
 
 
