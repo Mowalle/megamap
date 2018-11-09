@@ -123,20 +123,20 @@ namespace Megamap {
         //-------------------------------------------------
         private void HandHoverUpdate(Hand hand)
         {
-            GrabTypes startingGrabType = hand.GetGrabStarting();
-            //bool isGrabEnding = hand.IsGrabEnding(this.gameObject);
+            //GrabTypes startingGrabType = hand.GetGrabStarting();
+            ////bool isGrabEnding = hand.IsGrabEnding(this.gameObject);
 
-            // The GetMouseButtonDown(0) is a workaround for left-click not working currently with SteamVRs fallback hand (in 2D-mode).
-            if (startingGrabType != GrabTypes.None || Input.GetMouseButtonDown(0)) {
-                if (isShown) {
-                    Hide();
-                }
-                else {
-                    foreach (LocationPin pin in FindObjectsOfType<LocationPin>())
-                        pin.Hide();
-                    Show();
-                }
-            }
+            //// The GetMouseButtonDown(0) is a workaround for left-click not working currently with SteamVRs fallback hand (in 2D-mode).
+            //if (startingGrabType != GrabTypes.None || Input.GetMouseButtonDown(0)) {
+            //    if (isShown) {
+            //        Hide();
+            //    }
+            //    else {
+            //        foreach (LocationPin pin in FindObjectsOfType<LocationPin>())
+            //            pin.Hide();
+            //        Show();
+            //    }
+            //}
             //else if (isGrabEnding) {
             //}
         }
