@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Megamap {
 
@@ -23,29 +23,36 @@ namespace Megamap {
 
         //------------------
 
-        public Condition CurrentCondition { get { return conditions[currentCondition]; } }
-
-        private int currentCondition = 0;
+        public Condition CurrentCondition
+        {
+            get {
+                return conditions[mySequence[(startOffset + numConditionsFinished) % conditions.Length]];
+            }
+        }
 
         [Header("Condition Settings"), Space]
+
+        [SerializeField] private TextAsset conditionSequenceFile = null;
+
         [SerializeField] private bool randomizeConditions = true;
 
-        [SerializeField]
-        private TextAsset conditionsJson = null;
-        [SerializeField]
-        private Condition[] conditions = new Condition[0];
+        [SerializeField] private TextAsset conditionsJson = null;
+        [SerializeField] private Condition[] conditions = null;
 
-        
+        private int[] mySequence = null;
+        private int startOffset = 0;
+        private int numConditionsFinished = 0;
+
         public void NextCondition()
         {
             // Last condition was reached -> experiment is over!
-            if (currentCondition == conditions.Length - 1) {
+            if (numConditionsFinished == conditions.Length - 1) {
                 var task = FindObjectOfType<Task>();
                 task.Description = "Geschafft!\nDas Experiment ist vorbei.";
                 return;
             }
 
-            ++currentCondition;
+            ++numConditionsFinished;
 
             var switcher = FindObjectOfType<TaskSwitcher>();
             switcher.ResetTasks();
@@ -53,31 +60,43 @@ namespace Megamap {
 
         public void PreviousCondition()
         {
-            if (currentCondition == 0) {
+            if (numConditionsFinished == 0) {
                 return;
             }
 
-            --currentCondition;
+            --numConditionsFinished;
 
             var switcher = FindObjectOfType<TaskSwitcher>();
             switcher.ResetTasks();
         }
         
-        private void ShuffleConditions()
-        {
-            System.Random rnd = new System.Random();
-            conditions = new List<Condition>(conditions).OrderBy(x => rnd.Next()).ToArray();
-        }
-
-
         private void Awake()
         {
             var json = conditionsJson.text;
             var config = JsonUtility.FromJson<ConditionConfiguration>(json);
             conditions = config.conditions;
 
-            if (randomizeConditions)
-                ShuffleConditions();
+            if (conditionSequenceFile == null)
+                randomizeConditions = false;
+
+            if (randomizeConditions) {
+                var conditionSequences = SequenceLoader.LoadSequences(conditionSequenceFile);
+                mySequence = conditionSequences[UnityEngine.Random.Range(0, conditionSequences.GetLength(0))];
+                Assert.AreEqual(conditions.Length, mySequence.Length);
+                startOffset = UnityEngine.Random.Range(0, mySequence.Length);
+            }
+            else {
+                mySequence = new int[conditions.Length];
+                for (int i = 0; i < mySequence.Length; ++i) {
+                    mySequence[i] = i;
+                }
+            }
+
+            Debug.Log("Condition sequence is "
+                + string.Join(", ", new List<int>(mySequence).ConvertAll(i => i.ToString()).ToArray())
+                + ", starting with condition "
+                + (mySequence[startOffset] + 1) + "/" + mySequence.Length
+                + ".");
         }
     }
 

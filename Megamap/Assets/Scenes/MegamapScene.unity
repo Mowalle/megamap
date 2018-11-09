@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10934,6 +10934,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d75ac91edd52664d80d3b57c48f491b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conditionSequenceFile: {fileID: 4900000, guid: 0ae924388bad46c459c4ceaeb1146925,
+    type: 3}
   randomizeConditions: 1
   conditionsJson: {fileID: 4900000, guid: f30838d574e878044bcccc9566b6f47e, type: 3}
   conditions: []
@@ -11087,6 +11089,7 @@ MonoBehaviour:
   - {fileID: 253640447}
   - {fileID: 31391679}
   - {fileID: 1323486663}
+  taskSequenceFile: {fileID: 4900000, guid: 5d35fed9bd5d8f0469aea3535251f6a4, type: 3}
 --- !u!1001 &1756892565
 Prefab:
   m_ObjectHideFlags: 0
