@@ -104,8 +104,7 @@ namespace Megamap {
         //-------------------------------------------------
         private void OnHandHoverBegin(Hand hand)
         {
-            foreach (LocationPin pin in FindObjectsOfType<LocationPin>())
-                pin.Hide();
+            GetComponent<SphereCollider>().radius *= 3;
             Show();
         }
 
@@ -115,6 +114,8 @@ namespace Megamap {
         //-------------------------------------------------
         private void OnHandHoverEnd(Hand hand)
         {
+            GetComponent<SphereCollider>().radius /= 3;
+            Hide();
         }
 
 
