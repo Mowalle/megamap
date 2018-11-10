@@ -85,7 +85,7 @@ namespace Megamap {
             RaycastHit hit;
 
             line.SetPosition(0, ray.origin);
-            if (Physics.Raycast(ray, out hit, 100f)) {
+            if (Physics.Raycast(ray, out hit, 100f) && !hit.collider.isTrigger) {
                 line.SetPosition(1, hit.point);
                 // This should *theoretically* move the hover point of the hand,
                 // so that SteamVR-Interactables at the end of the ray should be

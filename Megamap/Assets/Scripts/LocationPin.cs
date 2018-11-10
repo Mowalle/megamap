@@ -11,7 +11,7 @@ namespace Megamap {
     [System.Serializable]
     public class LocationPinEvent : UnityEvent<LocationPin> { }
 
-    [RequireComponent(typeof(Interactable))]
+    [RequireComponent(typeof(Interactable), typeof(SphereCollider))]
     public class LocationPin : MonoBehaviour {
         
         public enum Status { Normal, Error }
@@ -31,6 +31,8 @@ namespace Megamap {
         [SerializeField] private Color errorColor = new Color();
 
         private bool isShown = false;
+
+        private float normalColliderRadius = 0f;
 
         public void Show()
         {
@@ -79,10 +81,26 @@ namespace Megamap {
             }
         }
 
+        private void Awake()
+        {
+            normalColliderRadius = GetComponent<SphereCollider>().radius;
+        }
+
+        private void OnDrawGizmos()
+        {
+            var coll = GetComponent<SphereCollider>();
+            Gizmos.DrawWireSphere(transform.position + coll.center, coll.radius);
+        }
+
         private void OnEnable()
         {
             Hide();
             SetStatus(Status.Normal);
+        }
+
+        private void OnDisable()
+        {
+            GetComponent<SphereCollider>().radius = normalColliderRadius;
         }
 
         private void Update()
@@ -98,8 +116,7 @@ namespace Megamap {
         //-------------------------------------------------
         private void OnHandHoverBegin(Hand hand)
         {
-            foreach (LocationPin pin in FindObjectsOfType<LocationPin>())
-                pin.Hide();
+            GetComponent<SphereCollider>().radius = 3 * normalColliderRadius;
             Show();
         }
 
@@ -109,6 +126,8 @@ namespace Megamap {
         //-------------------------------------------------
         private void OnHandHoverEnd(Hand hand)
         {
+            GetComponent<SphereCollider>().radius = normalColliderRadius;
+            Hide();
         }
 
 
@@ -117,20 +136,20 @@ namespace Megamap {
         //-------------------------------------------------
         private void HandHoverUpdate(Hand hand)
         {
-            GrabTypes startingGrabType = hand.GetGrabStarting();
-            //bool isGrabEnding = hand.IsGrabEnding(this.gameObject);
+            //GrabTypes startingGrabType = hand.GetGrabStarting();
+            ////bool isGrabEnding = hand.IsGrabEnding(this.gameObject);
 
-            // The GetMouseButtonDown(0) is a workaround for left-click not working currently with SteamVRs fallback hand (in 2D-mode).
-            if (startingGrabType != GrabTypes.None || Input.GetMouseButtonDown(0)) {
-                if (isShown) {
-                    Hide();
-                }
-                else {
-                    foreach (LocationPin pin in FindObjectsOfType<LocationPin>())
-                        pin.Hide();
-                    Show();
-                }
-            }
+            //// The GetMouseButtonDown(0) is a workaround for left-click not working currently with SteamVRs fallback hand (in 2D-mode).
+            //if (startingGrabType != GrabTypes.None || Input.GetMouseButtonDown(0)) {
+            //    if (isShown) {
+            //        Hide();
+            //    }
+            //    else {
+            //        foreach (LocationPin pin in FindObjectsOfType<LocationPin>())
+            //            pin.Hide();
+            //        Show();
+            //    }
+            //}
             //else if (isGrabEnding) {
             //}
         }
