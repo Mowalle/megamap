@@ -32,6 +32,8 @@ namespace Megamap {
 
         private bool isShown = false;
 
+        private float normalColliderRadius = 0f;
+
         public void Show()
         {
             // Initially, rotate canvas towards user's view.
@@ -79,6 +81,11 @@ namespace Megamap {
             }
         }
 
+        private void Awake()
+        {
+            normalColliderRadius = GetComponent<SphereCollider>().radius;
+        }
+
         private void OnDrawGizmos()
         {
             var coll = GetComponent<SphereCollider>();
@@ -89,6 +96,11 @@ namespace Megamap {
         {
             Hide();
             SetStatus(Status.Normal);
+        }
+
+        private void OnDisable()
+        {
+            GetComponent<SphereCollider>().radius = normalColliderRadius;
         }
 
         private void Update()
@@ -104,7 +116,7 @@ namespace Megamap {
         //-------------------------------------------------
         private void OnHandHoverBegin(Hand hand)
         {
-            GetComponent<SphereCollider>().radius *= 3;
+            GetComponent<SphereCollider>().radius = 3 * normalColliderRadius;
             Show();
         }
 
@@ -114,7 +126,7 @@ namespace Megamap {
         //-------------------------------------------------
         private void OnHandHoverEnd(Hand hand)
         {
-            GetComponent<SphereCollider>().radius /= 3;
+            GetComponent<SphereCollider>().radius = normalColliderRadius;
             Hide();
         }
 
