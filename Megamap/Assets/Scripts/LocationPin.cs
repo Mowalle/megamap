@@ -5,13 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using Valve.VR.InteractionSystem;
+using System;
 
 namespace Megamap {
-
-    [System.Serializable]
-    public class LocationPinEvent : UnityEvent<LocationPin> { }
-
-    [RequireComponent(typeof(Interactable), typeof(SphereCollider))]
+    
+    [RequireComponent(typeof(Interactable))]
     public class LocationPin : MonoBehaviour {
         
         public enum Status { Normal, Error }
@@ -31,6 +29,8 @@ namespace Megamap {
         [SerializeField] private Color errorColor = new Color();
 
         private bool isShown = false;
+
+        private LaserPointer laser = null;
         
         public void Show()
         {
@@ -78,19 +78,28 @@ namespace Megamap {
                 OnWrongPinSelected.Invoke();
             }
         }
-        
-        private void OnDrawGizmos()
+
+        private void Awake()
         {
-            var coll = GetComponent<SphereCollider>();
-            Gizmos.DrawWireSphere(transform.position + coll.center, coll.radius);
+            laser = FindObjectOfType<LaserPointer>();
         }
 
         private void OnEnable()
         {
+            laser.OnLaserTargetChanged.AddListener(HandleOnLaserTargetChanged);
+
             Hide();
             SetStatus(Status.Normal);
         }
-        
+
+        private void OnDisable()
+        {
+            if (laser == null)
+                return;
+
+            laser.OnLaserTargetChanged.RemoveListener(HandleOnLaserTargetChanged);
+        }
+
         private void Update()
         {
             if (!isShown)
@@ -99,45 +108,17 @@ namespace Megamap {
             KeepFacingUser();
         }
 
-        //-------------------------------------------------
-        // Called when a Hand starts hovering over this object
-        //-------------------------------------------------
-        private void OnHandHoverBegin(Hand hand)
+        private void HandleOnLaserTargetChanged(Collider from, Collider to)
         {
-            Show();
-        }
-
-
-        //-------------------------------------------------
-        // Called when a Hand stops hovering over this object
-        //-------------------------------------------------
-        private void OnHandHoverEnd(Hand hand)
-        {
-            Hide();
-        }
-
-
-        //-------------------------------------------------
-        // Called every Update() while a Hand is hovering over this object
-        //-------------------------------------------------
-        private void HandHoverUpdate(Hand hand)
-        {
-            //GrabTypes startingGrabType = hand.GetGrabStarting();
-            ////bool isGrabEnding = hand.IsGrabEnding(this.gameObject);
-
-            //// The GetMouseButtonDown(0) is a workaround for left-click not working currently with SteamVRs fallback hand (in 2D-mode).
-            //if (startingGrabType != GrabTypes.None || Input.GetMouseButtonDown(0)) {
-            //    if (isShown) {
-            //        Hide();
-            //    }
-            //    else {
-            //        foreach (LocationPin pin in FindObjectsOfType<LocationPin>())
-            //            pin.Hide();
-            //        Show();
-            //    }
-            //}
-            //else if (isGrabEnding) {
-            //}
+            if (to == GetComponent<Collider>() && !isShown) {
+                Show();
+            }
+            else if (from == GetComponent<Collider>() && !IsChildCollider(to)) {
+                Hide();
+            }
+            else if (IsChildCollider(from) && !IsChildCollider(to) && to != GetComponent<Collider>()) {
+                Hide();
+            }
         }
 
         private void KeepFacingUser()
@@ -148,6 +129,11 @@ namespace Megamap {
             if (Vector3.Dot(Camera.main.transform.forward, canvas.forward) < 0f) {
                 canvas.GetComponent<RectTransform>().Rotate(0f, 180f, 0f);
             }
+        }
+
+        private bool IsChildCollider(Collider c)
+        {
+            return Array.Exists(GetComponentsInChildren<Collider>(), collider => collider == c);
         }
     }
 

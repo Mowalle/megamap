@@ -8,7 +8,8 @@ using Valve.VR.InteractionSystem;
 namespace Megamap {
 
     [System.Serializable]
-    public class LaserEvent : UnityEvent<RaycastHit> {}
+    public class LaserStayEvent : UnityEvent<Collider> { }
+    public class LaserChangeEvent : UnityEvent<Collider, Collider> {}
 
     [RequireComponent(typeof(LineRenderer))]
     public class LaserPointer : MonoBehaviour {
@@ -18,10 +19,15 @@ namespace Megamap {
         [SerializeField] private Material normalMaterial = null;
         [SerializeField] private Material frozenMaterial = null;
 
+        public LaserChangeEvent OnLaserTargetChanged = new LaserChangeEvent();
+        public LaserStayEvent OnLaserStay = new LaserStayEvent();
+
+        private Collider lastHit = null;
+
         private LineRenderer line;
         private Hand hand;
-        public Hand GetHand() {  return hand; }
-
+        public Hand GetHand() { return hand; }
+        
         private bool isFrozen = false;
         public bool IsFrozen
         {
@@ -63,7 +69,7 @@ namespace Megamap {
         }
 
         // Have to use LateUpdate because hand position is updated via script, which is too late for Update apparently.
-        private void LateUpdate()
+        private void Update()
         {
             if (isFrozen)
                 return;
@@ -91,9 +97,21 @@ namespace Megamap {
                 // so that SteamVR-Interactables at the end of the ray should be
                 // clickable etc.
                 hand.hoverSphereTransform.position = hit.point;
+
+                if (lastHit != hit.collider) {
+                    OnLaserTargetChanged.Invoke(lastHit, hit.collider);
+                    lastHit = hit.collider;
+                }
+                else {
+                    OnLaserStay.Invoke(hit.collider);
+                }
             }
             else {
                 line.SetPosition(1, ray.GetPoint(100f));
+                if (lastHit != null) {
+                    OnLaserTargetChanged.Invoke(lastHit, null);
+                }
+                lastHit = null;
             }
         }
 
