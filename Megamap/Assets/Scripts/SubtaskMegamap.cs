@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Megamap {
 
-    public class SubtaskMegamap : MonoBehaviour {
+    public class SubtaskMegamap : Subtask {
 
         [Header("Pin randomization values")]
         [SerializeField]

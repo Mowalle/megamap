@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Megamap {
 
-    public class SubtaskUserSetup : MonoBehaviour {
+    public class SubtaskUserSetup : Subtask {
 
         [SerializeField]
         private FloorTarget floorTarget = null;

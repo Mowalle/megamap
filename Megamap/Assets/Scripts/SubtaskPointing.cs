@@ -6,7 +6,7 @@ using Valve.VR.InteractionSystem;
 
 namespace Megamap {
 
-    public class SubtaskPointing : MonoBehaviour {
+    public class SubtaskPointing : Subtask {
 
         public SteamVR_Action_Boolean acceptAction;
         public SteamVR_Action_Boolean backAction;

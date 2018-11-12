@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Megamap {
 
+    public class Subtask : MonoBehaviour { }
+
     public class Task : MonoBehaviour {
 
-        public SubtaskUserSetup subtaskUserSetup;
-        public SubtaskMegamap subtaskMegamap;
-        public SubtaskPointing subtaskPointing;
+        public Subtask[] subtasks = new Subtask[4];
 
         // Will be set by subtasks.
         public string Description { get; set; }
@@ -17,7 +15,7 @@ namespace Megamap {
 
         public void NextSubtask()
         {
-            if (currentSubtask == 2) {
+            if (currentSubtask == 3) {
                 return;
             }
 
@@ -43,24 +41,11 @@ namespace Megamap {
 
         private void UpdateSubtask()
         {
-            switch (currentSubtask) {
-            case 0:
-                subtaskUserSetup.gameObject.SetActive(true);
-                subtaskMegamap.gameObject.SetActive(false);
-                subtaskPointing.gameObject.SetActive(false);
-                break;
-            case 1:
-                subtaskUserSetup.gameObject.SetActive(false);
-                subtaskMegamap.gameObject.SetActive(true);
-                subtaskPointing.gameObject.SetActive(false);
-                break;
-            case 2:
-                subtaskUserSetup.gameObject.SetActive(false);
-                subtaskMegamap.gameObject.SetActive(false);
-                subtaskPointing.gameObject.SetActive(true);
-                break;
-            default: break;
-            }
+            for (int i = 0; i < subtasks.Length; ++i)
+                if (i != currentSubtask)
+                    subtasks[i].gameObject.SetActive(false);
+
+            subtasks[currentSubtask].gameObject.SetActive(true);
         }
 
 
