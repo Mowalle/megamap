@@ -23,7 +23,6 @@ namespace Megamap {
         private void Awake()
         {
             laser = FindObjectOfType<LaserPointer>();
-            laser.Show(false);
         }
 
         private void OnEnable()

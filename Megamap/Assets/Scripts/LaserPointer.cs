@@ -69,7 +69,7 @@ namespace Megamap {
         }
 
         // Have to use LateUpdate because hand position is updated via script, which is too late for Update apparently.
-        private void Update()
+        private void LateUpdate()
         {
             if (isFrozen)
                 return;
