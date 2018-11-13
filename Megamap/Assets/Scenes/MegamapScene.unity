@@ -8073,15 +8073,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4457109188305766, guid: 8502f82b3ea930844bfc4fe739a2edd8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 4.843
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4457109188305766, guid: 8502f82b3ea930844bfc4fe739a2edd8, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1.447
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4457109188305766, guid: 8502f82b3ea930844bfc4fe739a2edd8, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 2.17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4457109188305766, guid: 8502f82b3ea930844bfc4fe739a2edd8, type: 2}
       propertyPath: m_LocalRotation.x
