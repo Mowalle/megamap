@@ -1,2 +1,1 @@
-# MegaMap
-
+# Masterthesis "Megamap" - Code Repository
