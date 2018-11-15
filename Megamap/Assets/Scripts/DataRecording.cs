@@ -11,6 +11,37 @@ public class DataRecording : MonoBehaviour {
     [SerializeField] private string userID = "";
     private string startTime = "";
 
+    public static DirectoryInfo IncrementDirectory(DirectoryInfo rootDir, string dirNameStem, string suffix)
+    {
+        var dirs = rootDir.GetDirectories();
+
+        List<string> dirNames = new List<string>();
+
+        foreach (var dir in dirs) {
+            if (dir.Name.StartsWith(dirNameStem)) {
+                dirNames.Add(dir.Name.Substring(dirNameStem.Length));
+            }
+        }
+
+        dirNames.Sort();
+
+        string newDirNumber = "0";
+        for (int i = dirNames.Count - 1; i >= 0; --i) {
+            var fields = dirNames[i].Split('_');
+            int n;
+            if (int.TryParse(fields[0], out n)) {
+                newDirNumber = (n + 1).ToString();
+                break;
+            }
+        }
+
+        var newDir = new DirectoryInfo(rootDir.FullName + "/" + dirNameStem + newDirNumber + suffix);
+        // Just to make sure...
+        Debug.Assert(!newDir.Exists, "User folder would be overwritten; ABORT!");
+        newDir.Create();
+        return newDir;
+    }
+
     private void Start()
     {
         Assert.raiseExceptions = true;
@@ -28,40 +59,15 @@ public class DataRecording : MonoBehaviour {
                 di.Create();
             }
 
-            var userDirs = di.GetDirectories("user_*");
-            userID = "user_" + NextUserID(userDirs);
-
-            UserFolder = new DirectoryInfo(di.FullName + "/" + userID + "_" + startTime);
+            UserFolder = IncrementDirectory(di, "user_", "_" + startTime);
             // Just to make sure...
             Debug.Assert(!UserFolder.Exists, "User folder would be overwritten; ABORT!");
             UserFolder.Create();
+            userID = UserFolder.Name;
         }
         catch (Exception e) {
             Debug.LogError("Creating directory failed: " + e.ToString());
         }
-    }
-
-    private string NextUserID(DirectoryInfo[] dirs)
-    {
-        List<string> dirNames = new List<string>();
-
-        foreach (var dir in dirs) {
-            if (dir.Name.StartsWith("user_")) {
-                dirNames.Add(dir.Name.Substring("user_".Length));
-            }
-        }
-
-        dirNames.Sort();
-
-        for (int i = dirNames.Count - 1; i >= 0; --i) {
-            var fields = dirNames[i].Split('_');
-            int n;
-            if (int.TryParse(fields[0], out n)) {
-                return (n + 1).ToString();
-            }
-        }
-
-        return "0";
     }
 }
 
