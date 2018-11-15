@@ -11,6 +11,8 @@ public class DataRecording : MonoBehaviour {
     [SerializeField] private string userID = "";
     private string startTime = "";
 
+    private StreamWriter writer = null;
+
     public static DirectoryInfo IncrementDirectory(DirectoryInfo rootDir, string dirNameStem, string suffix)
     {
         var dirs = rootDir.GetDirectories();
@@ -47,6 +49,25 @@ public class DataRecording : MonoBehaviour {
         Assert.raiseExceptions = true;
 
         CreateUserDir();
+
+        writer = File.AppendText(UserFolder.FullName + "/position_and_view.csv");
+    }
+
+    private void OnDestroy()
+    {
+        writer.Close();
+    }
+
+    private void LateUpdate()
+    {
+        var cam = Camera.main.transform;
+        writer.WriteLine(Time.time + ", "
+            + cam.position.x + ", "
+            + cam.position.y + ", "
+            + cam.position.z + ", "
+            + cam.rotation.eulerAngles.x + ", "
+            + cam.rotation.eulerAngles.y + ", "
+            + cam.rotation.eulerAngles.z);
     }
 
     private void CreateUserDir()
