@@ -6,16 +6,38 @@ using UnityEngine.Assertions;
 
 namespace Megamap {
 
+    public class Record {
+        public int conditionIndex;
+        public int taskIndex;
+        public float megamapTime;
+        public int numErrors;
+        public int numSelectionsTotal;
+        public int[] numSelections;
+        public float pointingTime;
+        public float confirmationTime;
+        public Vector3 positionAtConfirmation;
+        public Vector3 viewAtConfirmation;
+        public Vector3 handPosition;
+        public Vector3 rayDirection;
+        public float horizOffsetDeg;
+        public float vertOffsetDeg;
+
+        public void WriteToDisk(DirectoryInfo directory, string name)
+        {}
+    }
+
     public class RecordData : MonoBehaviour {
 
         public DirectoryInfo UserFolder { get; set; }
+        public Record CurrentRecord { get; set; }
 
         public bool writeData = true;
 
         [SerializeField] private string userID = "";
-        private string startTime = "";
 
-        private StreamWriter writer = null;
+        private string startTime = "";
+        private StreamWriter csvWriter = null;
+        private StreamWriter logWriter = null;
 
         public static DirectoryInfo IncrementDirectory(DirectoryInfo rootDir, string dirNameStem, string suffix)
         {
@@ -48,6 +70,8 @@ namespace Megamap {
             return newDir;
         }
 
+        public void Log(string s) { logWriter.WriteLine(Time.realtimeSinceStartup.ToString() + ": " + s); }
+
         private void Awake()
         {
             enabled = writeData;
@@ -59,18 +83,22 @@ namespace Megamap {
 
             CreateUserDir();
 
-            writer = File.AppendText(UserFolder.FullName + "/position_and_view.csv");
+            csvWriter = File.AppendText(UserFolder.FullName + "/position_and_view_total.csv");
+            logWriter = File.AppendText(UserFolder.FullName + "/logfile.txt");
+
+            CurrentRecord = new Record();
         }
 
         private void OnDestroy()
         {
-            writer.Close();
+            csvWriter.Close();
+            logWriter.Close();
         }
 
         private void LateUpdate()
         {
             var cam = Camera.main.transform;
-            writer.WriteLine(Time.time + ", "
+            csvWriter.WriteLine(Time.time + ", "
                 + cam.position.x + ", "
                 + cam.position.y + ", "
                 + cam.position.z + ", "
