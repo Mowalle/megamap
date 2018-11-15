@@ -111,6 +111,8 @@ namespace Megamap {
         private void HandleOnLaserTargetChanged(Collider from, Collider to)
         {
             if (to == GetComponent<Collider>() && !isShown) {
+                var recorder = FindObjectOfType<RecordData>();
+                ++recorder.CurrentRecord.numSelectionsTotal;
                 Show();
             }
             else if (from == GetComponent<Collider>() && !IsChildCollider(to)) {

@@ -20,9 +20,14 @@ namespace Megamap {
 
         private LaserPointer laser;
 
+        private float startTime = 0f;
+
+        private RecordData recorder = null;
+
         private void Awake()
         {
             laser = FindObjectOfType<LaserPointer>();
+            recorder = FindObjectOfType<RecordData>();
         }
 
         private void OnEnable()
@@ -59,7 +64,8 @@ namespace Megamap {
             map.heightOffset = condition.heightOffset;
 
             // Map animation.
-            StartCoroutine(map.Show());
+            StopCoroutine("StartSubtask");
+            StartCoroutine("StartSubtask");
         }
 
         private void OnDisable()
@@ -75,23 +81,33 @@ namespace Megamap {
 
         private void HandleTargetPinSelected()
         {
-            StopCoroutine("CompleteTask");
-            StartCoroutine("CompleteTask");
+            float completionTime = Time.realtimeSinceStartup;
+            recorder.CurrentRecord.megamapTime = completionTime - startTime;
+
+            StopCoroutine("CompleteSubtask");
+            StartCoroutine("CompleteSubtask");
         }
 
         private void HandleWrongPinSelected()
         {
             var task = FindObjectOfType<Task>();
             task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
+
+            ++recorder.CurrentRecord.numErrors;
         }
 
-        private IEnumerator CompleteTask()
+        private IEnumerator StartSubtask()
+        {
+            yield return StartCoroutine(map.Show());
+            startTime = Time.realtimeSinceStartup;
+            recorder.CurrentRecord.numSelections = new int[map.LocationPins.Length];
+        }
+
+        private IEnumerator CompleteSubtask()
         {
             yield return StartCoroutine(map.Hide());
             FindObjectOfType<Task>().NextSubtask();
         }
-        
-       
     }
 
 }

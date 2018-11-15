@@ -9,10 +9,14 @@ namespace Megamap {
     public class Record {
         public int conditionIndex;
         public int taskIndex;
+
+        // Megamap subtask data.
         public float megamapTime;
         public int numErrors;
         public int numSelectionsTotal;
         public int[] numSelections;
+
+        // Pointing subtask data.
         public float pointingTime;
         public float confirmationTime;
         public Vector3 positionAtConfirmation;
