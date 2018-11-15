@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 
 namespace Megamap {
 
-    public class DataRecording : MonoBehaviour {
+    public class RecordData : MonoBehaviour {
 
         public DirectoryInfo UserFolder { get; set; }
 
