@@ -19,6 +19,8 @@ namespace Megamap {
 
         public void NextTask()
         {
+            SaveData();
+
             if (numTasksFinished == tasks.Length - 1) {
                 var conditionSwitcher = FindObjectOfType<ConditionSwitcher>();
                 if (conditionSwitcher != null) {
@@ -119,6 +121,19 @@ namespace Megamap {
                     sequences[0][i] = i;
                 }
             }
+        }
+
+        private void SaveData()
+        {
+            var recorder = FindObjectOfType<RecordData>();
+            recorder.CurrentRecord.conditionIndex = FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx;
+            int currentTaskIdx = (startOffset + numTasksFinished) % tasks.Length;
+            recorder.CurrentRecord.taskIndex = currentSequence[currentTaskIdx];
+
+            if (recorder.writeData)
+                recorder.CurrentRecord.WriteToDisk(recorder.UserFolder, "data_c_" + recorder.CurrentRecord.conditionIndex + "_t_" + recorder.CurrentRecord.taskIndex);
+
+            recorder.CurrentRecord = new Record();
         }
     }
 }

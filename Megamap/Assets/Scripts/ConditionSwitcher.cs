@@ -23,10 +23,15 @@ namespace Megamap {
 
         //------------------
 
+        public int CurrentConditionIdx
+        {
+            get { return mySequence[(startOffset + numConditionsFinished) % conditions.Length]; }
+        }
+
         public Condition CurrentCondition
         {
             get {
-                return conditions[mySequence[(startOffset + numConditionsFinished) % conditions.Length]];
+                return conditions[CurrentConditionIdx];
             }
         }
 
