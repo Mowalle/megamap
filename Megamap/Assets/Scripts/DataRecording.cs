@@ -46,27 +46,25 @@ public class DataRecording : MonoBehaviour {
     {
         Assert.raiseExceptions = true;
 
+        CreateUserDir();
+    }
+
+    private void CreateUserDir()
+    {
         startTime = DateTime.UtcNow.ToString("yyyy-MM-dd_HH_mm_ss");
 
         DirectoryInfo baseDir = Directory.GetParent(Application.dataPath);
 
         try {
-            DirectoryInfo di = new DirectoryInfo(baseDir.FullName + "/Results");
-            if (di.Exists) {
-                Debug.Log("Not creating directory \"Results\": already exists.");
-            }
-            else {
-                di.Create();
-            }
+            DirectoryInfo resultsDir = baseDir.CreateSubdirectory("Results");
 
-            UserFolder = IncrementDirectory(di, "user_", "_" + startTime);
-            // Just to make sure...
-            Debug.Assert(!UserFolder.Exists, "User folder would be overwritten; ABORT!");
-            UserFolder.Create();
+            UserFolder = IncrementDirectory(resultsDir, "user_", "_" + startTime);
+            resultsDir.CreateSubdirectory(UserFolder.Name);
+
             userID = UserFolder.Name;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Debug.LogError("Creating directory failed: " + e.ToString());
+            enabled = false;
         }
     }
 }
