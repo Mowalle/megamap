@@ -8,6 +8,8 @@ public class DataRecording : MonoBehaviour {
 
     public DirectoryInfo UserFolder { get; set; }
 
+    public bool writeData = true;
+
     [SerializeField] private string userID = "";
     private string startTime = "";
 
@@ -42,6 +44,11 @@ public class DataRecording : MonoBehaviour {
         Debug.Assert(!newDir.Exists, "User folder would be overwritten; ABORT!");
         newDir.Create();
         return newDir;
+    }
+
+    private void Awake()
+    {
+        enabled = writeData;
     }
 
     private void Start()
