@@ -16,12 +16,17 @@ namespace Megamap {
         private readonly string confirmation = "Trigger: Annehmen\nTrackpad: Korrigieren";
 
         private Task currentTask;
+
+        private float startTime = 0f;
+        private float startConfirmationTime = 0f;
         
         private void OnEnable()
         {
             currentTask = FindObjectOfType<Task>();
             currentTask.Description = taskDescription;
             laser.Show(true);
+
+            startTime = Time.realtimeSinceStartup;
         }
 
         private void Update()
@@ -31,10 +36,19 @@ namespace Megamap {
                 if (!laser.IsFrozen) {
                     laser.IsFrozen = true;
                     currentTask.Description = confirmation;
+
+                    startConfirmationTime = Time.realtimeSinceStartup;
                 } 
                 else {
-                    // TODO: Record data etc...
-                    // ...
+                    float endTime = Time.realtimeSinceStartup;
+                    var recorder = FindObjectOfType<RecordData>();
+                    recorder.CurrentRecord.pointingTime = endTime - startTime;
+                    recorder.CurrentRecord.confirmationTime = endTime - startConfirmationTime;
+                    recorder.CurrentRecord.positionAtConfirmation = Camera.main.transform.position;
+                    recorder.CurrentRecord.viewAtConfirmation = Camera.main.transform.rotation.eulerAngles;
+                    recorder.CurrentRecord.rayPosition = laser.Ray.origin;
+                    recorder.CurrentRecord.rayDirection = laser.Ray.direction;
+                    // TODO: Calculate horizontal/vertical error...
 
                     // Do next trial.
                     laser.Show(false);
@@ -44,6 +58,9 @@ namespace Megamap {
             else if ((backAction.GetStateDown(hand.handType) || Input.GetKeyDown(KeyCode.Backspace)) && laser.IsFrozen) {
                 laser.IsFrozen = false;
                 currentTask.Description = taskDescription;
+
+                var recorder = FindObjectOfType<RecordData>();
+                ++recorder.CurrentRecord.numCorrections;
             }
         }
     }

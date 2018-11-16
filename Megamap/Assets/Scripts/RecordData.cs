@@ -20,9 +20,10 @@ namespace Megamap {
         // Pointing subtask data.
         public float pointingTime = 0f;
         public float confirmationTime = 0f;
+        public int numCorrections = 0;
         public Vector3 positionAtConfirmation = new Vector3();
         public Vector3 viewAtConfirmation = new Vector3();
-        public Vector3 handPosition = new Vector3();
+        public Vector3 rayPosition = new Vector3();
         public Vector3 rayDirection = new Vector3();
         public float horizOffsetDeg = 0f;
         public float vertOffsetDeg = 0f;
