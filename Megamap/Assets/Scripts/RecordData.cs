@@ -7,24 +7,24 @@ using UnityEngine.Assertions;
 namespace Megamap {
 
     public class Record {
-        public int conditionIndex;
-        public int taskIndex;
+        public int conditionIndex = 0;
+        public int taskIndex = 0;
 
         // Megamap subtask data.
-        public float megamapTime;
-        public int numErrors;
-        public int numSelectionsTotal;
-        public int[] numSelections;
+        public float megamapTime = 0f;
+        public int numErrors = 0;
+        public int numSelectionsTotal = 0;
+        public int[] numSelections = null;
 
         // Pointing subtask data.
-        public float pointingTime;
-        public float confirmationTime;
-        public Vector3 positionAtConfirmation;
-        public Vector3 viewAtConfirmation;
-        public Vector3 handPosition;
-        public Vector3 rayDirection;
-        public float horizOffsetDeg;
-        public float vertOffsetDeg;
+        public float pointingTime = 0f;
+        public float confirmationTime = 0f;
+        public Vector3 positionAtConfirmation = new Vector3();
+        public Vector3 viewAtConfirmation = new Vector3();
+        public Vector3 handPosition = new Vector3();
+        public Vector3 rayDirection = new Vector3();
+        public float horizOffsetDeg = 0f;
+        public float vertOffsetDeg = 0f;
 
         public void WriteToDisk(DirectoryInfo directory, string name)
         {}
