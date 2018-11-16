@@ -101,6 +101,10 @@ namespace Megamap {
         public void Log(string s)
         {
             Debug.Log(s + " [Logging]");
+
+            if (!writeData)
+                return;
+
             logWriter.WriteLine(Time.realtimeSinceStartup + "(" + Time.frameCount + "): " + s);
         }
 
@@ -110,8 +114,10 @@ namespace Megamap {
 
             CreateUserDir();
 
-            csvWriter = File.AppendText(UserFolder.FullName + "/position_and_view_total.csv");
-            logWriter = File.AppendText(UserFolder.FullName + "/logfile.txt");
+            if (writeData) {
+                csvWriter = File.AppendText(UserFolder.FullName + "/position_and_view_total.csv");
+                logWriter = File.AppendText(UserFolder.FullName + "/logfile.txt");
+            }
 
             CurrentRecord = new Record();
 
@@ -120,12 +126,17 @@ namespace Megamap {
 
         private void OnDestroy()
         {
-            csvWriter.Close();
-            logWriter.Close();
+            if (writeData) {
+                csvWriter.Close();
+                logWriter.Close();
+            }
         }
 
         private void LateUpdate()
         {
+            if (!writeData)
+                return;
+
             var cam = Camera.main.transform;
             csvWriter.WriteLine(Time.time + ", "
                 + cam.position.x + ", "
