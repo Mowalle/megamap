@@ -9,7 +9,7 @@ namespace Megamap {
 
     [System.Serializable]
     public class LaserStayEvent : UnityEvent<Collider> { }
-    public class LaserChangeEvent : UnityEvent<Collider, Collider> {}
+    public class LaserChangeEvent : UnityEvent<Collider, Collider> { }
 
     [RequireComponent(typeof(LineRenderer))]
     public class LaserPointer : MonoBehaviour {
@@ -27,13 +27,16 @@ namespace Megamap {
         private LineRenderer line;
         private Hand hand;
         public Hand GetHand() { return hand; }
-        
+
         private bool isFrozen = false;
         public bool IsFrozen
         {
             get { return isFrozen; }
             set { Freeze(value); }
         }
+
+        private Ray ray = new Ray();
+        public Ray Ray { get { return ray; } }
 
         private Coroutine linkToHandRoutine = null;
 
@@ -87,7 +90,7 @@ namespace Megamap {
                 dir = hand.transform.forward;
             }
 
-            Ray ray = new Ray(start, dir);
+            ray = new Ray(start, dir);
             RaycastHit hit;
 
             line.SetPosition(0, ray.origin);
