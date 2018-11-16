@@ -22,6 +22,8 @@ namespace Megamap {
         
         private void OnEnable()
         {
+            LogSubtask();
+
             currentTask = FindObjectOfType<Task>();
             currentTask.Description = taskDescription;
             laser.Show(true);

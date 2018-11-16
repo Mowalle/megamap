@@ -31,8 +31,8 @@ namespace Megamap {
 
         private void OnEnable()
         {
-            FindObjectOfType<RecordData>().Log("Starting the subtask \"User Setup\"");
-            
+            LogSubtask();
+
             floorTarget.OnTargetEnter.AddListener(HandleFloorTargetEnter);
             floorTarget.OnTargetExit.AddListener(HandleFloorTargetExit);
             wallTarget.OnTargetEnter.AddListener(HandleWallTargetEnter);
