@@ -15,6 +15,7 @@ namespace Megamap {
         public int numErrors = 0;
         public int numSelectionsTotal = 0;
         public int[] numSelections = null;
+        public int correctPinIdx = 0;
 
         // Pointing subtask data.
         public float pointingTime = 0f;
