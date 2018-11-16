@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -29,7 +30,28 @@ namespace Megamap {
         public float vertOffsetDeg = 0f;
 
         public void WriteToDisk(DirectoryInfo directory, string name)
-        {}
+        {
+            var writer = File.AppendText(directory.FullName + "/" + name);
+
+            writer.WriteLine("conditionIndex: " + conditionIndex);
+            writer.WriteLine("taskIndex: " + taskIndex);
+            writer.WriteLine("megamapTime: " + megamapTime);
+            writer.WriteLine("numErrors: " + numErrors);
+            writer.WriteLine("numSelectionsTotal: " + numSelectionsTotal);
+            writer.WriteLine("numSelections: " + string.Join(", ", numSelections.Select(x => x.ToString()).ToArray()));
+            writer.WriteLine("correctPinIdx: " + correctPinIdx);
+            writer.WriteLine("pointingTime: " + pointingTime);
+            writer.WriteLine("confirmationTime: " + confirmationTime);
+            writer.WriteLine("numCorrections: " + numCorrections);
+            writer.WriteLine("positionAtConfirmation: " + positionAtConfirmation.x + ", " + positionAtConfirmation.y + ", " + positionAtConfirmation.z);
+            writer.WriteLine("viewAtConfirmation: " + viewAtConfirmation.x + ", " + viewAtConfirmation.y + ", " + viewAtConfirmation.z);
+            writer.WriteLine("rayPosition: " + rayPosition.x + ", " + rayPosition.y + ", " + rayPosition.z);
+            writer.WriteLine("rayDirection: " + rayDirection.x + ", " + rayDirection.y + ", " + rayDirection.z);
+            writer.WriteLine("horizOffsetDeg: " + horizOffsetDeg);
+            writer.WriteLine("vertOffsetDeg: " + vertOffsetDeg);
+
+            writer.Close();
+        }
     }
 
     public class RecordData : MonoBehaviour {
