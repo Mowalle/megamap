@@ -106,11 +106,6 @@ namespace Megamap {
 
         private void Awake()
         {
-            enabled = writeData;
-        }
-
-        private void Start()
-        {
             Assert.raiseExceptions = true;
 
             CreateUserDir();
@@ -119,6 +114,8 @@ namespace Megamap {
             logWriter = File.AppendText(UserFolder.FullName + "/logfile.txt");
 
             CurrentRecord = new Record();
+
+            enabled = writeData;
         }
 
         private void OnDestroy()
