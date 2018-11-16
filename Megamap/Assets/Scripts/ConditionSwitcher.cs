@@ -54,10 +54,12 @@ namespace Megamap {
             if (numConditionsFinished == conditions.Length - 1) {
                 var task = FindObjectOfType<Task>();
                 task.Description = "Geschafft!\nDas Experiment ist vorbei.";
+                FindObjectOfType<RecordData>().Log("All conditions completed. The experiment is over.");
                 return;
             }
 
             ++numConditionsFinished;
+            FindObjectOfType<RecordData>().Log("Starting condition " + (mySequence[(startOffset + numConditionsFinished) % conditions.Length] + 1) + " / " + mySequence.Length);
 
             var switcher = FindObjectOfType<TaskSwitcher>();
             switcher.ResetTasks();
@@ -70,6 +72,7 @@ namespace Megamap {
             }
 
             --numConditionsFinished;
+            FindObjectOfType<RecordData>().Log("Starting condition " + (mySequence[(startOffset + numConditionsFinished) % conditions.Length] + 1) + " / " + mySequence.Length);
 
             var switcher = FindObjectOfType<TaskSwitcher>();
             switcher.ResetTasks();
