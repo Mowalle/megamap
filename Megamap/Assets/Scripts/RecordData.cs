@@ -98,7 +98,11 @@ namespace Megamap {
             return newDir;
         }
 
-        public void Log(string s) { logWriter.WriteLine(Time.realtimeSinceStartup.ToString() + ": " + s); }
+        public void Log(string s)
+        {
+            Debug.Log(s + " [Logging]");
+            logWriter.WriteLine(Time.realtimeSinceStartup + "(" + Time.frameCount + "): " + s);
+        }
 
         private void Awake()
         {

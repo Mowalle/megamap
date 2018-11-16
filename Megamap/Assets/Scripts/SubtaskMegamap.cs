@@ -32,7 +32,7 @@ namespace Megamap {
 
         private void OnEnable()
         {
-            Debug.Log("Starting the subtask \"Megamap\"");
+            recorder.Log("Starting the subtask \"Megamap\"");
             FindObjectOfType<Task>().Description = description;
 
             laser.Show(true);

@@ -97,7 +97,7 @@ namespace Megamap {
                 }
             }
 
-            Debug.Log("Condition sequence is "
+            FindObjectOfType<RecordData>().Log("Condition sequence is "
                 + string.Join(", ", new List<int>(mySequence).ConvertAll(i => i.ToString()).ToArray())
                 + ", starting with condition "
                 + (mySequence[startOffset] + 1) + "/" + mySequence.Length

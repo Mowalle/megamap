@@ -79,7 +79,7 @@ namespace Megamap {
                 startOffset = 0;
             }
 
-            Debug.Log("Task sequence is "
+            FindObjectOfType<RecordData>().Log("Task sequence is "
                 + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray())
                 + ", starting with task "
                 + (currentSequence[startOffset] + 1) + "/" + currentSequence.Length
