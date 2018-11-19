@@ -78,7 +78,7 @@ namespace Megamap {
             if (!writeData)
                 return;
 
-            logWriter.WriteLine(Time.realtimeSinceStartup + "(" + Time.frameCount + "): " + s);
+            logWriter.WriteLine(Time.frameCount + " | " + Time.realtimeSinceStartup + ": " + s);
         } 
 
         private static void CreateUserDir()
