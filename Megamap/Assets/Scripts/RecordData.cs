@@ -171,9 +171,9 @@ namespace Megamap {
                 + cam.position.x + ", "
                 + cam.position.y + ", "
                 + cam.position.z + ", "
-                + cam.rotation.eulerAngles.x + ", "
-                + cam.rotation.eulerAngles.y + ", "
-                + cam.rotation.eulerAngles.z + ", "
+                + cam.eulerAngles.x + ", "
+                + cam.eulerAngles.y + ", "
+                + cam.eulerAngles.z + ", "
                 + cam.name);
 
             foreach(var hand in FindObjectsOfType<Hand>()) {
