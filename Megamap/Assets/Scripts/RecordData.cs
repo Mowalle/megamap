@@ -41,7 +41,7 @@ namespace Megamap {
 
         private static string startTime = "";
         private static StreamWriter logWriter = null;
-        private static StreamWriter csvWriter = null;
+        private static StreamWriter hmdLog = null;
 
         private static bool initialized = false;
 
@@ -138,7 +138,7 @@ namespace Megamap {
             if (!initialized && writeData) {
                 CreateUserDir();
 
-                csvWriter = File.AppendText(UserFolder.FullName + "/position_and_view_total.csv");
+                hmdLog = File.AppendText(UserFolder.FullName + "/hmd_pos_and_view.csv");
                 logWriter = File.AppendText(UserFolder.FullName + "/logfile.txt");
             }
 
@@ -149,7 +149,7 @@ namespace Megamap {
         private void OnDestroy()
         {
             if (initialized && writeData) {
-                csvWriter.Close();
+                hmdLog.Close();
                 logWriter.Close();
             }
 
@@ -162,13 +162,15 @@ namespace Megamap {
                 return;
 
             var cam = Camera.main.transform;
-            csvWriter.WriteLine(Time.time + ", "
+            hmdLog.WriteLine(Time.renderedFrameCount + ", "
+                + Time.time + ", "
                 + cam.position.x + ", "
                 + cam.position.y + ", "
                 + cam.position.z + ", "
                 + cam.rotation.eulerAngles.x + ", "
                 + cam.rotation.eulerAngles.y + ", "
-                + cam.rotation.eulerAngles.z);
+                + cam.rotation.eulerAngles.z + ", "
+                + cam.name);
         }
     }
 
