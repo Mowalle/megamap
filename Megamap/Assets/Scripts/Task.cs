@@ -2,7 +2,14 @@
 
 namespace Megamap {
 
-    public class Subtask : MonoBehaviour { }
+    public class Subtask : MonoBehaviour {
+
+        protected void LogSubtask()
+        {
+            // FIXME: Not really the best approach for getting a distinct name.
+            RecordData.Log("Starting subtask " + gameObject.name + ".");
+        }
+    }
 
     public class Task : MonoBehaviour {
 
@@ -15,7 +22,7 @@ namespace Megamap {
 
         public void NextSubtask()
         {
-            if (currentSubtask == 3) {
+            if (currentSubtask == subtasks.Length - 1) {
                 return;
             }
 
@@ -47,7 +54,6 @@ namespace Megamap {
 
             subtasks[currentSubtask].gameObject.SetActive(true);
         }
-
 
         private void Start()
         {

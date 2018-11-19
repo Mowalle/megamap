@@ -20,6 +20,8 @@ namespace Megamap {
 
         private LaserPointer laser;
 
+        private float startTime = 0f;
+        
         private void Awake()
         {
             laser = FindObjectOfType<LaserPointer>();
@@ -27,7 +29,8 @@ namespace Megamap {
 
         private void OnEnable()
         {
-            Debug.Log("Starting the subtask \"Megamap\"");
+            LogSubtask();
+
             FindObjectOfType<Task>().Description = description;
 
             laser.Show(true);
@@ -59,7 +62,8 @@ namespace Megamap {
             map.heightOffset = condition.heightOffset;
 
             // Map animation.
-            StartCoroutine(map.Show());
+            StopCoroutine("StartSubtask");
+            StartCoroutine("StartSubtask");
         }
 
         private void OnDisable()
@@ -75,23 +79,33 @@ namespace Megamap {
 
         private void HandleTargetPinSelected()
         {
-            StopCoroutine("CompleteTask");
-            StartCoroutine("CompleteTask");
+            float completionTime = Time.realtimeSinceStartup;
+            RecordData.CurrentRecord.megamapTime = completionTime - startTime;
+
+            StopCoroutine("CompleteSubtask");
+            StartCoroutine("CompleteSubtask");
         }
 
         private void HandleWrongPinSelected()
         {
             var task = FindObjectOfType<Task>();
             task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
+
+            ++RecordData.CurrentRecord.numErrors;
         }
 
-        private IEnumerator CompleteTask()
+        private IEnumerator StartSubtask()
+        {
+            yield return StartCoroutine(map.Show());
+            startTime = Time.realtimeSinceStartup;
+            RecordData.CurrentRecord.numSelections = new int[map.LocationPins.Length];
+        }
+
+        private IEnumerator CompleteSubtask()
         {
             yield return StartCoroutine(map.Hide());
             FindObjectOfType<Task>().NextSubtask();
         }
-        
-       
     }
 
 }

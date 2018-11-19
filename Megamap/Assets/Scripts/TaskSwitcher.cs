@@ -19,6 +19,8 @@ namespace Megamap {
 
         public void NextTask()
         {
+            SaveData();
+
             if (numTasksFinished == tasks.Length - 1) {
                 var conditionSwitcher = FindObjectOfType<ConditionSwitcher>();
                 if (conditionSwitcher != null) {
@@ -77,11 +79,7 @@ namespace Megamap {
                 startOffset = 0;
             }
 
-            Debug.Log("Task sequence is "
-                + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray())
-                + ", starting with task "
-                + (currentSequence[startOffset] + 1) + "/" + currentSequence.Length
-                + ".");
+            RecordData.Log("Task sequence is " + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray()));
 
             UpdateTasks();
         }
@@ -104,6 +102,8 @@ namespace Megamap {
                 }
             }
             tasks[currentSequence[(startOffset + numTasksFinished) % tasks.Length]].gameObject.SetActive(true);
+
+            RecordData.Log("Starting task " + (currentSequence[(startOffset + numTasksFinished) % tasks.Length] + 1) + " / " + currentSequence.Length);
         }
 
         private void LoadSequences()
@@ -119,6 +119,16 @@ namespace Megamap {
                     sequences[0][i] = i;
                 }
             }
+        }
+
+        private void SaveData()
+        {
+            RecordData.CurrentRecord.conditionIndex = FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx;
+            int currentTaskIdx = (startOffset + numTasksFinished) % tasks.Length;
+            RecordData.CurrentRecord.taskIndex = currentSequence[currentTaskIdx];
+
+            if (RecordData.writeData)
+                RecordData.DumpToDisk(RecordData.UserFolder, "data_c_" + RecordData.CurrentRecord.conditionIndex + "_t_" + RecordData.CurrentRecord.taskIndex);
         }
     }
 }
