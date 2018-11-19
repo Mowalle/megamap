@@ -79,7 +79,8 @@ namespace Megamap {
                 startOffset = 0;
             }
 
-            RecordData.Log("Task sequence is " + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray()));
+            RecordData.Log("Task sequence is " + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray())
+                + ", starting with task " + (currentSequence[startOffset] + 1) + "/" + currentSequence.Length + ":");
 
             UpdateTasks();
         }
