@@ -96,14 +96,13 @@ namespace Megamap {
 
         private void UpdateTasks()
         {
+            RecordData.Log("Starting task " + (currentSequence[(startOffset + numTasksFinished) % tasks.Length] + 1) + " / " + currentSequence.Length);
             foreach (Task t in tasks) {
                 if (t.gameObject.activeSelf) {
                     t.gameObject.SetActive(false);
                 }
             }
             tasks[currentSequence[(startOffset + numTasksFinished) % tasks.Length]].gameObject.SetActive(true);
-
-            RecordData.Log("Starting task " + (currentSequence[(startOffset + numTasksFinished) % tasks.Length] + 1) + " / " + currentSequence.Length);
         }
 
         private void LoadSequences()
