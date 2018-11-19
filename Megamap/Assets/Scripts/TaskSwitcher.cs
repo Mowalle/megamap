@@ -128,7 +128,7 @@ namespace Megamap {
             RecordData.CurrentRecord.taskIndex = currentSequence[currentTaskIdx];
 
             if (RecordData.writeData)
-                RecordData.DumpToDisk(RecordData.UserFolder, "data_c_" + RecordData.CurrentRecord.conditionIndex + "_t_" + RecordData.CurrentRecord.taskIndex);
+                RecordData.DumpToDisk(RecordData.UserFolder, "data_c_" + RecordData.CurrentRecord.conditionIndex + "_t_" + RecordData.CurrentRecord.taskIndex + ".txt");
         }
     }
 }
