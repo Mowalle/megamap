@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Valve.VR.InteractionSystem;
 
 namespace Megamap {
 
@@ -42,6 +43,7 @@ namespace Megamap {
         private static string startTime = "";
         private static StreamWriter logWriter = null;
         private static StreamWriter hmdLog = null;
+        private static StreamWriter handLog = null;
 
         private static bool initialized = false;
 
@@ -139,6 +141,7 @@ namespace Megamap {
                 CreateUserDir();
 
                 hmdLog = File.AppendText(UserFolder.FullName + "/hmd_pos_and_view.csv");
+                handLog = File.AppendText(UserFolder.FullName + "/hands_pos_and_rot.csv");
                 logWriter = File.AppendText(UserFolder.FullName + "/logfile.txt");
             }
 
@@ -150,6 +153,7 @@ namespace Megamap {
         {
             if (initialized && writeData) {
                 hmdLog.Close();
+                handLog.Close();
                 logWriter.Close();
             }
 
@@ -171,6 +175,19 @@ namespace Megamap {
                 + cam.rotation.eulerAngles.y + ", "
                 + cam.rotation.eulerAngles.z + ", "
                 + cam.name);
+
+            foreach(var hand in FindObjectsOfType<Hand>()) {
+                handLog.WriteLine(Time.renderedFrameCount + ", "
+                + Time.time + ", "
+                + hand.transform.position.x + ", "
+                + hand.transform.position.y + ", "
+                + hand.transform.position.z + ", "
+                + hand.transform.eulerAngles.x + ", "
+                + hand.transform.eulerAngles.y + ", "
+                + hand.transform.eulerAngles.z + ", "
+                + hand.name + ", "
+                + hand.handType.ToString());
+            }
         }
     }
 
