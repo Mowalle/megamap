@@ -89,7 +89,7 @@ namespace Megamap {
         private void HandleWrongPinSelected()
         {
             var task = FindObjectOfType<Task>();
-            task.Description = "Raum hat nicht das niedrigste Attribut. Versuche es weiter.";
+            task.Description = "Raum hat nicht das niedrigste Attribut.\nVersuche es weiter.";
 
             ++RecordData.CurrentRecord.numErrors;
         }
