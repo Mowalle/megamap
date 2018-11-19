@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -70,7 +71,7 @@ namespace Megamap {
                 sequences = tmp.ToArray();
             }
 
-            if (randomizeTasks) {
+            if (tasks.Length > 1 && randomizeTasks) {
                 do {
                     startOffset = Random.Range(0, currentSequence.Length);
                 } while (preventDirectRepitition && lastTask == currentSequence[startOffset]);

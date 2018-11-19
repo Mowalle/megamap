@@ -1,7 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
+
 using UnityEngine;
+
+using Valve.VR.InteractionSystem;
 
 namespace Megamap {
 
@@ -12,7 +13,6 @@ namespace Megamap {
         [SerializeField] private UserMarker userMarker = null;
         [SerializeField] private Transform labReference = null;
         [SerializeField] private Transform mapReference = null;
-        [SerializeField] private GameObject pins = null;
 
         [Header("Megamap Settings"), Space]
         [Range(0.01f, 1f)]
@@ -40,27 +40,6 @@ namespace Megamap {
         }
 
         private bool isShown;
-        public bool IsShown
-        {
-            get { return isShown; }
-            set {
-                if (value)
-                    Show();
-                else
-                    Hide();
-            }
-        }
-
-        public LocationPin[] LocationPins
-        {
-            get {
-                var locationPins = pins.GetComponentsInChildren<LocationPin>();
-                if (locationPins == null || locationPins.Length == 0) {
-                    Debug.LogWarning("Megamap: Map does not contain any LocationPins.");
-                }
-                return locationPins;
-            }
-        }
 
         // -------------------------------- //
 
@@ -70,15 +49,6 @@ namespace Megamap {
                 yield return null;
 
             mapModel.SetActive(true);
-            pins.SetActive(true);
-
-            // Deactivate colliders on all pins during transition,
-            // so that a pin does not show its info by accident.
-            foreach (var pin in LocationPins) {
-                var colliders = pin.GetComponents<Collider>();
-                foreach (var collider in colliders)
-                    collider.enabled = false;
-            }
 
             var targetPosition = placeAtPlayer ? GetPlayerOffsetPosition() : transform.position;
             targetPosition.y = heightOffset;
@@ -90,15 +60,14 @@ namespace Megamap {
                 new Vector3(scale, scale, scale),
                 transitionDuration));
 
-            // Re-Activate colliders so pin-info can be shown.
-            foreach (var pin in LocationPins) {
-                var colliders = pin.GetComponents<Collider>();
-                foreach (var collider in colliders)
-                    collider.enabled = true;
-            }
             userMarker.gameObject.SetActive(true);
 
             isShown = true;
+
+            // Reactivate.
+            foreach (var interactable in GetComponentsInChildren<Interactable>()) {
+                interactable.enabled = true;
+            }
         }
 
         public IEnumerator Hide()
@@ -106,6 +75,9 @@ namespace Megamap {
             if (!isShown)
                 yield return null;
 
+            foreach (var interactable in GetComponentsInChildren<Interactable>()) {
+                interactable.enabled = false;
+            }
             userMarker.gameObject.SetActive(false);
 
             yield return StartCoroutine(Transition(
@@ -117,7 +89,6 @@ namespace Megamap {
                 transitionDuration));
 
             mapModel.SetActive(false);
-            pins.SetActive(false);
 
             isShown = false;
         }
@@ -132,8 +103,7 @@ namespace Megamap {
             if (mapModel == null
                 || userMarker == null
                 || labReference == null
-                || mapReference == null
-                || pins == null) {
+                || mapReference == null) {
                 Debug.LogError("Megamap: References not set up correctly; disabling script");
                 enabled = false;
                 return;
@@ -142,7 +112,11 @@ namespace Megamap {
             isShown = initializeShown;
             mapModel.SetActive(isShown);
             userMarker.gameObject.SetActive(false);
-            pins.SetActive(isShown);
+
+            foreach (var interactable in GetComponentsInChildren<Interactable>()) {
+                interactable.highlightOnHover = false; // Works around bug that highlights stay when rooms are scaled, which leads to huge fps loss.
+                interactable.enabled = false;
+            }
         }
 
         private void Update()

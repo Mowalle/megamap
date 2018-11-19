@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using UnityEngine;
 using UnityEngine.Assertions;
+
 using Valve.VR.InteractionSystem;
 
 namespace Megamap {
@@ -15,9 +17,10 @@ namespace Megamap {
         // Megamap subtask data.
         public float megamapTime = 0f;
         public int numErrors = 0;
-        public int numSelectionsTotal = 0;
-        public int[] numSelections = null;
-        public int correctPinIdx = 0;
+        public int numRoomSelections = 0;
+        public int[] roomSelections = null;
+        public int correctRoomIndex = 0;
+        public string correctRoomName = "";
 
         // Pointing subtask data.
         public float pointingTime = 0f;
@@ -55,9 +58,10 @@ namespace Megamap {
             writer.WriteLine("taskIndex: " + CurrentRecord.taskIndex);
             writer.WriteLine("megamapTime: " + CurrentRecord.megamapTime);
             writer.WriteLine("numErrors: " + CurrentRecord.numErrors);
-            writer.WriteLine("numSelectionsTotal: " + CurrentRecord.numSelectionsTotal);
-            writer.WriteLine("numSelections: " + string.Join(", ", CurrentRecord.numSelections.Select(x => x.ToString()).ToArray()));
-            writer.WriteLine("correctPinIdx: " + CurrentRecord.correctPinIdx);
+            writer.WriteLine("numRoomSelections: " + CurrentRecord.numRoomSelections);
+            writer.WriteLine("roomSelections: " + string.Join(", ", CurrentRecord.roomSelections.Select(x => x.ToString()).ToArray()));
+            writer.WriteLine("correctRoomIndex: " + CurrentRecord.correctRoomIndex);
+            writer.WriteLine("correctRoomName: " + CurrentRecord.correctRoomName);
             writer.WriteLine("pointingTime: " + CurrentRecord.pointingTime);
             writer.WriteLine("confirmationTime: " + CurrentRecord.confirmationTime);
             writer.WriteLine("numCorrections: " + CurrentRecord.numCorrections);
@@ -65,8 +69,8 @@ namespace Megamap {
             writer.WriteLine("viewAtConfirmation: " + CurrentRecord.viewAtConfirmation.x + ", " + CurrentRecord.viewAtConfirmation.y + ", " + CurrentRecord.viewAtConfirmation.z);
             writer.WriteLine("rayPosition: " + CurrentRecord.rayPosition.x + ", " + CurrentRecord.rayPosition.y + ", " + CurrentRecord.rayPosition.z);
             writer.WriteLine("rayDirection: " + CurrentRecord.rayDirection.x + ", " + CurrentRecord.rayDirection.y + ", " + CurrentRecord.rayDirection.z);
-            writer.WriteLine("horizOffsetDeg: " + CurrentRecord.horizOffsetDeg);
-            writer.WriteLine("vertOffsetDeg: " + CurrentRecord.vertOffsetDeg);
+            //writer.WriteLine("horizOffsetDeg: " + CurrentRecord.horizOffsetDeg);
+            //writer.WriteLine("vertOffsetDeg: " + CurrentRecord.vertOffsetDeg);
 
             writer.Close();
 
@@ -81,7 +85,7 @@ namespace Megamap {
                 return;
 
             logWriter.WriteLine(Time.frameCount + " | " + Time.realtimeSinceStartup + ": " + s);
-        } 
+        }
 
         private static void CreateUserDir()
         {
@@ -176,7 +180,7 @@ namespace Megamap {
                 + cam.eulerAngles.z + ", "
                 + cam.name);
 
-            foreach(var hand in FindObjectsOfType<Hand>()) {
+            foreach (var hand in FindObjectsOfType<Hand>()) {
                 handLog.WriteLine(Time.renderedFrameCount + ", "
                 + Time.time + ", "
                 + hand.transform.position.x + ", "
