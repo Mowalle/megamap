@@ -79,7 +79,7 @@ namespace Megamap {
                 startOffset = 0;
             }
 
-            FindObjectOfType<RecordData>().Log("Task sequence is " + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray()));
+            RecordData.Log("Task sequence is " + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray()));
 
             UpdateTasks();
         }
@@ -103,7 +103,7 @@ namespace Megamap {
             }
             tasks[currentSequence[(startOffset + numTasksFinished) % tasks.Length]].gameObject.SetActive(true);
 
-            FindObjectOfType<RecordData>().Log("Starting task " + (currentSequence[(startOffset + numTasksFinished) % tasks.Length] + 1) + " / " + currentSequence.Length);
+            RecordData.Log("Starting task " + (currentSequence[(startOffset + numTasksFinished) % tasks.Length] + 1) + " / " + currentSequence.Length);
         }
 
         private void LoadSequences()
@@ -123,15 +123,12 @@ namespace Megamap {
 
         private void SaveData()
         {
-            var recorder = FindObjectOfType<RecordData>();
-            recorder.CurrentRecord.conditionIndex = FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx;
+            RecordData.CurrentRecord.conditionIndex = FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx;
             int currentTaskIdx = (startOffset + numTasksFinished) % tasks.Length;
-            recorder.CurrentRecord.taskIndex = currentSequence[currentTaskIdx];
+            RecordData.CurrentRecord.taskIndex = currentSequence[currentTaskIdx];
 
-            if (recorder.writeData)
-                recorder.CurrentRecord.WriteToDisk(recorder.UserFolder, "data_c_" + recorder.CurrentRecord.conditionIndex + "_t_" + recorder.CurrentRecord.taskIndex);
-
-            recorder.CurrentRecord = new Record();
+            if (RecordData.writeData)
+                RecordData.DumpToDisk(RecordData.UserFolder, "data_c_" + RecordData.CurrentRecord.conditionIndex + "_t_" + RecordData.CurrentRecord.taskIndex);
         }
     }
 }

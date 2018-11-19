@@ -43,13 +43,13 @@ namespace Megamap {
                 } 
                 else {
                     float endTime = Time.realtimeSinceStartup;
-                    var recorder = FindObjectOfType<RecordData>();
-                    recorder.CurrentRecord.pointingTime = endTime - startTime;
-                    recorder.CurrentRecord.confirmationTime = endTime - startConfirmationTime;
-                    recorder.CurrentRecord.positionAtConfirmation = Camera.main.transform.position;
-                    recorder.CurrentRecord.viewAtConfirmation = Camera.main.transform.rotation.eulerAngles;
-                    recorder.CurrentRecord.rayPosition = laser.Ray.origin;
-                    recorder.CurrentRecord.rayDirection = laser.Ray.direction;
+
+                    RecordData.CurrentRecord.pointingTime = endTime - startTime;
+                    RecordData.CurrentRecord.confirmationTime = endTime - startConfirmationTime;
+                    RecordData.CurrentRecord.positionAtConfirmation = Camera.main.transform.position;
+                    RecordData.CurrentRecord.viewAtConfirmation = Camera.main.transform.rotation.eulerAngles;
+                    RecordData.CurrentRecord.rayPosition = laser.Ray.origin;
+                    RecordData.CurrentRecord.rayDirection = laser.Ray.direction;
                     // TODO: Calculate horizontal/vertical error...
 
                     // Do next trial.
@@ -61,8 +61,7 @@ namespace Megamap {
                 laser.IsFrozen = false;
                 currentTask.Description = taskDescription;
 
-                var recorder = FindObjectOfType<RecordData>();
-                ++recorder.CurrentRecord.numCorrections;
+                ++RecordData.CurrentRecord.numCorrections;
             }
         }
     }

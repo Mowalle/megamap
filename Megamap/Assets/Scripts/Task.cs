@@ -7,7 +7,7 @@ namespace Megamap {
         protected void LogSubtask()
         {
             // FIXME: Not really the best approach for getting a distinct name.
-            FindObjectOfType<RecordData>().Log("Starting subtask " + gameObject.name + ".");
+            RecordData.Log("Starting subtask " + gameObject.name + ".");
         }
     }
 

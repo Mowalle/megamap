@@ -88,9 +88,8 @@ namespace Megamap {
         {
             if (isTargetPin) {
                 var map = transform.parent.GetComponentInParent<Megamap>();
-                var recorder = FindObjectOfType<RecordData>();
 
-                recorder.CurrentRecord.correctPinIdx = Array.IndexOf(map.LocationPins, this);
+                RecordData.CurrentRecord.correctPinIdx = Array.IndexOf(map.LocationPins, this);
             }
 
             laser.OnLaserTargetChanged.AddListener(HandleOnLaserTargetChanged);
@@ -118,10 +117,9 @@ namespace Megamap {
         private void HandleOnLaserTargetChanged(Collider from, Collider to)
         {
             if (to == GetComponent<Collider>() && !isShown) {
-                var recorder = FindObjectOfType<RecordData>();
-                ++recorder.CurrentRecord.numSelectionsTotal;
+                ++RecordData.CurrentRecord.numSelectionsTotal;
                 var map = transform.parent.GetComponentInParent<Megamap>();
-                ++(recorder.CurrentRecord.numSelections[Array.IndexOf(map.LocationPins, this)]);
+                ++RecordData.CurrentRecord.numSelections[Array.IndexOf(map.LocationPins, this)];
 
                 Show();
             }

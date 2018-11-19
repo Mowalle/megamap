@@ -28,46 +28,79 @@ namespace Megamap {
         public Vector3 rayDirection = new Vector3();
         public float horizOffsetDeg = 0f;
         public float vertOffsetDeg = 0f;
-
-        public void WriteToDisk(DirectoryInfo directory, string name)
-        {
-            var writer = File.AppendText(directory.FullName + "/" + name);
-
-            writer.WriteLine("conditionIndex: " + conditionIndex);
-            writer.WriteLine("taskIndex: " + taskIndex);
-            writer.WriteLine("megamapTime: " + megamapTime);
-            writer.WriteLine("numErrors: " + numErrors);
-            writer.WriteLine("numSelectionsTotal: " + numSelectionsTotal);
-            writer.WriteLine("numSelections: " + string.Join(", ", numSelections.Select(x => x.ToString()).ToArray()));
-            writer.WriteLine("correctPinIdx: " + correctPinIdx);
-            writer.WriteLine("pointingTime: " + pointingTime);
-            writer.WriteLine("confirmationTime: " + confirmationTime);
-            writer.WriteLine("numCorrections: " + numCorrections);
-            writer.WriteLine("positionAtConfirmation: " + positionAtConfirmation.x + ", " + positionAtConfirmation.y + ", " + positionAtConfirmation.z);
-            writer.WriteLine("viewAtConfirmation: " + viewAtConfirmation.x + ", " + viewAtConfirmation.y + ", " + viewAtConfirmation.z);
-            writer.WriteLine("rayPosition: " + rayPosition.x + ", " + rayPosition.y + ", " + rayPosition.z);
-            writer.WriteLine("rayDirection: " + rayDirection.x + ", " + rayDirection.y + ", " + rayDirection.z);
-            writer.WriteLine("horizOffsetDeg: " + horizOffsetDeg);
-            writer.WriteLine("vertOffsetDeg: " + vertOffsetDeg);
-
-            writer.Close();
-        }
     }
 
     public class RecordData : MonoBehaviour {
 
-        public DirectoryInfo UserFolder { get; set; }
-        public Record CurrentRecord { get; set; }
+        public static DirectoryInfo UserFolder { get; set; }
+        public static Record CurrentRecord { get; set; }
 
-        public bool writeData = true;
+        public static bool writeData = true;
 
-        [SerializeField] private string userID = "";
+        [SerializeField] private static string userID = "";
 
-        private string startTime = "";
-        private StreamWriter csvWriter = null;
-        private StreamWriter logWriter = null;
+        private static string startTime = "";
+        private static StreamWriter logWriter = null;
+        private static StreamWriter csvWriter = null;
 
-        public static DirectoryInfo IncrementDirectory(DirectoryInfo rootDir, string dirNameStem, string suffix)
+        private static bool initialized = false;
+
+        public static void DumpToDisk(DirectoryInfo directory, string name)
+        {
+            var writer = File.AppendText(directory.FullName + "/" + name);
+
+            writer.WriteLine("conditionIndex: " + CurrentRecord.conditionIndex);
+            writer.WriteLine("taskIndex: " + CurrentRecord.taskIndex);
+            writer.WriteLine("megamapTime: " + CurrentRecord.megamapTime);
+            writer.WriteLine("numErrors: " + CurrentRecord.numErrors);
+            writer.WriteLine("numSelectionsTotal: " + CurrentRecord.numSelectionsTotal);
+            writer.WriteLine("numSelections: " + string.Join(", ", CurrentRecord.numSelections.Select(x => x.ToString()).ToArray()));
+            writer.WriteLine("correctPinIdx: " + CurrentRecord.correctPinIdx);
+            writer.WriteLine("pointingTime: " + CurrentRecord.pointingTime);
+            writer.WriteLine("confirmationTime: " + CurrentRecord.confirmationTime);
+            writer.WriteLine("numCorrections: " + CurrentRecord.numCorrections);
+            writer.WriteLine("positionAtConfirmation: " + CurrentRecord.positionAtConfirmation.x + ", " + CurrentRecord.positionAtConfirmation.y + ", " + CurrentRecord.positionAtConfirmation.z);
+            writer.WriteLine("viewAtConfirmation: " + CurrentRecord.viewAtConfirmation.x + ", " + CurrentRecord.viewAtConfirmation.y + ", " + CurrentRecord.viewAtConfirmation.z);
+            writer.WriteLine("rayPosition: " + CurrentRecord.rayPosition.x + ", " + CurrentRecord.rayPosition.y + ", " + CurrentRecord.rayPosition.z);
+            writer.WriteLine("rayDirection: " + CurrentRecord.rayDirection.x + ", " + CurrentRecord.rayDirection.y + ", " + CurrentRecord.rayDirection.z);
+            writer.WriteLine("horizOffsetDeg: " + CurrentRecord.horizOffsetDeg);
+            writer.WriteLine("vertOffsetDeg: " + CurrentRecord.vertOffsetDeg);
+
+            writer.Close();
+
+            CurrentRecord = new Record();
+        }
+
+        public static void Log(string s)
+        {
+            Debug.Log(s + " [Logging]");
+
+            if (!writeData)
+                return;
+
+            logWriter.WriteLine(Time.realtimeSinceStartup + "(" + Time.frameCount + "): " + s);
+        } 
+
+        private static void CreateUserDir()
+        {
+            startTime = DateTime.UtcNow.ToString("yyyy-MM-dd_HH_mm_ss");
+
+            DirectoryInfo baseDir = Directory.GetParent(Application.dataPath);
+
+            try {
+                DirectoryInfo resultsDir = baseDir.CreateSubdirectory("Results");
+
+                UserFolder = IncrementDirectory(resultsDir, "user_", "_" + startTime);
+                resultsDir.CreateSubdirectory(UserFolder.Name);
+
+                userID = UserFolder.Name;
+            }
+            catch (Exception e) {
+                Debug.LogError("Creating directory failed: " + e.ToString());
+            }
+        }
+
+        private static DirectoryInfo IncrementDirectory(DirectoryInfo rootDir, string dirNameStem, string suffix)
         {
             var dirs = rootDir.GetDirectories();
 
@@ -98,38 +131,29 @@ namespace Megamap {
             return newDir;
         }
 
-        public void Log(string s)
-        {
-            Debug.Log(s + " [Logging]");
-
-            if (!writeData)
-                return;
-
-            logWriter.WriteLine(Time.realtimeSinceStartup + "(" + Time.frameCount + "): " + s);
-        }
-
         private void Awake()
         {
             Assert.raiseExceptions = true;
 
-            CreateUserDir();
+            if (!initialized && writeData) {
+                CreateUserDir();
 
-            if (writeData) {
                 csvWriter = File.AppendText(UserFolder.FullName + "/position_and_view_total.csv");
                 logWriter = File.AppendText(UserFolder.FullName + "/logfile.txt");
             }
 
             CurrentRecord = new Record();
-
-            enabled = writeData;
+            initialized = true;
         }
 
         private void OnDestroy()
         {
-            if (writeData) {
+            if (initialized && writeData) {
                 csvWriter.Close();
                 logWriter.Close();
             }
+
+            initialized = false;
         }
 
         private void LateUpdate()
@@ -145,25 +169,6 @@ namespace Megamap {
                 + cam.rotation.eulerAngles.x + ", "
                 + cam.rotation.eulerAngles.y + ", "
                 + cam.rotation.eulerAngles.z);
-        }
-
-        private void CreateUserDir()
-        {
-            startTime = DateTime.UtcNow.ToString("yyyy-MM-dd_HH_mm_ss");
-
-            DirectoryInfo baseDir = Directory.GetParent(Application.dataPath);
-
-            try {
-                DirectoryInfo resultsDir = baseDir.CreateSubdirectory("Results");
-
-                UserFolder = IncrementDirectory(resultsDir, "user_", "_" + startTime);
-                resultsDir.CreateSubdirectory(UserFolder.Name);
-
-                userID = UserFolder.Name;
-            } catch (Exception e) {
-                Debug.LogError("Creating directory failed: " + e.ToString());
-                enabled = false;
-            }
         }
     }
 
