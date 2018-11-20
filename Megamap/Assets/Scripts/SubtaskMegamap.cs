@@ -1,27 +1,17 @@
 ﻿using System.Collections;
+
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Megamap {
 
     public class SubtaskMegamap : Subtask {
 
-        [Header("Pin randomization values")]
-        [SerializeField]
-        private int absoluteMinimum = 50;
-        [SerializeField]
-        private int maxTargetAttributeValue = 333;
-        [SerializeField]
-        private int maxAttributeValue = 1000;
-
         public Megamap map;
 
-        private readonly string description = "Finde den Raum mit dem niedrigsten Attribut.";
-
+        private readonly string description = "Finde den Raum mit den meisten Bällen.";
         private LaserPointer laser;
-
         private float startTime = 0f;
-        
+
         private void Awake()
         {
             laser = FindObjectOfType<LaserPointer>();
@@ -35,31 +25,15 @@ namespace Megamap {
 
             laser.Show(true);
 
-            // Randomization of LocationPins.
-            if (maxTargetAttributeValue <= 0) {
-                Debug.LogWarning("SubtaskMegamap: Invalid maxTargetAttributeValue <= 0. Using 1 instead.");
-                maxTargetAttributeValue = 1;
-            }
-
-            if (maxAttributeValue <= maxTargetAttributeValue) {
-                maxAttributeValue = maxTargetAttributeValue + 1;
-                Debug.LogWarning("SubtaskMegamap: Invalid maxAttributeValue <= " + maxTargetAttributeValue
-                                 + ". Using " + maxAttributeValue + " instead (not a good value).");
-            }
-
-            // Determine target pins' attribute value (pseudo-randomize).
-            int targetValue = Random.Range(absoluteMinimum, maxTargetAttributeValue + 1);
-            foreach (LocationPin pin in map.LocationPins) {
-                pin.roomNumber = Random.Range(100, 1000);
-                pin.attribute = pin.isTargetPin ? targetValue : Random.Range(maxTargetAttributeValue + 1, maxAttributeValue);
-                pin.OnTargetPinSelected.AddListener(HandleTargetPinSelected);
-                pin.OnWrongPinSelected.AddListener(HandleWrongPinSelected);
-            }
-
             // Update Megamap with values from condition.
             var condition = FindObjectOfType<ConditionSwitcher>().CurrentCondition;
             map.scale = condition.scale;
             map.heightOffset = condition.heightOffset;
+
+            foreach (var room in map.GetComponentsInChildren<SelectRoom>()) {
+                room.OnTargetRoomSelected.AddListener(HandleTargetRoomSelected);
+                room.OnWrongRoomSelected.AddListener(HandleWrongRoomSelected);
+            }
 
             // Map animation.
             StopCoroutine("StartSubtask");
@@ -71,13 +45,13 @@ namespace Megamap {
             if (laser != null)
                 laser.Show(false);
 
-            foreach (LocationPin pin in map.LocationPins) {
-                pin.OnTargetPinSelected.RemoveListener(HandleTargetPinSelected);
-                pin.OnWrongPinSelected.RemoveListener(HandleWrongPinSelected);
+            foreach (var room in map.GetComponentsInChildren<SelectRoom>()) {
+                room.OnTargetRoomSelected.RemoveListener(HandleTargetRoomSelected);
+                room.OnWrongRoomSelected.RemoveListener(HandleWrongRoomSelected);
             }
         }
 
-        private void HandleTargetPinSelected()
+        private void HandleTargetRoomSelected(SelectRoom room)
         {
             float completionTime = Time.realtimeSinceStartup;
             RecordData.CurrentRecord.megamapTime = completionTime - startTime;
@@ -86,19 +60,30 @@ namespace Megamap {
             StartCoroutine("CompleteSubtask");
         }
 
-        private void HandleWrongPinSelected()
+        private void HandleWrongRoomSelected(SelectRoom room)
         {
             var task = FindObjectOfType<Task>();
-            task.Description = "Raum hat nicht das niedrigste Attribut.\nVersuche es weiter.";
+            task.Description = "Raum hat nicht die meisten Bälle.\nVersuche es weiter.";
 
             ++RecordData.CurrentRecord.numErrors;
         }
 
         private IEnumerator StartSubtask()
         {
+            // For data recording.
+            var selectableRooms = map.GetComponentsInChildren<SelectRoom>();
+            RecordData.CurrentRecord.roomSelections = new int[selectableRooms.Length];
+            for (int i = 0; i < selectableRooms.Length; ++i) {
+                if (selectableRooms[i].IsTargetRoom) {
+                    RecordData.CurrentRecord.correctRoomIndex = i;
+                    RecordData.CurrentRecord.correctRoomName = selectableRooms[i].name;
+                    break;
+                }
+            }
+
             yield return StartCoroutine(map.Show());
+
             startTime = Time.realtimeSinceStartup;
-            RecordData.CurrentRecord.numSelections = new int[map.LocationPins.Length];
         }
 
         private IEnumerator CompleteSubtask()
