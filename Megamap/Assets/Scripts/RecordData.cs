@@ -118,7 +118,8 @@ namespace Megamap {
                 }
             }
 
-            dirNames.Sort();
+            var comp = new Tempesta.Extensions.OrdinalStringComparer();
+            dirNames.Sort(comp);
 
             string newDirNumber = "0";
             for (int i = dirNames.Count - 1; i >= 0; --i) {
