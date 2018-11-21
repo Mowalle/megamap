@@ -38,6 +38,9 @@ namespace Megamap {
 
         private SelectRoomConfiguration config = null;
 
+        private List<GameObject> balls = new List<GameObject>();
+        public List<GameObject> Balls { get { return balls; } }
+
         public void ResetMaterial()
         {
             Material = normalMaterial;
@@ -53,7 +56,12 @@ namespace Megamap {
             }
 
             int numBalls = isTargetRoom ? config.NumBallsTargetRoom : Random.Range(config.ballMinimum, config.NumBallsTargetRoom);
-            var balls = new List<GameObject>();
+
+            if (balls.Count != 0) {
+                foreach (var go in balls) { Destroy(go); }
+            }
+            balls.Clear();
+
             for (int i = 0; i < numBalls; ++i) {
                 var ball = Instantiate(config.ballPrefab, transform);
                 balls.Add(ball);
@@ -68,7 +76,7 @@ namespace Megamap {
         {
             float x = Random.Range(room.min.x + coll.radius, room.max.x - coll.radius);
             float z = Random.Range(room.min.z + coll.radius, room.max.z - coll.radius);
-            float y = coll.radius;
+            float y = room.min.y + coll.radius;
 
             coll.transform.position = new Vector3(x, y, z);
         }
@@ -100,12 +108,11 @@ namespace Megamap {
             normalMaterial = config.normalMaterial;
             hoverMaterial = config.hoverMaterial;
             errorMaterial = config.errorMaterial;
-
-            GenerateBalls();
         }
 
         private void OnEnable()
         {
+            GenerateBalls();
             ResetMaterial();
             wasClicked = false;
         }
@@ -125,6 +132,7 @@ namespace Megamap {
                     break;
                 }
             }
+            ++RecordData.CurrentRecord.numRoomSelections;
         }
 
         private void OnHandHoverEnd(Hand hand)

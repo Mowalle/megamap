@@ -9,8 +9,6 @@ namespace Megamap {
         [Header("References"), Space]
         [SerializeField] private GameObject mapModel = null;
         [SerializeField] private UserMarker userMarker = null;
-        [SerializeField] private Transform labReference = null;
-        [SerializeField] private Transform mapReference = null;
 
         [Header("Megamap Settings"), Space]
         [Range(0.01f, 1f)]
@@ -19,34 +17,75 @@ namespace Megamap {
         [Range(0.1f, 1.5f)]
         public float heightOffset = 0f;
 
-        [SerializeField] private float transitionDuration = 1f;
         [SerializeField] private bool placeAtPlayer = true;
-        [SerializeField] private bool initializeShown = true;
 
         // --- Properties/Getter/Setter --- //
 
+        [SerializeField] private Transform labReference = null;
         public Transform LabReference
         {
             get { return labReference; }
             set { labReference = value; }
         }
 
+        [SerializeField] private Transform mapReference = null;
         public Transform MapReference
         {
             get { return mapReference; }
             set { mapReference = value; }
         }
 
-        private bool isShown;
+        private bool isShown = false;
+        private bool shouldChangeVisible = true;
+
+        public bool useTransition = true;
+        public float transitionDuration = 1f;
+        private Coroutine transitionRoutine = null;
 
         // -------------------------------- //
 
-        public IEnumerator Show()
+        public void Show(bool showMap)
         {
-            if (isShown)
-                yield return null;
+            shouldChangeVisible = isShown != showMap;
+        }
 
+        public bool IsShown() { return isShown; }
+
+        private void Awake()
+        {
+            if (mapModel == null
+                || userMarker == null
+                || labReference == null
+                || mapReference == null) {
+                Debug.LogError("Megamap: References not set up correctly; disabling script");
+                enabled = false;
+                return;
+            }
+        }
+
+        private void Update()
+        {
+            if (shouldChangeVisible) {
+                if (transitionRoutine == null)
+                    transitionRoutine = isShown ? StartCoroutine(HideRoutine()) : StartCoroutine(ShowRoutine());
+
+                return;
+            }
+
+            if (!shouldChangeVisible && !isShown)
+                return;
+
+            // Apply room and wall scale.
+            transform.localScale = new Vector3(scale, scale, scale);
+
+            // Apply height offset.
+            transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
+        }
+
+        private IEnumerator ShowRoutine()
+        {
             mapModel.SetActive(true);
+            userMarker.gameObject.SetActive(false);
 
             var targetPosition = placeAtPlayer ? GetPlayerOffsetPosition() : transform.position;
             targetPosition.y = heightOffset;
@@ -61,13 +100,12 @@ namespace Megamap {
             userMarker.gameObject.SetActive(true);
 
             isShown = true;
+            shouldChangeVisible = false;
+            transitionRoutine = null;
         }
 
-        public IEnumerator Hide()
+        private IEnumerator HideRoutine()
         {
-            if (!isShown)
-                yield return null;
-
             userMarker.gameObject.SetActive(false);
 
             yield return StartCoroutine(Transition(
@@ -81,34 +119,8 @@ namespace Megamap {
             mapModel.SetActive(false);
 
             isShown = false;
-        }
-
-        private void Awake()
-        {
-            if (mapModel == null
-                || userMarker == null
-                || labReference == null
-                || mapReference == null) {
-                Debug.LogError("Megamap: References not set up correctly; disabling script");
-                enabled = false;
-                return;
-            }
-
-            isShown = initializeShown;
-            mapModel.SetActive(isShown);
-            userMarker.gameObject.SetActive(false);
-        }
-
-        private void Update()
-        {
-            if (!isShown)
-                return;
-
-            // Apply room and wall scale.
-            transform.localScale = new Vector3(scale, scale, scale);
-
-            // Apply height offset.
-            transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
+            shouldChangeVisible = false;
+            transitionRoutine = null;
         }
 
         private IEnumerator Transition(

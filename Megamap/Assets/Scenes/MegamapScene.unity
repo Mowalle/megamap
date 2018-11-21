@@ -1207,13 +1207,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1268007526}
   userMarker: {fileID: 164584562}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1268007525}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1268007525}
+  useTransition: 1
+  transitionDuration: 1
 --- !u!4 &184184166
 Transform:
   m_ObjectHideFlags: 0
@@ -4437,13 +4437,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1410765982}
   userMarker: {fileID: 1034979099}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1410765981}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1410765981}
+  useTransition: 1
+  transitionDuration: 1
 --- !u!4 &1006824801
 Transform:
   m_ObjectHideFlags: 0
@@ -9118,13 +9118,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1252677905}
   userMarker: {fileID: 1872107451}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1252677904}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1252677904}
+  useTransition: 1
+  transitionDuration: 1
 --- !u!4 &1544688326
 Transform:
   m_ObjectHideFlags: 0
@@ -11111,13 +11111,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1380151340}
   userMarker: {fileID: 485361908}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1380151339}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1380151339}
+  useTransition: 1
+  transitionDuration: 1
 --- !u!1 &2036369943 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100294, guid: 730ba15cb2ee740479d744c5407b3f8b,
@@ -11761,13 +11761,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1423148242}
   userMarker: {fileID: 513996774}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1423148241}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1423148241}
+  useTransition: 1
+  transitionDuration: 1
 --- !u!4 &2135473103
 Transform:
   m_ObjectHideFlags: 0
