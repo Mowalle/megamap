@@ -72,12 +72,17 @@ namespace Megamap {
         {
             // For data recording.
             var selectableRooms = map.GetComponentsInChildren<SelectRoom>();
+            RecordData.CurrentRecord.numBallsPerRoom = new int[selectableRooms.Length];
             RecordData.CurrentRecord.roomSelections = new int[selectableRooms.Length];
             for (int i = 0; i < selectableRooms.Length; ++i) {
+                for (int child = 0; child < selectableRooms[i].transform.childCount; ++child) {
+                    if (selectableRooms[i].transform.GetChild(child).name.StartsWith("Ball"))
+                        ++RecordData.CurrentRecord.numBallsPerRoom[i];
+                }
+
                 if (selectableRooms[i].IsTargetRoom) {
                     RecordData.CurrentRecord.correctRoomIndex = i;
                     RecordData.CurrentRecord.correctRoomName = selectableRooms[i].name;
-                    break;
                 }
             }
 
