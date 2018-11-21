@@ -60,6 +60,7 @@ namespace Megamap {
                 do {
                     PlaceRandomlyInRoom(ball.GetComponentInChildren<SphereCollider>(), GetComponent<Collider>().bounds);
                 } while (IsOverlapping(ball, balls));
+                ball.transform.localRotation = Quaternion.Euler(Random.Range(0f, 360f), Random.Range(0f, 360f), Random.Range(0f, 360f));
             }
         }
 
