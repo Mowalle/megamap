@@ -2,8 +2,6 @@
 
 using UnityEngine;
 
-using Valve.VR.InteractionSystem;
-
 namespace Megamap {
 
     public class Megamap : MonoBehaviour {
@@ -63,11 +61,6 @@ namespace Megamap {
             userMarker.gameObject.SetActive(true);
 
             isShown = true;
-
-            // Reactivate.
-            foreach (var interactable in GetComponentsInChildren<Interactable>()) {
-                interactable.enabled = true;
-            }
         }
 
         public IEnumerator Hide()
@@ -75,9 +68,6 @@ namespace Megamap {
             if (!isShown)
                 yield return null;
 
-            foreach (var interactable in GetComponentsInChildren<Interactable>()) {
-                interactable.enabled = false;
-            }
             userMarker.gameObject.SetActive(false);
 
             yield return StartCoroutine(Transition(
@@ -91,11 +81,6 @@ namespace Megamap {
             mapModel.SetActive(false);
 
             isShown = false;
-        }
-
-        public void PlaceAtPlayer()
-        {
-            transform.position = GetPlayerOffsetPosition();
         }
 
         private void Awake()
@@ -112,11 +97,6 @@ namespace Megamap {
             isShown = initializeShown;
             mapModel.SetActive(isShown);
             userMarker.gameObject.SetActive(false);
-
-            foreach (var interactable in GetComponentsInChildren<Interactable>()) {
-                interactable.highlightOnHover = false; // Works around bug that highlights stay when rooms are scaled, which leads to huge fps loss.
-                interactable.enabled = false;
-            }
         }
 
         private void Update()

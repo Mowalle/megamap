@@ -88,6 +88,8 @@ namespace Megamap {
 
         private void Awake()
         {
+            GetComponent<Interactable>().highlightOnHover = false;
+
             config = FindObjectOfType<SelectRoomConfiguration>();
             if (config == null) {
                 GetComponent<Interactable>().enabled = false;
