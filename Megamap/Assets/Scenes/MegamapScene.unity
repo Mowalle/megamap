@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10397,9 +10397,9 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: ccd21d053835a614986ecfd9d80ff063, type: 2}
   errorMaterial: {fileID: 2100000, guid: ed152cef17bfade40a2c1e867e16b588, type: 2}
   ballPrefab: {fileID: 1780381517168204, guid: d557e23886381ac488915864b563c388, type: 2}
-  ballMinimum: 9
-  targetRoomBallMinimum: 12
-  ballMaximum: 15
+  ballMinimum: 5
+  targetRoomBallMinimum: 7
+  ballMaximum: 10
 --- !u!1 &1836676964
 GameObject:
   m_ObjectHideFlags: 0
