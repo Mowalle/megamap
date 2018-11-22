@@ -16,6 +16,9 @@ namespace Megamap {
         [SerializeField] private bool isTargetRoom = false;
         public bool IsTargetRoom { get { return isTargetRoom; } }
 
+        private List<GameObject> balls = new List<GameObject>();
+        public List<GameObject> Balls { get { return balls; } }
+
         public RoomSelectionEvent OnTargetRoomSelected = new RoomSelectionEvent();
         public RoomSelectionEvent OnWrongRoomSelected = new RoomSelectionEvent();
 
@@ -34,16 +37,18 @@ namespace Megamap {
             }
         }
 
+        private bool enableInteraction = true;
         private bool wasClicked = false;
-
         private SelectRoomConfiguration config = null;
-
-        private List<GameObject> balls = new List<GameObject>();
-        public List<GameObject> Balls { get { return balls; } }
 
         public void ResetMaterial()
         {
             Material = normalMaterial;
+        }
+
+        public void EnableInteraction(bool enable)
+        {
+            enableInteraction = enable;
         }
 
         private void GenerateBalls()
@@ -125,6 +130,9 @@ namespace Megamap {
 
         private void OnHandHoverBegin(Hand hand)
         {
+            if (!enableInteraction)
+                return;
+
             if (wasClicked && !isTargetRoom)
                 Material = errorMaterial;
             else
@@ -143,11 +151,17 @@ namespace Megamap {
 
         private void OnHandHoverEnd(Hand hand)
         {
+            if (!enableInteraction)
+                return;
+
             Material = normalMaterial;
         }
 
         private void HandHoverUpdate(Hand hand)
         {
+            if (!enableInteraction)
+                return;
+
             if (!wasClicked && (hand.GetGrabStarting() != GrabTypes.None || Input.GetMouseButtonDown(0))) {
                 wasClicked = true;
 

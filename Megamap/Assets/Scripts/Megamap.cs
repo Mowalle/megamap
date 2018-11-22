@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 namespace Megamap {
 
@@ -84,6 +85,12 @@ namespace Megamap {
 
         private IEnumerator ShowRoutine()
         {
+            // Disable rooms during transition to prevent accidental selection.
+            var rooms = mapModel.GetComponentsInChildren<SelectRoom>(true);
+            foreach (var room in rooms) {
+                room.EnableInteraction(false);
+            }
+
             mapModel.SetActive(true);
             userMarker.gameObject.SetActive(false);
 
@@ -102,10 +109,21 @@ namespace Megamap {
             isShown = true;
             shouldChangeVisible = false;
             transitionRoutine = null;
+
+            // Re-activate rooms after transition.
+            foreach (var room in rooms) {
+                room.EnableInteraction(true);
+            }
         }
 
         private IEnumerator HideRoutine()
         {
+            // Disable rooms during transition to prevent accidental selection.
+            var rooms = mapModel.GetComponentsInChildren<SelectRoom>(true);
+            foreach (var room in rooms) {
+                room.EnableInteraction(false);
+            }
+
             userMarker.gameObject.SetActive(false);
 
             yield return StartCoroutine(Transition(
@@ -121,6 +139,11 @@ namespace Megamap {
             isShown = false;
             shouldChangeVisible = false;
             transitionRoutine = null;
+
+            // Re-activate rooms after transition.
+            foreach (var room in rooms) {
+                room.EnableInteraction(true);
+            }
         }
 
         private IEnumerator Transition(
