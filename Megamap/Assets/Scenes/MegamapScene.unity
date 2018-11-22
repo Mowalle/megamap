@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1207,13 +1207,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1268007526}
   userMarker: {fileID: 164584562}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1268007525}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1268007525}
+  useTransition: 1
+  transitionDuration: 1.5
 --- !u!4 &184184166
 Transform:
   m_ObjectHideFlags: 0
@@ -4437,13 +4437,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1410765982}
   userMarker: {fileID: 1034979099}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1410765981}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1410765981}
+  useTransition: 1
+  transitionDuration: 1.5
 --- !u!4 &1006824801
 Transform:
   m_ObjectHideFlags: 0
@@ -9118,13 +9118,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1252677905}
   userMarker: {fileID: 1872107451}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1252677904}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1252677904}
+  useTransition: 1
+  transitionDuration: 1.5
 --- !u!4 &1544688326
 Transform:
   m_ObjectHideFlags: 0
@@ -10393,13 +10393,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7255f55f42dd5eb479ce47df747d4921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalMaterial: {fileID: 2100000, guid: 3620ec65e76bfb244bf3a0ade32779d3, type: 2}
+  normalMaterial: {fileID: 2100000, guid: a23569332a3999545a6a3d874bb81803, type: 2}
   hoverMaterial: {fileID: 2100000, guid: ccd21d053835a614986ecfd9d80ff063, type: 2}
   errorMaterial: {fileID: 2100000, guid: ed152cef17bfade40a2c1e867e16b588, type: 2}
   ballPrefab: {fileID: 1780381517168204, guid: d557e23886381ac488915864b563c388, type: 2}
-  ballMinimum: 9
-  targetRoomBallMinimum: 12
-  ballMaximum: 15
+  ballMinimum: 5
+  targetRoomBallMinimum: 7
+  ballMaximum: 10
 --- !u!1 &1836676964
 GameObject:
   m_ObjectHideFlags: 0
@@ -11111,13 +11111,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1380151340}
   userMarker: {fileID: 485361908}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1380151339}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1380151339}
+  useTransition: 1
+  transitionDuration: 1.5
 --- !u!1 &2036369943 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100294, guid: 730ba15cb2ee740479d744c5407b3f8b,
@@ -11761,13 +11761,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapModel: {fileID: 1423148242}
   userMarker: {fileID: 513996774}
-  labReference: {fileID: 1573455972}
-  mapReference: {fileID: 1423148241}
   scale: 1
   heightOffset: 0
-  transitionDuration: 1
   placeAtPlayer: 1
-  initializeShown: 1
+  labReference: {fileID: 1573455972}
+  mapReference: {fileID: 1423148241}
+  useTransition: 1
+  transitionDuration: 1.5
 --- !u!4 &2135473103
 Transform:
   m_ObjectHideFlags: 0

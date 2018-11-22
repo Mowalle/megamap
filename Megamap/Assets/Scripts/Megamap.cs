@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 
 using UnityEngine;
-
 using Valve.VR.InteractionSystem;
 
 namespace Megamap {
@@ -11,8 +10,6 @@ namespace Megamap {
         [Header("References"), Space]
         [SerializeField] private GameObject mapModel = null;
         [SerializeField] private UserMarker userMarker = null;
-        [SerializeField] private Transform labReference = null;
-        [SerializeField] private Transform mapReference = null;
 
         [Header("Megamap Settings"), Space]
         [Range(0.01f, 1f)]
@@ -21,34 +18,81 @@ namespace Megamap {
         [Range(0.1f, 1.5f)]
         public float heightOffset = 0f;
 
-        [SerializeField] private float transitionDuration = 1f;
         [SerializeField] private bool placeAtPlayer = true;
-        [SerializeField] private bool initializeShown = true;
 
         // --- Properties/Getter/Setter --- //
 
+        [SerializeField] private Transform labReference = null;
         public Transform LabReference
         {
             get { return labReference; }
             set { labReference = value; }
         }
 
+        [SerializeField] private Transform mapReference = null;
         public Transform MapReference
         {
             get { return mapReference; }
             set { mapReference = value; }
         }
 
-        private bool isShown;
+        private bool isShown = false;
+        private bool shouldChangeVisible = true;
+
+        public bool useTransition = true;
+        public float transitionDuration = 1f;
+        private Coroutine transitionRoutine = null;
 
         // -------------------------------- //
 
-        public IEnumerator Show()
+        public void Show(bool showMap)
         {
-            if (isShown)
-                yield return null;
+            shouldChangeVisible = isShown != showMap;
+        }
+
+        public bool IsShown() { return isShown; }
+
+        private void Awake()
+        {
+            if (mapModel == null
+                || userMarker == null
+                || labReference == null
+                || mapReference == null) {
+                Debug.LogError("Megamap: References not set up correctly; disabling script");
+                enabled = false;
+                return;
+            }
+        }
+
+        private void Update()
+        {
+            if (shouldChangeVisible) {
+                if (transitionRoutine == null)
+                    transitionRoutine = isShown ? StartCoroutine(HideRoutine()) : StartCoroutine(ShowRoutine());
+
+                return;
+            }
+
+            if (!shouldChangeVisible && !isShown)
+                return;
+
+            // Apply room and wall scale.
+            transform.localScale = new Vector3(scale, scale, scale);
+
+            // Apply height offset.
+            transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
+        }
+
+        private IEnumerator ShowRoutine()
+        {
+            // Disable rooms during transition to prevent accidental selection.
+            var rooms = mapModel.GetComponentsInChildren<SelectRoom>(true);
+            foreach (var room in rooms) {
+                room.EnableInteraction(false);
+            }
 
             mapModel.SetActive(true);
+            userMarker.gameObject.SetActive(false);
 
             var targetPosition = placeAtPlayer ? GetPlayerOffsetPosition() : transform.position;
             targetPosition.y = heightOffset;
@@ -63,21 +107,23 @@ namespace Megamap {
             userMarker.gameObject.SetActive(true);
 
             isShown = true;
+            shouldChangeVisible = false;
+            transitionRoutine = null;
 
-            // Reactivate.
-            foreach (var interactable in GetComponentsInChildren<Interactable>()) {
-                interactable.enabled = true;
+            // Re-activate rooms after transition.
+            foreach (var room in rooms) {
+                room.EnableInteraction(true);
             }
         }
 
-        public IEnumerator Hide()
+        private IEnumerator HideRoutine()
         {
-            if (!isShown)
-                yield return null;
-
-            foreach (var interactable in GetComponentsInChildren<Interactable>()) {
-                interactable.enabled = false;
+            // Disable rooms during transition to prevent accidental selection.
+            var rooms = mapModel.GetComponentsInChildren<SelectRoom>(true);
+            foreach (var room in rooms) {
+                room.EnableInteraction(false);
             }
+
             userMarker.gameObject.SetActive(false);
 
             yield return StartCoroutine(Transition(
@@ -91,44 +137,13 @@ namespace Megamap {
             mapModel.SetActive(false);
 
             isShown = false;
-        }
+            shouldChangeVisible = false;
+            transitionRoutine = null;
 
-        public void PlaceAtPlayer()
-        {
-            transform.position = GetPlayerOffsetPosition();
-        }
-
-        private void Awake()
-        {
-            if (mapModel == null
-                || userMarker == null
-                || labReference == null
-                || mapReference == null) {
-                Debug.LogError("Megamap: References not set up correctly; disabling script");
-                enabled = false;
-                return;
+            // Re-activate rooms after transition.
+            foreach (var room in rooms) {
+                room.EnableInteraction(true);
             }
-
-            isShown = initializeShown;
-            mapModel.SetActive(isShown);
-            userMarker.gameObject.SetActive(false);
-
-            foreach (var interactable in GetComponentsInChildren<Interactable>()) {
-                interactable.highlightOnHover = false; // Works around bug that highlights stay when rooms are scaled, which leads to huge fps loss.
-                interactable.enabled = false;
-            }
-        }
-
-        private void Update()
-        {
-            if (!isShown)
-                return;
-
-            // Apply room and wall scale.
-            transform.localScale = new Vector3(scale, scale, scale);
-
-            // Apply height offset.
-            transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
         }
 
         private IEnumerator Transition(

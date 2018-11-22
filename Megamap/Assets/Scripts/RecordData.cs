@@ -21,6 +21,7 @@ namespace Megamap {
         public int[] roomSelections = null;
         public int correctRoomIndex = 0;
         public string correctRoomName = "";
+        public int[] numBallsPerRoom = null;
 
         // Pointing subtask data.
         public float pointingTime = 0f;
@@ -57,11 +58,12 @@ namespace Megamap {
             writer.WriteLine("conditionIndex: " + CurrentRecord.conditionIndex);
             writer.WriteLine("taskIndex: " + CurrentRecord.taskIndex);
             writer.WriteLine("megamapTime: " + CurrentRecord.megamapTime);
-            writer.WriteLine("numErrors: " + CurrentRecord.numErrors);
+            writer.WriteLine("correctRoomName: " + CurrentRecord.correctRoomName);
+            writer.WriteLine("correctRoomIndex: " + CurrentRecord.correctRoomIndex);
+            writer.WriteLine("numBallsPerRoom: " + string.Join(", ", CurrentRecord.numBallsPerRoom.Select(x => x.ToString()).ToArray()));
             writer.WriteLine("numRoomSelections: " + CurrentRecord.numRoomSelections);
             writer.WriteLine("roomSelections: " + string.Join(", ", CurrentRecord.roomSelections.Select(x => x.ToString()).ToArray()));
-            writer.WriteLine("correctRoomIndex: " + CurrentRecord.correctRoomIndex);
-            writer.WriteLine("correctRoomName: " + CurrentRecord.correctRoomName);
+            writer.WriteLine("numErrors: " + CurrentRecord.numErrors);
             writer.WriteLine("pointingTime: " + CurrentRecord.pointingTime);
             writer.WriteLine("confirmationTime: " + CurrentRecord.confirmationTime);
             writer.WriteLine("numCorrections: " + CurrentRecord.numCorrections);

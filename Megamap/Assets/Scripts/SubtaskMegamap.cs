@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System;
 
 using UnityEngine;
 
@@ -12,8 +13,15 @@ namespace Megamap {
         private LaserPointer laser;
         private float startTime = 0f;
 
+        private bool completed = false;
+
+        private float transitionDuration = 0f;
+
         private void Awake()
         {
+            if (map == null)
+                map = FindObjectOfType<Megamap>();
+
             laser = FindObjectOfType<LaserPointer>();
         }
 
@@ -30,14 +38,19 @@ namespace Megamap {
             map.scale = condition.scale;
             map.heightOffset = condition.heightOffset;
 
-            foreach (var room in map.GetComponentsInChildren<SelectRoom>()) {
+            var rooms = map.GetComponentsInChildren<SelectRoom>(true);
+            foreach (var room in rooms) {
+                // Register handlers.
                 room.OnTargetRoomSelected.AddListener(HandleTargetRoomSelected);
                 room.OnWrongRoomSelected.AddListener(HandleWrongRoomSelected);
             }
+            RecordData.CurrentRecord.numBallsPerRoom = new int[rooms.Length];
+            RecordData.CurrentRecord.roomSelections = new int[rooms.Length];
 
-            // Map animation.
-            StopCoroutine("StartSubtask");
-            StartCoroutine("StartSubtask");
+            transitionDuration = map.transitionDuration;
+            map.Show(true);
+
+            startTime = Time.realtimeSinceStartup;
         }
 
         private void OnDisable()
@@ -45,19 +58,38 @@ namespace Megamap {
             if (laser != null)
                 laser.Show(false);
 
-            foreach (var room in map.GetComponentsInChildren<SelectRoom>()) {
+            foreach (var room in map.GetComponentsInChildren<SelectRoom>(true)) {
                 room.OnTargetRoomSelected.RemoveListener(HandleTargetRoomSelected);
                 room.OnWrongRoomSelected.RemoveListener(HandleWrongRoomSelected);
             }
+
+            completed = false;
+        }
+
+        private void Update()
+        {
+            if (completed && !map.IsShown())
+                FindObjectOfType<Task>().NextSubtask();
         }
 
         private void HandleTargetRoomSelected(SelectRoom room)
         {
+            // For data recording.
             float completionTime = Time.realtimeSinceStartup;
-            RecordData.CurrentRecord.megamapTime = completionTime - startTime;
+            // Would be cooler to instead of saving the transition duration calculate it as soon as map is shown, but this would require more implementation/events.
+            RecordData.CurrentRecord.megamapTime = completionTime - startTime - transitionDuration;
 
-            StopCoroutine("CompleteSubtask");
-            StartCoroutine("CompleteSubtask");
+            var rooms = map.GetComponentsInChildren<SelectRoom>(true);
+            for (int i = 0; i < rooms.Length; ++i) {
+                foreach (var ball in rooms[i].Balls)
+                    ++RecordData.CurrentRecord.numBallsPerRoom[i];
+            }
+
+            RecordData.CurrentRecord.correctRoomIndex = Array.IndexOf(rooms, room);
+            RecordData.CurrentRecord.correctRoomName = room.name;
+
+            map.Show(false);
+            completed = true;
         }
 
         private void HandleWrongRoomSelected(SelectRoom room)
@@ -66,30 +98,6 @@ namespace Megamap {
             task.Description = "Raum hat nicht die meisten Bälle.\nVersuche es weiter.";
 
             ++RecordData.CurrentRecord.numErrors;
-        }
-
-        private IEnumerator StartSubtask()
-        {
-            // For data recording.
-            var selectableRooms = map.GetComponentsInChildren<SelectRoom>();
-            RecordData.CurrentRecord.roomSelections = new int[selectableRooms.Length];
-            for (int i = 0; i < selectableRooms.Length; ++i) {
-                if (selectableRooms[i].IsTargetRoom) {
-                    RecordData.CurrentRecord.correctRoomIndex = i;
-                    RecordData.CurrentRecord.correctRoomName = selectableRooms[i].name;
-                    break;
-                }
-            }
-
-            yield return StartCoroutine(map.Show());
-
-            startTime = Time.realtimeSinceStartup;
-        }
-
-        private IEnumerator CompleteSubtask()
-        {
-            yield return StartCoroutine(map.Hide());
-            FindObjectOfType<Task>().NextSubtask();
         }
     }
 
