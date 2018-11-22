@@ -39,13 +39,15 @@ namespace Megamap {
             map.heightOffset = condition.heightOffset;
 
             var rooms = map.GetComponentsInChildren<SelectRoom>(true);
+            RecordData.CurrentRecord.numBallsPerRoom = new int[rooms.Length];
+            RecordData.CurrentRecord.roomSelections = new int[rooms.Length];
+
+            FindObjectOfType<SelectRoomConfiguration>().RandomizeBallNumbers();
             foreach (var room in rooms) {
                 // Register handlers.
                 room.OnTargetRoomSelected.AddListener(HandleTargetRoomSelected);
                 room.OnWrongRoomSelected.AddListener(HandleWrongRoomSelected);
             }
-            RecordData.CurrentRecord.numBallsPerRoom = new int[rooms.Length];
-            RecordData.CurrentRecord.roomSelections = new int[rooms.Length];
 
             transitionDuration = map.transitionDuration;
             map.Show(true);
@@ -81,8 +83,7 @@ namespace Megamap {
 
             var rooms = map.GetComponentsInChildren<SelectRoom>(true);
             for (int i = 0; i < rooms.Length; ++i) {
-                foreach (var ball in rooms[i].Balls)
-                    ++RecordData.CurrentRecord.numBallsPerRoom[i];
+                RecordData.CurrentRecord.numBallsPerRoom[i] = rooms[i].Balls.Count;
             }
 
             RecordData.CurrentRecord.correctRoomIndex = Array.IndexOf(rooms, room);

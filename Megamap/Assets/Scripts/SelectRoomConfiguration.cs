@@ -18,11 +18,17 @@ namespace Megamap {
         private int numBallsTargetRoom = 0;
         public int NumBallsTargetRoom { get { return numBallsTargetRoom; } }
 
+        public void RandomizeBallNumbers()
+        {
+            numBallsTargetRoom = Random.Range(targetRoomBallMinimum, ballMaximum + 1);
+
+        }
+
         protected override void Awake()
         {
             base.Awake();
 
-            numBallsTargetRoom = Random.Range(targetRoomBallMinimum, ballMaximum + 1);
+            RandomizeBallNumbers();
         }
     }
 
