@@ -1213,7 +1213,7 @@ MonoBehaviour:
   labReference: {fileID: 1573455972}
   mapReference: {fileID: 1268007525}
   useTransition: 1
-  transitionDuration: 1
+  transitionDuration: 1.5
 --- !u!4 &184184166
 Transform:
   m_ObjectHideFlags: 0
@@ -4443,7 +4443,7 @@ MonoBehaviour:
   labReference: {fileID: 1573455972}
   mapReference: {fileID: 1410765981}
   useTransition: 1
-  transitionDuration: 1
+  transitionDuration: 1.5
 --- !u!4 &1006824801
 Transform:
   m_ObjectHideFlags: 0
@@ -9124,7 +9124,7 @@ MonoBehaviour:
   labReference: {fileID: 1573455972}
   mapReference: {fileID: 1252677904}
   useTransition: 1
-  transitionDuration: 1
+  transitionDuration: 1.5
 --- !u!4 &1544688326
 Transform:
   m_ObjectHideFlags: 0
@@ -11117,7 +11117,7 @@ MonoBehaviour:
   labReference: {fileID: 1573455972}
   mapReference: {fileID: 1380151339}
   useTransition: 1
-  transitionDuration: 1
+  transitionDuration: 1.5
 --- !u!1 &2036369943 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100294, guid: 730ba15cb2ee740479d744c5407b3f8b,
@@ -11767,7 +11767,7 @@ MonoBehaviour:
   labReference: {fileID: 1573455972}
   mapReference: {fileID: 1423148241}
   useTransition: 1
-  transitionDuration: 1
+  transitionDuration: 1.5
 --- !u!4 &2135473103
 Transform:
   m_ObjectHideFlags: 0
