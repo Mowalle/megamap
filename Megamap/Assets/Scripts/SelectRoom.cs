@@ -67,12 +67,13 @@ namespace Megamap {
             }
             balls.Clear();
 
+            var roomBounds = GetComponent<Collider>().bounds;
             for (int i = 0; i < numBalls; ++i) {
                 var ball = Instantiate(config.ballPrefab, transform);
                 ball.transform.rotation = Quaternion.Euler(Vector3.zero);
                 balls.Add(ball);
                 do {
-                    PlaceRandomlyInRoom(ball.GetComponentInChildren<SphereCollider>(), GetComponent<Collider>().bounds);
+                    PlaceRandomlyInRoom(ball.GetComponentInChildren<SphereCollider>(), roomBounds);
                 } while (IsOverlapping(ball, balls));
                 ball.transform.localRotation = Quaternion.Euler(Random.Range(0f, 360f), Random.Range(0f, 360f), Random.Range(0f, 360f));
             }
@@ -80,16 +81,18 @@ namespace Megamap {
 
         private void PlaceRandomlyInRoom(SphereCollider coll, Bounds room)
         {
-            float x = Random.Range(room.min.x + coll.radius, room.max.x - coll.radius);
-            float z = Random.Range(room.min.z + coll.radius, room.max.z - coll.radius);
+            // To correctly place the balls in the room, we have to scale both by the Megamap's scale
+            // and the ball's transform's scale (because the radius is given in LOCAL SPACE).
+            float scaledRadius = coll.radius * coll.transform.localScale.y * FindObjectOfType<Megamap>().transform.localScale.y;
+            Vector3 range = room.max - room.min;
+            Debug.Log(range);
+            Debug.Log(scaledRadius);
 
-            // We have to scale the collider's radius because it is not done automatically.
-            // When using a perfect sphere, it shouldn't matter which local scale axis we apply to the collider.
-            // For non-perfect sphere objects, the vertical scale is taken (assuming the object is rotated such that
-            // its y-axis is pointing upwards.
-            float y = room.min.y + coll.radius * coll.transform.localScale.y;
+            float x = Random.Range(scaledRadius, range.x - scaledRadius);
+            float z = Random.Range(scaledRadius, range.z - scaledRadius);
+            float y = scaledRadius;
 
-            coll.transform.position = new Vector3(x, y, z);
+            coll.transform.position = new Vector3(room.min.x + x, room.min.y + y, room.min.z + z);
         }
 
         private bool IsOverlapping(GameObject ball, List<GameObject> balls)
