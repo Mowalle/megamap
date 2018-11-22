@@ -10393,7 +10393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7255f55f42dd5eb479ce47df747d4921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalMaterial: {fileID: 2100000, guid: 3620ec65e76bfb244bf3a0ade32779d3, type: 2}
+  normalMaterial: {fileID: 2100000, guid: a23569332a3999545a6a3d874bb81803, type: 2}
   hoverMaterial: {fileID: 2100000, guid: ccd21d053835a614986ecfd9d80ff063, type: 2}
   errorMaterial: {fileID: 2100000, guid: ed152cef17bfade40a2c1e867e16b588, type: 2}
   ballPrefab: {fileID: 1780381517168204, guid: d557e23886381ac488915864b563c388, type: 2}
