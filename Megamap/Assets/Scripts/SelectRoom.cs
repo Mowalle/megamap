@@ -85,8 +85,6 @@ namespace Megamap {
             // and the ball's transform's scale (because the radius is given in LOCAL SPACE).
             float scaledRadius = coll.radius * coll.transform.localScale.y * FindObjectOfType<Megamap>().transform.localScale.y;
             Vector3 range = room.max - room.min;
-            Debug.Log(range);
-            Debug.Log(scaledRadius);
 
             float x = Random.Range(scaledRadius, range.x - scaledRadius);
             float z = Random.Range(scaledRadius, range.z - scaledRadius);
