@@ -64,6 +64,7 @@ namespace Megamap {
 
             for (int i = 0; i < numBalls; ++i) {
                 var ball = Instantiate(config.ballPrefab, transform);
+                ball.transform.rotation = Quaternion.Euler(Vector3.zero);
                 balls.Add(ball);
                 do {
                     PlaceRandomlyInRoom(ball.GetComponentInChildren<SphereCollider>(), GetComponent<Collider>().bounds);
@@ -76,7 +77,12 @@ namespace Megamap {
         {
             float x = Random.Range(room.min.x + coll.radius, room.max.x - coll.radius);
             float z = Random.Range(room.min.z + coll.radius, room.max.z - coll.radius);
-            float y = room.min.y + coll.radius;
+
+            // We have to scale the collider's radius because it is not done automatically.
+            // When using a perfect sphere, it shouldn't matter which local scale axis we apply to the collider.
+            // For non-perfect sphere objects, the vertical scale is taken (assuming the object is rotated such that
+            // its y-axis is pointing upwards.
+            float y = room.min.y + coll.radius * coll.transform.localScale.y;
 
             coll.transform.position = new Vector3(x, y, z);
         }
