@@ -1,149 +1,149 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
-using Valve.VR.InteractionSystem;
 
 namespace Megamap {
 
     public class Megamap : MonoBehaviour {
 
-        [Header("References"), Space]
-        [SerializeField] private GameObject mapModel = null;
-        [SerializeField] private UserMarker userMarker = null;
+        [Range(0.01f, 1f)] public float scale = 1f;
+        [Range(0.1f, 1.5f)] public float heightOffset = 0f;
 
-        [Header("Megamap Settings"), Space]
-        [Range(0.01f, 1f)]
-        public float scale = 1f;
-
-        [Range(0.1f, 1.5f)]
-        public float heightOffset = 0f;
-
-        [SerializeField] private bool placeAtPlayer = true;
-
-        // --- Properties/Getter/Setter --- //
-
+        public Transform LabReference { get { return labReference; } set { labReference = value; } }
         [SerializeField] private Transform labReference = null;
-        public Transform LabReference
-        {
-            get { return labReference; }
-            set { labReference = value; }
-        }
 
-        [SerializeField] private Transform mapReference = null;
-        public Transform MapReference
-        {
-            get { return mapReference; }
-            set { mapReference = value; }
-        }
+        public bool placeAtPlayer = true;
 
+        public bool UseAnimation { get { return useAnimation; } set { useAnimation = value; } }
+        [SerializeField] private bool useAnimation = true;
+        public float animationDuration = 1.5f;
+
+        public List<GameObject> Rooms { get { return indoorMap.Rooms; } }
+        public List<SelectRoom> SelectableRooms { get { return indoorMap.SelectableRooms; } }
+        public SelectRoom TargetRoom { get { return indoorMap.TargetRoom; } }
+
+        private IndoorMap indoorMap = null;
+        private Transform previousParent = null;
+        private Transform mapReference = null;
+        public Transform MapReference { get { return mapReference; } }
+
+        // Animation state.
+        public bool IsShown { get { return isShown; } }
         private bool isShown = false;
-        private bool shouldChangeVisible = true;
-
-        public bool useTransition = true;
-        public float transitionDuration = 1f;
-        private Coroutine transitionRoutine = null;
+        private Coroutine animationRoutine = null;
 
         // -------------------------------- //
 
-        public void Show(bool showMap)
+        public void SetMap(IndoorMap indoorMap, Transform referencePoint = null)
         {
-            shouldChangeVisible = isShown != showMap;
-        }
-
-        public bool IsShown() { return isShown; }
-
-        private void Awake()
-        {
-            if (mapModel == null
-                || userMarker == null
-                || labReference == null
-                || mapReference == null) {
-                Debug.LogError("Megamap: References not set up correctly; disabling script");
-                enabled = false;
+            if (indoorMap == null) {
+                this.indoorMap = null;
+                mapReference = null;
                 return;
             }
+
+            if (this.indoorMap != null) {
+                this.indoorMap.transform.SetParent(previousParent);
+                this.indoorMap.transform.localPosition = Vector3.zero;
+                this.indoorMap.gameObject.SetActive(false);
+            }
+
+            this.indoorMap = indoorMap;
+            previousParent = this.indoorMap.transform.parent;
+            this.indoorMap.transform.SetParent(transform);
+            this.indoorMap.transform.localPosition = Vector3.zero;
+            this.indoorMap.gameObject.SetActive(true);
+            mapReference = referencePoint != null ? referencePoint : indoorMap.transform;
+
+            if (placeAtPlayer)
+                transform.position = GetPlayerOffsetPosition();
+        }
+
+        public void Show()
+        {
+            if (isShown || animationRoutine != null)
+                return;
+
+            gameObject.SetActive(true);
+            // Animaiton.
+            animationRoutine = StartCoroutine(ShowRoutine());
+        }
+
+        public void Hide()
+        {
+            if (!isShown || animationRoutine != null)
+                return;
+
+            // Animation.
+            animationRoutine = StartCoroutine(HideRoutine());
         }
 
         private void Update()
         {
-            if (shouldChangeVisible) {
-                if (transitionRoutine == null)
-                    transitionRoutine = isShown ? StartCoroutine(HideRoutine()) : StartCoroutine(ShowRoutine());
-
+            if (MapReference == null) {
+                enabled = false;
                 return;
             }
 
-            if (!shouldChangeVisible && !isShown)
+            if (!isShown || animationRoutine != null)
                 return;
 
-            // Apply room and wall scale.
-            transform.localScale = new Vector3(scale, scale, scale);
-
-            // Apply height offset.
-            transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
+            ApplyCondition();
         }
 
         private IEnumerator ShowRoutine()
         {
             // Disable rooms during transition to prevent accidental selection.
-            var rooms = mapModel.GetComponentsInChildren<SelectRoom>(true);
-            foreach (var room in rooms) {
-                room.EnableInteraction(false);
+            SelectableRooms.ForEach(room => room.EnableInteraction(false));
+
+            if (useAnimation) {
+                var targetPosition = placeAtPlayer ? GetPlayerOffsetPosition() : transform.position;
+                targetPosition.y = heightOffset;
+                yield return StartCoroutine(Transition(
+                    transform,
+                    labReference.position,
+                    targetPosition,
+                    Vector3.one,
+                    new Vector3(scale, scale, scale),
+                    animationDuration));
             }
 
-            mapModel.SetActive(true);
-            userMarker.gameObject.SetActive(false);
+            // Just to make sure...
+            ApplyCondition();
 
-            var targetPosition = placeAtPlayer ? GetPlayerOffsetPosition() : transform.position;
-            targetPosition.y = heightOffset;
-            yield return StartCoroutine(Transition(
-                transform,
-                labReference.position,
-                targetPosition,
-                Vector3.one,
-                new Vector3(scale, scale, scale),
-                transitionDuration));
-
-            userMarker.gameObject.SetActive(true);
-
+            animationRoutine = null;
             isShown = true;
-            shouldChangeVisible = false;
-            transitionRoutine = null;
 
             // Re-activate rooms after transition.
-            foreach (var room in rooms) {
-                room.EnableInteraction(true);
-            }
+            SelectableRooms.ForEach(room => room.EnableInteraction(true));
         }
 
         private IEnumerator HideRoutine()
         {
             // Disable rooms during transition to prevent accidental selection.
-            var rooms = mapModel.GetComponentsInChildren<SelectRoom>(true);
-            foreach (var room in rooms) {
-                room.EnableInteraction(false);
+            SelectableRooms.ForEach(room => room.EnableInteraction(false));
+
+            if (useAnimation) {
+                yield return StartCoroutine(Transition(
+                    transform,
+                    transform.position,
+                    labReference.position,
+                    new Vector3(scale, scale, scale),
+                    Vector3.one,
+                    animationDuration));
             }
 
-            userMarker.gameObject.SetActive(false);
+            transform.position = labReference.position;
+            transform.localScale = Vector3.one;
 
-            yield return StartCoroutine(Transition(
-                transform,
-                transform.position,
-                labReference.position,
-                new Vector3(scale, scale, scale),
-                Vector3.one,
-                transitionDuration));
-
-            mapModel.SetActive(false);
-
-            isShown = false;
-            shouldChangeVisible = false;
-            transitionRoutine = null;
+            animationRoutine = null;
 
             // Re-activate rooms after transition.
-            foreach (var room in rooms) {
-                room.EnableInteraction(true);
-            }
+            SelectableRooms.ForEach(room => room.EnableInteraction(true));
+
+            isShown = false;
+            gameObject.SetActive(false);
         }
 
         private IEnumerator Transition(
@@ -163,6 +163,15 @@ namespace Megamap {
                 transform.localScale = Vector3.Lerp(startScale, endScale, Mathf.SmoothStep(0f, 1f, t));
                 yield return null;
             }
+        }
+
+        private void ApplyCondition()
+        {
+            // Apply room and wall scale.
+            transform.localScale = new Vector3(scale, scale, scale);
+
+            // Apply height offset.
+            transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
         }
 
         private Vector3 GetPlayerOffsetPosition()

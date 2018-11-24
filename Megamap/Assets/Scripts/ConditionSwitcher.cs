@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -52,32 +53,16 @@ namespace Megamap {
         {
             // Last condition was reached -> experiment is over!
             if (numConditionsFinished == conditions.Length - 1) {
-                var task = FindObjectOfType<Task>();
-                task.Description = "Geschafft!\nDas Experiment ist vorbei.";
+                FindObjectOfType<TaskDisplay>().Description = "Geschafft!\nDas Experiment ist vorbei.";
                 RecordData.Log("All conditions completed. The experiment is over.");
-                return;
+            }
+            else {
+                ++numConditionsFinished;
+                RecordData.Log("Starting condition " + (CurrentConditionIdx + 1) + " / " + mySequence.Length);
             }
 
-            ++numConditionsFinished;
-            RecordData.Log("Starting condition " + (mySequence[(startOffset + numConditionsFinished) % conditions.Length] + 1) + " / " + mySequence.Length);
-
-            var switcher = FindObjectOfType<TaskSwitcher>();
-            switcher.ResetTasks();
         }
 
-        public void PreviousCondition()
-        {
-            if (numConditionsFinished == 0) {
-                return;
-            }
-
-            --numConditionsFinished;
-            RecordData.Log("Starting condition " + (mySequence[(startOffset + numConditionsFinished) % conditions.Length] + 1) + " / " + mySequence.Length);
-
-            var switcher = FindObjectOfType<TaskSwitcher>();
-            switcher.ResetTasks();
-        }
-        
         private void Awake()
         {
             var json = conditionsJson.text;

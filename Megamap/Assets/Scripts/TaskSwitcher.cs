@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -8,103 +9,94 @@ namespace Megamap {
     public class TaskSwitcher : MonoBehaviour {
 
         [SerializeField] private bool randomizeTasks = true;
-        [SerializeField] private bool preventDirectRepitition = true;
+        [SerializeField] private bool preventDirectRepetition = true;
 
         [SerializeField] private Task[] tasks = new Task[5];
 
         [SerializeField] private TextAsset taskSequenceFile = null;
+
+        public Task CurrentTask { get { return tasks[CurrentTaskIndex]; } }
+
         private int[][] sequences = null;
         private int[] currentSequence = null;
         private int startOffset = -1;
         private int numTasksFinished = 0;
+        private int CurrentTaskIndex { get { return currentSequence[(startOffset + numTasksFinished) % currentSequence.Length]; } }
 
         public void NextTask()
         {
+            tasks[CurrentTaskIndex].StopTask();
+            tasks[CurrentTaskIndex].gameObject.SetActive(false);
             SaveData();
 
             if (numTasksFinished == tasks.Length - 1) {
-                var conditionSwitcher = FindObjectOfType<ConditionSwitcher>();
-                if (conditionSwitcher != null) {
-                    conditionSwitcher.NextCondition();
-                }
-                return;
+                // Switch conditions.
+                var condSwitcher = FindObjectOfType<ConditionSwitcher>();
+                int lastCondition = condSwitcher.CurrentConditionIdx;
+                condSwitcher.NextCondition();
+                // If conditions were not switched, it means all conditions were completed.
+                // In that case, don't start the next task (there is none) and just keep the
+                // task display and wait for user to take off HMD.
+                if (lastCondition == condSwitcher.CurrentConditionIdx)
+                    return;
+
+                numTasksFinished = 0;
+                NextSequence();
+            }
+            else {
+                ++numTasksFinished;
             }
 
-            ++numTasksFinished;
-            UpdateTasks();
+            StartTask();
         }
 
-        public void PreviousTask()
+        private void Awake()
         {
-            if (numTasksFinished == 0) {
+            if (FindObjectOfType<ConditionSwitcher>() == null) {
+                gameObject.SetActive(false);
                 return;
             }
-
-            --numTasksFinished;
-            UpdateTasks();
         }
 
-        public void ResetTasks()
+        private void Start()
         {
-            // Remember previous task in case we don't want to repeat it. 
-            int lastTask = (startOffset == -1) ? -1 : currentSequence[(startOffset + numTasksFinished) % tasks.Length];
-
-            foreach (Task t in tasks) {
-                t.ResetSubtasks();
+            NextSequence();
+            foreach (var t in tasks) {
+                t.gameObject.SetActive(false);
             }
+            StartTask();
+        }
 
-            numTasksFinished = 0;
-
+        private void NextSequence()
+        {
             // Load new sequences in case old ones are all used up, which should not be a problem when using a file with all possible permutations.
-            if (sequences.GetLength(0) == 0)
+            if (sequences == null || sequences.GetLength(0) == 0) {
                 LoadSequences();
+            }
+
+            // Remember previous task in case we don't want to repeat it. 
+            int lastTask = (startOffset == -1) ? -1 : CurrentTaskIndex;
 
             // Pick sequence and remove it from list of available sequences.
-            {
-                var sequenceIndex = Random.Range(0, sequences.GetLength(0));
-                currentSequence = sequences[sequenceIndex];
-                Assert.AreEqual(currentSequence.Length, tasks.Length);
+            var sequenceIndex = Random.Range(0, sequences.GetLength(0));
+            currentSequence = sequences[sequenceIndex];
+            Assert.AreEqual(currentSequence.Length, tasks.Length);
 
-                // This remove the used element, but it's quite ugly...
-                var tmp = new List<int[]>(sequences);
-                tmp.RemoveAt(sequenceIndex);
-                sequences = tmp.ToArray();
-            }
+            // This removes the used element, but it's quite ugly...
+            var tmp = new List<int[]>(sequences);
+            tmp.RemoveAt(sequenceIndex);
+            sequences = tmp.ToArray();
 
             if (tasks.Length > 1 && randomizeTasks) {
                 do {
                     startOffset = Random.Range(0, currentSequence.Length);
-                } while (preventDirectRepitition && lastTask == currentSequence[startOffset]);
+                } while (preventDirectRepetition && lastTask == currentSequence[startOffset]);
             }
             else {
                 startOffset = 0;
             }
 
-            RecordData.Log("Task sequence is " + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray())
-                + ", starting with task " + (currentSequence[startOffset] + 1) + "/" + currentSequence.Length + ":");
-
-            UpdateTasks();
-        }
-
-        private void Awake()
-        {
-            LoadSequences();
-        }
-
-        private void Start()
-        {
-            ResetTasks();
-        }
-
-        private void UpdateTasks()
-        {
-            RecordData.Log("Starting task " + (currentSequence[(startOffset + numTasksFinished) % tasks.Length] + 1) + " / " + currentSequence.Length);
-            foreach (Task t in tasks) {
-                if (t.gameObject.activeSelf) {
-                    t.gameObject.SetActive(false);
-                }
-            }
-            tasks[currentSequence[(startOffset + numTasksFinished) % tasks.Length]].gameObject.SetActive(true);
+            RecordData.Log("New task sequence is " + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray()));
         }
 
         private void LoadSequences()
@@ -120,6 +112,13 @@ namespace Megamap {
                     sequences[0][i] = i;
                 }
             }
+        }
+
+        private void StartTask()
+        {
+            RecordData.Log("Starting task " + (CurrentTaskIndex + 1) + " / " + currentSequence.Length);
+            tasks[CurrentTaskIndex].gameObject.SetActive(true);
+            tasks[CurrentTaskIndex].StartTask();
         }
 
         private void SaveData()

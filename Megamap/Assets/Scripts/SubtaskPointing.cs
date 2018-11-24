@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 using Valve.VR;
-using Valve.VR.InteractionSystem;
 
 namespace Megamap {
 
@@ -10,37 +8,53 @@ namespace Megamap {
 
         public SteamVR_Action_Boolean acceptAction;
         public SteamVR_Action_Boolean backAction;
-        public LaserPointer laser;
+        public LaserPointer laser = null;
 
         private readonly string taskDescription = "Zeige dorthin, wo sich der ausgewählte Raum befindet.\nBestätige die Richtung mit dem Trigger.";
         private readonly string confirmation = "Trigger: Annehmen\nTrackpad: Korrigieren";
 
-        private Task currentTask;
-
         private float startTime = 0f;
         private float startConfirmationTime = 0f;
-        
-        private void OnEnable()
+
+        public override void StartSubtask()
         {
             LogSubtask();
-
-            currentTask = FindObjectOfType<Task>();
-            currentTask.Description = taskDescription;
+            FindObjectOfType<TaskDisplay>().Description = taskDescription;
             laser.Show(true);
+            laser.IsFrozen = false;
 
             startTime = Time.realtimeSinceStartup;
         }
 
+        public override void StopSubtask()
+        {
+            laser.IsFrozen = false;
+            laser.Show(false);
+        }
+
+        private void Awake()
+        {
+            laser = FindObjectOfType<LaserPointer>();
+        }
+
+        private void Start()
+        {
+            laser.gameObject.SetActive(false);
+        }
+
         private void Update()
         {
+            if (!IsStarted)
+                return;
+
             var hand = laser.GetHand();
             if (acceptAction.GetStateDown(hand.handType) || Input.GetMouseButtonDown(0)) {
                 if (!laser.IsFrozen) {
                     laser.IsFrozen = true;
-                    currentTask.Description = confirmation;
+                    FindObjectOfType<TaskDisplay>().Description = confirmation;
 
                     startConfirmationTime = Time.realtimeSinceStartup;
-                } 
+                }
                 else {
                     float endTime = Time.realtimeSinceStartup;
 
@@ -53,13 +67,12 @@ namespace Megamap {
                     // TODO: Calculate horizontal/vertical error...
 
                     // Do next trial.
-                    laser.Show(false);
                     FindObjectOfType<TaskSwitcher>().NextTask();
                 }
             }
             else if ((backAction.GetStateDown(hand.handType) || Input.GetKeyDown(KeyCode.Backspace)) && laser.IsFrozen) {
                 laser.IsFrozen = false;
-                currentTask.Description = taskDescription;
+                FindObjectOfType<TaskDisplay>().Description = taskDescription;
 
                 ++RecordData.CurrentRecord.numCorrections;
             }

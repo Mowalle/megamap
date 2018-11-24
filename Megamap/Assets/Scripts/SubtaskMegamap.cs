@@ -7,30 +7,25 @@ namespace Megamap {
 
     public class SubtaskMegamap : Subtask {
 
-        public Megamap map;
+        public IndoorMap indoorMap = null;
+
+        private Megamap map = null;
+        private LaserPointer laser = null;
 
         private readonly string description = "Finde den Raum mit den meisten Bällen.";
-        private LaserPointer laser;
+
         private float startTime = 0f;
 
         private bool completed = false;
 
-        private float transitionDuration = 0f;
-
-        private void Awake()
+        public override void StartSubtask()
         {
-            if (map == null)
-                map = FindObjectOfType<Megamap>();
+            completed = false;
 
-            laser = FindObjectOfType<LaserPointer>();
-        }
-
-        private void OnEnable()
-        {
             LogSubtask();
+            FindObjectOfType<TaskDisplay>().Description = description;
 
-            FindObjectOfType<Task>().Description = description;
-
+            laser.gameObject.SetActive(true);
             laser.Show(true);
 
             // Update Megamap with values from condition.
@@ -38,48 +33,69 @@ namespace Megamap {
             map.scale = condition.scale;
             map.heightOffset = condition.heightOffset;
 
-            var rooms = map.GetComponentsInChildren<SelectRoom>(true);
-            RecordData.CurrentRecord.numBallsPerRoom = new int[rooms.Length];
-            RecordData.CurrentRecord.roomSelections = new int[rooms.Length];
+            map.SetMap(indoorMap);
+            map.GetComponent<RoomGuides>().enabled = true;
+            map.GetComponent<UserMarker>().enabled = true;
+
+            var rooms = map.SelectableRooms;
+            RecordData.CurrentRecord.numBallsPerRoom = new int[rooms.Count];
+            RecordData.CurrentRecord.roomSelections = new int[rooms.Count];
 
             FindObjectOfType<SelectRoomConfiguration>().RandomizeBallNumbers();
             foreach (var room in rooms) {
+                // Make it so that none of the rooms counts as 'clicked'.
+                // Important if the same map is used across multiple tasks (e.g. in testing).
+                room.ResetRoom();
+
+                // Randomize balls.
+                room.GenerateBalls();
+
                 // Register handlers.
                 room.OnTargetRoomSelected.AddListener(HandleTargetRoomSelected);
                 room.OnWrongRoomSelected.AddListener(HandleWrongRoomSelected);
             }
 
-            transitionDuration = map.transitionDuration;
-            map.Show(true);
+            map.Show();
 
             startTime = Time.realtimeSinceStartup;
         }
 
-        private void OnDisable()
+        public override void StopSubtask()
         {
-            if (laser != null)
-                laser.Show(false);
+            laser.Show(false);
 
-            foreach (var room in map.GetComponentsInChildren<SelectRoom>(true)) {
+            foreach (var room in map.SelectableRooms) {
                 room.OnTargetRoomSelected.RemoveListener(HandleTargetRoomSelected);
                 room.OnWrongRoomSelected.RemoveListener(HandleWrongRoomSelected);
             }
 
-            completed = false;
+            // No need to disable map here, as this is already handled
+            // by map.Hide() in HandleTargetRoomSelected().
+            // map.gameObject.SetActive(false); <-- No!
+        }
+
+        private void Awake()
+        {
+            map = FindObjectOfType<Megamap>();
+            laser = FindObjectOfType<LaserPointer>();
         }
 
         private void Update()
         {
-            if (completed && !map.IsShown())
-                FindObjectOfType<Task>().NextSubtask();
+            // When the correct room was clicked and handled by HandleTargetRoomSelected(),
+            // the hiding animation for the map is started. However, we don't want to switch
+            // to the next subtask UNTIL the map is completely hidden. Thus, we wait.
+            if (completed && !map.IsShown) {
+                FindObjectOfType<TaskSwitcher>().CurrentTask.NextSubtask();
+            }
         }
 
         private void HandleTargetRoomSelected(SelectRoom room)
         {
             // For data recording.
             float completionTime = Time.realtimeSinceStartup;
-            // Would be cooler to instead of saving the transition duration calculate it as soon as map is shown, but this would require more implementation/events.
-            RecordData.CurrentRecord.megamapTime = completionTime - startTime - transitionDuration;
+            // We have to subtract the animationDuration once since the start time is taken BEFORE the animation started (see StartSubtask()).
+            RecordData.CurrentRecord.megamapTime = completionTime - startTime - map.animationDuration;
 
             var rooms = map.GetComponentsInChildren<SelectRoom>(true);
             for (int i = 0; i < rooms.Length; ++i) {
@@ -89,14 +105,14 @@ namespace Megamap {
             RecordData.CurrentRecord.correctRoomIndex = Array.IndexOf(rooms, room);
             RecordData.CurrentRecord.correctRoomName = room.name;
 
-            map.Show(false);
+            map.Hide();
+
             completed = true;
         }
 
         private void HandleWrongRoomSelected(SelectRoom room)
         {
-            var task = FindObjectOfType<Task>();
-            task.Description = "Raum hat nicht die meisten Bälle.\nVersuche es weiter.";
+            FindObjectOfType<TaskDisplay>().Description = "Raum hat nicht die meisten Bälle.\nVersuche es weiter.";
 
             ++RecordData.CurrentRecord.numErrors;
         }
