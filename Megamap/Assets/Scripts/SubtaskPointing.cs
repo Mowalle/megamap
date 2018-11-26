@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 using Valve.VR;
 
@@ -24,6 +25,10 @@ namespace Megamap {
             FindObjectOfType<TaskDisplay>().Description = taskDescription;
             laser.Show(true);
             laser.IsFrozen = false;
+
+            // We want to enable the target room so that we can use its BoxCollider of Raycasts (otherwise, its size would be 0).
+            // All other rooms are disabled to prevent rendering collisions/z-fighting with the virtual lab.
+            DisplayTargetRoom(true);
             targetRoom = FindObjectOfType<TaskSwitcher>().CurrentTask.Megamap.TargetRoom;
 
             startTime = Time.realtimeSinceStartup;
@@ -31,6 +36,7 @@ namespace Megamap {
 
         public override void StopSubtask()
         {
+            DisplayTargetRoom(false);
             laser.IsFrozen = false;
             laser.Show(false);
         }
@@ -114,6 +120,28 @@ namespace Megamap {
                 Gizmos.DrawLine(laser.Ray.origin, roomBounds.center);
             }
 
+        }
+
+        private void DisplayTargetRoom(bool enable)
+        {
+            var map = FindObjectOfType<TaskSwitcher>().CurrentTask.Megamap;
+
+            map.gameObject.SetActive(enable);
+
+            // Disable colliders for all selectable rooms and balls.
+            foreach (var room in map.SelectableRooms) {
+                var colls = room.GetComponentsInChildren<Collider>(true);
+                Array.ForEach(colls, c => c.enabled = !enable);
+            }
+            // Re-enable collider for target room so it can be used for raycasting.
+            map.TargetRoom.GetComponent<Collider>().enabled = true;
+
+            // Make only target room visible.
+            ChangeVisibility.SetVisible(map.gameObject, !enable);
+            ChangeVisibility.SetVisible(map.TargetRoom.gameObject, true);
+            var marker = GameObject.Find("UserMarker Circle");
+            if (marker != null)
+                ChangeVisibility.SetVisible(marker, false);
         }
     }
 
