@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2303,6 +2303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 301807594}
   - {fileID: 1836676965}
@@ -3327,6 +3328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 112067910}
   - {fileID: 424884094}
@@ -3361,6 +3363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 1771961175}
   - {fileID: 2109809427}
@@ -3414,6 +3417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 772546078}
   - {fileID: 624695044}
@@ -7013,6 +7017,34 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5.2000003, y: 3.6000001, z: 3.0000002}
   m_Center: {x: -2.5000002, y: 1.6999999, z: 1.4999999}
+--- !u!1 &1416226359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1416226360}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1416226360
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1416226359}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.04, y: 1.47, z: 1.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1423148274}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1422742223
 Prefab:
   m_ObjectHideFlags: 0
@@ -7564,6 +7596,11 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5.2, y: 7.2999988, z: 2.9999995}
   m_Center: {x: -2.5, y: 3.5499995, z: 1.4999998}
+--- !u!4 &1423148274 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400360, guid: 69585ea024123bb498cc5789a6b34214,
+    type: 3}
+  m_PrefabInternal: {fileID: 1423148240}
 --- !u!1 &1428674208 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100290, guid: fbad3e8bc6e5d964facb780e965d4c4d,
@@ -9127,6 +9164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 564070466}
   - {fileID: 1703055864}
