@@ -74,8 +74,19 @@ namespace Megamap {
                     RecordData.CurrentRecord.rayPosition = laser.Ray.origin;
                     RecordData.CurrentRecord.rayDirection = laser.Ray.direction;
 
+                    var hits = Physics.RaycastAll(laser.Ray, 200f);
+                    foreach (var hit in hits) {
+                        // Go through all hits. If hit is room AND room is target, record related data.
+                        // Second condition should always be true since we disabled all room colliders except for the target room.
+                        if (hit.collider.GetComponent<SelectRoom>() != null && hit.collider.GetComponent<SelectRoom>().IsTargetRoom) {
+                            RecordData.CurrentRecord.hitRoom = true;
+                            RecordData.CurrentRecord.hitLocation = hit.point - hit.transform.position;
+                            break;
+                        }
+                    }
+
                     var roomBounds = targetRoom.GetComponent<Renderer>().bounds;
-                    // First thing's first, determine pointing error towards room center.
+                    // Determine pointing error towards room center.
                     Vector3 correctDir = (roomBounds.center - laser.Ray.origin).normalized;
                     Vector3 actualDir = laser.Ray.direction.normalized;
 
@@ -128,7 +139,13 @@ namespace Megamap {
 
             map.gameObject.SetActive(enable);
 
-            // Disable colliders for all selectable rooms and balls.
+            // Disable/Enable colliders for all selectable rooms and balls.
+
+            // FIXME: This seems to not always reliably disable the colliders?
+            // It's not a severe problem for now because when raycasting we cast for all
+            // colliders and only act when the collider of the targetRoom is found
+            // anyway.
+
             foreach (var room in map.SelectableRooms) {
                 var colls = room.GetComponentsInChildren<Collider>(true);
                 Array.ForEach(colls, c => c.enabled = !enable);

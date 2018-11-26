@@ -31,6 +31,8 @@ namespace Megamap {
         public Vector3 viewAtConfirmation = new Vector3();
         public Vector3 rayPosition = new Vector3();
         public Vector3 rayDirection = new Vector3();
+        public bool hitRoom = false;
+        public Vector3 hitLocation = Vector3.zero;
         public float horizOffsetDeg = 0f;
         public float vertOffsetDeg = 0f;
     }
@@ -71,6 +73,8 @@ namespace Megamap {
             writer.WriteLine("viewAtConfirmation: " + CurrentRecord.viewAtConfirmation.x + ", " + CurrentRecord.viewAtConfirmation.y + ", " + CurrentRecord.viewAtConfirmation.z);
             writer.WriteLine("rayPosition: " + CurrentRecord.rayPosition.x + ", " + CurrentRecord.rayPosition.y + ", " + CurrentRecord.rayPosition.z);
             writer.WriteLine("rayDirection: " + CurrentRecord.rayDirection.x + ", " + CurrentRecord.rayDirection.y + ", " + CurrentRecord.rayDirection.z);
+            writer.WriteLine("hitRoom: " + CurrentRecord.hitRoom);
+            writer.WriteLine("hitLocation: " + CurrentRecord.hitLocation.x + ", " + CurrentRecord.hitLocation.y + ", " + CurrentRecord.hitLocation.z);
             writer.WriteLine("horizOffsetDeg: " + CurrentRecord.horizOffsetDeg);
             writer.WriteLine("vertOffsetDeg: " + CurrentRecord.vertOffsetDeg);
 
