@@ -39,11 +39,11 @@ namespace Megamap {
 
         private bool enableInteraction = true;
         private bool wasClicked = false;
-        private SelectRoomConfiguration config = null;
 
-        public void ResetMaterial()
+        public void ResetRoom()
         {
             Material = normalMaterial;
+            wasClicked = false;
         }
 
         public void EnableInteraction(bool enable)
@@ -51,15 +51,9 @@ namespace Megamap {
             enableInteraction = enable;
         }
 
-        private void GenerateBalls()
+        public void GenerateBalls()
         {
-            if (config.ballPrefab.GetComponentInChildren<SphereCollider>() == null
-                || config.ballPrefab.GetComponentInChildren<Rigidbody>() == null) {
-                GetComponent<Interactable>().enabled = false;
-                enabled = false;
-                return;
-            }
-
+            var config = FindObjectOfType<SelectRoomConfiguration>();
             int numBalls = isTargetRoom ? config.NumBallsTargetRoom : Random.Range(config.ballMinimum, config.NumBallsTargetRoom);
 
             if (balls.Count != 0) {
@@ -67,30 +61,30 @@ namespace Megamap {
             }
             balls.Clear();
 
-            var roomBounds = GetComponent<Collider>().bounds;
+            var roomBounds = GetComponent<Renderer>().bounds;
             for (int i = 0; i < numBalls; ++i) {
                 var ball = Instantiate(config.ballPrefab, transform);
                 ball.transform.rotation = Quaternion.Euler(Vector3.zero);
                 balls.Add(ball);
                 do {
-                    PlaceRandomlyInRoom(ball.GetComponentInChildren<SphereCollider>(), roomBounds);
+                    PlaceRandomlyInRoom(ball, roomBounds);
                 } while (IsOverlapping(ball, balls));
                 ball.transform.localRotation = Quaternion.Euler(Random.Range(0f, 360f), Random.Range(0f, 360f), Random.Range(0f, 360f));
             }
         }
 
-        private void PlaceRandomlyInRoom(SphereCollider coll, Bounds room)
+        private void PlaceRandomlyInRoom(GameObject go, Bounds room)
         {
             // To correctly place the balls in the room, we have to scale both by the Megamap's scale
-            // and the ball's transform's scale (because the radius is given in LOCAL SPACE).
-            float scaledRadius = coll.radius * coll.transform.localScale.y * FindObjectOfType<Megamap>().transform.localScale.y;
             Vector3 range = room.max - room.min;
 
-            float x = Random.Range(scaledRadius, range.x - scaledRadius);
-            float z = Random.Range(scaledRadius, range.z - scaledRadius);
-            float y = scaledRadius;
+            var objBounds = go.GetComponent<Renderer>().bounds;
 
-            coll.transform.position = new Vector3(room.min.x + x, room.min.y + y, room.min.z + z);
+            float x = Random.Range(objBounds.extents.x, range.x - objBounds.extents.x);
+            float z = Random.Range(objBounds.extents.z, range.z - objBounds.extents.z);
+            float y = objBounds.extents.y;
+
+            go.transform.position = new Vector3(room.min.x + x, room.min.y + y, room.min.z + z);
         }
 
         private bool IsOverlapping(GameObject ball, List<GameObject> balls)
@@ -99,7 +93,7 @@ namespace Megamap {
                 if (b.Equals(ball))
                     continue;
 
-                if (ball.GetComponent<Collider>().bounds.Intersects(b.GetComponent<Collider>().bounds))
+                if (ball.GetComponent<Renderer>().bounds.Intersects(b.GetComponent<Renderer>().bounds))
                     return true;
             }
 
@@ -110,23 +104,12 @@ namespace Megamap {
         {
             GetComponent<Interactable>().highlightOnHover = false;
 
-            config = FindObjectOfType<SelectRoomConfiguration>();
-            if (config == null) {
-                GetComponent<Interactable>().enabled = false;
-                enabled = false;
-                return;
-            }
-
+            var config = FindObjectOfType<SelectRoomConfiguration>();
             normalMaterial = config.normalMaterial;
             hoverMaterial = config.hoverMaterial;
             errorMaterial = config.errorMaterial;
-        }
 
-        private void OnEnable()
-        {
-            GenerateBalls();
-            ResetMaterial();
-            wasClicked = false;
+            ResetRoom();
         }
 
         private void OnHandHoverBegin(Hand hand)

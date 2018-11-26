@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Megamap {
@@ -10,14 +8,11 @@ namespace Megamap {
         [SerializeField]
         private Text taskDisplay = null;
 
+        public string Description { get; set; }
+
         private void Update()
         {
-            var task = FindObjectOfType<Task>();
-            if (task == null) {
-                return;
-            }
-
-            taskDisplay.text = task.Description;
+            taskDisplay.text = Description;
         }
     }
 
