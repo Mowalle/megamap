@@ -71,8 +71,8 @@ namespace Megamap {
             writer.WriteLine("viewAtConfirmation: " + CurrentRecord.viewAtConfirmation.x + ", " + CurrentRecord.viewAtConfirmation.y + ", " + CurrentRecord.viewAtConfirmation.z);
             writer.WriteLine("rayPosition: " + CurrentRecord.rayPosition.x + ", " + CurrentRecord.rayPosition.y + ", " + CurrentRecord.rayPosition.z);
             writer.WriteLine("rayDirection: " + CurrentRecord.rayDirection.x + ", " + CurrentRecord.rayDirection.y + ", " + CurrentRecord.rayDirection.z);
-            //writer.WriteLine("horizOffsetDeg: " + CurrentRecord.horizOffsetDeg);
-            //writer.WriteLine("vertOffsetDeg: " + CurrentRecord.vertOffsetDeg);
+            writer.WriteLine("horizOffsetDeg: " + CurrentRecord.horizOffsetDeg);
+            writer.WriteLine("vertOffsetDeg: " + CurrentRecord.vertOffsetDeg);
 
             writer.Close();
 

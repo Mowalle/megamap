@@ -67,7 +67,26 @@ namespace Megamap {
                     RecordData.CurrentRecord.viewAtConfirmation = Camera.main.transform.rotation.eulerAngles;
                     RecordData.CurrentRecord.rayPosition = laser.Ray.origin;
                     RecordData.CurrentRecord.rayDirection = laser.Ray.direction;
-                    // TODO: Calculate horizontal/vertical error...
+
+                    var roomBounds = targetRoom.GetComponent<Renderer>().bounds;
+                    // First thing's first, determine pointing error towards room center.
+                    Vector3 correctDir = (roomBounds.center - laser.Ray.origin).normalized;
+                    Vector3 actualDir = laser.Ray.direction.normalized;
+
+                    // Positive horizontal angle means error to the right of center (from user POV), negative means left.
+                    Vector2 correctProjHoriz = new Vector2(correctDir.z, correctDir.x);
+                    Vector2 actualProjHoriz = new Vector2(actualDir.z, actualDir.x);
+                    float horizAngle = Vector2.SignedAngle(correctProjHoriz, actualProjHoriz);
+
+                    // Positive horizontal angle means error over center (from user POV), negative means under.
+                    Vector2 correctProjVert = new Vector2(correctDir.y, correctDir.z);
+                    Vector2 actualProjVert = new Vector2(actualDir.y, actualDir.z);
+                    float vertAngle = Vector2.SignedAngle(correctProjVert, actualProjVert);
+
+                    RecordData.CurrentRecord.horizOffsetDeg = horizAngle;
+                    RecordData.CurrentRecord.vertOffsetDeg = vertAngle;
+
+                    RecordData.Log("Pointing error in degrees: " + horizAngle + ", " + vertAngle);
 
                     // Do next trial.
                     FindObjectOfType<TaskSwitcher>().NextTask();
@@ -89,6 +108,12 @@ namespace Megamap {
             var roomBounds = targetRoom.GetComponent<Renderer>().bounds;
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(roomBounds.center, roomBounds.size);
+
+            if (laser != null) {
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(laser.Ray.origin, roomBounds.center);
+            }
+
         }
     }
 
