@@ -16,12 +16,15 @@ namespace Megamap {
         private float startTime = 0f;
         private float startConfirmationTime = 0f;
 
+        private SelectRoom targetRoom = null;
+
         public override void StartSubtask()
         {
             LogSubtask();
             FindObjectOfType<TaskDisplay>().Description = taskDescription;
             laser.Show(true);
             laser.IsFrozen = false;
+            targetRoom = FindObjectOfType<TaskSwitcher>().CurrentTask.Megamap.TargetRoom;
 
             startTime = Time.realtimeSinceStartup;
         }
@@ -76,6 +79,16 @@ namespace Megamap {
 
                 ++RecordData.CurrentRecord.numCorrections;
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (targetRoom == null)
+                return;
+
+            var roomBounds = targetRoom.GetComponent<Renderer>().bounds;
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(roomBounds.center, roomBounds.size);
         }
     }
 

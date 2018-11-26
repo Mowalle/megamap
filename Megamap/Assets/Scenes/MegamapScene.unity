@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2303,6 +2303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 301807594}
   - {fileID: 1836676965}
@@ -3327,6 +3328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 112067910}
   - {fileID: 424884094}
@@ -3361,6 +3363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 1771961175}
   - {fileID: 2109809427}
@@ -3414,6 +3417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 772546078}
   - {fileID: 624695044}
@@ -9127,6 +9131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1055fdba60ebae4bba72948133c7a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  megamap: {fileID: 1117749756}
   subtasks:
   - {fileID: 564070466}
   - {fileID: 1703055864}

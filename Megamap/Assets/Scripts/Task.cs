@@ -30,6 +30,10 @@ namespace Megamap {
 
     public class Task : MonoBehaviour {
 
+        // For accessing the Megamap in subtasks even if it's disabled.
+        [SerializeField] private Megamap megamap = null;
+        public Megamap Megamap { get { return megamap; } }
+
         public Subtask[] subtasks = new Subtask[4];
 
         private bool isStarted = false;
