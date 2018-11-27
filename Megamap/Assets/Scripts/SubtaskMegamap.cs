@@ -12,7 +12,7 @@ namespace Megamap {
         private Megamap map = null;
         private LaserPointer laser = null;
 
-        private readonly string description = "Finde den Raum mit den meisten Bällen.";
+        private readonly string description = "1. FINDE den Raum mit den meisten Bällen.\n\n2. MERKE dir die Richtung zum Raum.\n\n3. WÄHLE den Raum mit dem TRIGGER aus.";
 
         private float startTime = 0f;
 
