@@ -11,22 +11,48 @@ namespace Megamap {
         [SerializeField] private bool randomizeTasks = true;
         [SerializeField] private bool preventDirectRepetition = true;
 
+        [SerializeField] private List<Task> tutorials = new List<Task>();
+        bool runningTutorial = false;
+        public bool IsTutorialRunning { get { return runningTutorial; } }
+        int numTutorialsFinished = 0;
+        bool waitingForExperimentStart = false;
+
         [SerializeField] private Task[] tasks = new Task[5];
 
         [SerializeField] private TextAsset taskSequenceFile = null;
 
-        public Task CurrentTask { get { return tasks[CurrentTaskIndex]; } }
+        public Task CurrentTask { get { return runningTutorial ? tutorials[numTasksFinished] : tasks[CurrentTaskIndex]; } }
 
         private int[][] sequences = null;
         private int[] currentSequence = null;
         private int startOffset = -1;
         private int numTasksFinished = 0;
-        private int CurrentTaskIndex { get { return currentSequence[(startOffset + numTasksFinished) % currentSequence.Length]; } }
+        private int CurrentTaskIndex { get { return runningTutorial ? numTutorialsFinished : currentSequence[(startOffset + numTasksFinished) % currentSequence.Length]; } }
 
         public void NextTask()
         {
+            if (runningTutorial) {
+                tutorials[numTutorialsFinished].StopTask();
+                tutorials[numTutorialsFinished].gameObject.SetActive(false);
+
+                ++numTutorialsFinished;
+                if (numTutorialsFinished == tutorials.Count) {
+                    waitingForExperimentStart = true;
+                    return;
+                }
+                tutorials[CurrentTaskIndex].gameObject.SetActive(true);
+                tutorials[CurrentTaskIndex].StartTask();
+
+                return;
+            }
+
+            // ------
+            // The following will only be executed when all tutorials are finished.
+            // ------
+
             tasks[CurrentTaskIndex].StopTask();
             tasks[CurrentTaskIndex].gameObject.SetActive(false);
+
             SaveData();
 
             if (numTasksFinished == tasks.Length - 1) {
@@ -64,7 +90,31 @@ namespace Megamap {
             foreach (var t in tasks) {
                 t.gameObject.SetActive(false);
             }
-            StartTask();
+
+            if (tutorials.Count == 0) {
+                StartTask();
+            }
+            else {
+                StartTutorials();
+            }
+        }
+
+        private void Update()
+        {
+            if (!waitingForExperimentStart)
+                return;
+
+            FindObjectOfType<TaskDisplay>().Description = "WARTE auf Beginn des Experiments...";
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
+                waitingForExperimentStart = false;
+                runningTutorial = false;
+                StartTask();
+            }
+            else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.R)) {
+                waitingForExperimentStart = false;
+                runningTutorial = true;
+                StartTutorials();
+            }
         }
 
         private void NextSequence()
@@ -119,6 +169,18 @@ namespace Megamap {
             RecordData.Log("Starting task " + CurrentTaskIndex + " (" + (numTasksFinished + 1) + " / " + currentSequence.Length + ")");
             tasks[CurrentTaskIndex].gameObject.SetActive(true);
             tasks[CurrentTaskIndex].StartTask();
+        }
+
+        private void StartTutorials()
+        {
+            numTutorialsFinished = 0;
+            runningTutorial = true;
+            tutorials.ForEach(t => t.gameObject.SetActive(false));
+            RecordData.Log("Starting tutorial 0 (1/" + tutorials.Count
+                + ") with tutorial condition instead of condition "
+                + FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx + ".");
+            tutorials[0].gameObject.SetActive(true);
+            tutorials[0].StartTask();
         }
 
         private void SaveData()
