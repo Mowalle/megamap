@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Megamap {
-
     public class ConditionSwitcher : MonoBehaviour {
 
         // For .json loading
@@ -58,7 +57,7 @@ namespace Megamap {
             }
             else {
                 ++numConditionsFinished;
-                RecordData.Log("Starting condition " + (CurrentConditionIdx + 1) + " / " + mySequence.Length);
+                RecordData.Log("Starting condition " + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + mySequence.Length + ")");
             }
 
         }
@@ -88,7 +87,7 @@ namespace Megamap {
             RecordData.Log("Condition sequence is "
                 + string.Join(", ", new List<int>(mySequence).ConvertAll(i => i.ToString()).ToArray())
                 + ", starting with condition "
-                + (mySequence[startOffset] + 1) + "/" + mySequence.Length
+                + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + mySequence.Length + ")"
                 + ".");
         }
     }

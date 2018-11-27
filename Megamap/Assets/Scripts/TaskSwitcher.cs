@@ -116,7 +116,7 @@ namespace Megamap {
 
         private void StartTask()
         {
-            RecordData.Log("Starting task " + (CurrentTaskIndex + 1) + " / " + currentSequence.Length);
+            RecordData.Log("Starting task " + CurrentTaskIndex + " (" + (numTasksFinished + 1) + " / " + currentSequence.Length + ")");
             tasks[CurrentTaskIndex].gameObject.SetActive(true);
             tasks[CurrentTaskIndex].StartTask();
         }
