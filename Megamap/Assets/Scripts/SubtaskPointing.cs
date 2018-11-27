@@ -1,4 +1,5 @@
 ﻿using System;
+
 using UnityEngine;
 
 using Valve.VR;
@@ -11,8 +12,8 @@ namespace Megamap {
         public SteamVR_Action_Boolean backAction;
         public LaserPointer laser = null;
 
-        private readonly string taskDescription = "Zeige dorthin, wo sich der ausgewählte Raum befindet.\nBestätige die Richtung mit dem Trigger.";
-        private readonly string confirmation = "Trigger: Annehmen\nTrackpad: Korrigieren";
+        private readonly string taskDescription = "1. ZEIGE, wo sich der Raum in deiner Umgebung befindet.\n(Ziele auf die Mitte des Raums).\n\n2. BESTÄTIGE die Richtung mit dem TRIGGER.";
+        private readonly string confirmation = "TRIGGER: Annehmen\n\nTRACKPAD: Korrigieren";
 
         private float startTime = 0f;
         private float startConfirmationTime = 0f;
@@ -23,6 +24,7 @@ namespace Megamap {
         {
             LogSubtask();
             FindObjectOfType<TaskDisplay>().Description = taskDescription;
+
             laser.Show(true);
             laser.IsFrozen = false;
 

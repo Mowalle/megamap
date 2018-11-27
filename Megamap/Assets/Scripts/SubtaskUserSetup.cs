@@ -11,8 +11,8 @@ namespace Megamap {
         [SerializeField]
         private VRStandardAssets.Utils.SelectionRadial selectionRadial = null;
 
-        private string positionDescription = "Bitte stelle dich auf das Ziel ('X').";
-        private string gazeDescription = "Schaue das Ziel an, um den Test zu starten.";
+        private string positionDescription = "STELLE dich auf das Ziel ('X').";
+        private string gazeDescription = "SCHAUE das Ziel an, um fortzufahren.";
 
         private TaskDisplay taskDisplay = null;
 
@@ -95,7 +95,7 @@ namespace Megamap {
 
         private void HandleWallTargetEnter()
         {
-            taskDisplay.Description = "";
+            //taskDisplay.Description = "";
             selectionRadial.Show();
         }
 
