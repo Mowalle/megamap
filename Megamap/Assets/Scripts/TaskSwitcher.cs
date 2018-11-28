@@ -21,7 +21,7 @@ namespace Megamap {
 
         [SerializeField] private TextAsset taskSequenceFile = null;
 
-        public Task CurrentTask { get { return runningTutorial ? tutorials[numTasksFinished] : tasks[CurrentTaskIndex]; } }
+        public Task CurrentTask { get { return runningTutorial ? tutorials[numTutorialsFinished] : tasks[CurrentTaskIndex]; } }
 
         private int[][] sequences = null;
         private int[] currentSequence = null;
