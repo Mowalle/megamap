@@ -66,8 +66,8 @@ namespace Megamap {
                 if (lastCondition == condSwitcher.CurrentConditionIdx)
                     return;
 
-                numTasksFinished = 0;
                 NextSequence();
+                numTasksFinished = 0;
             }
             else {
                 ++numTasksFinished;
