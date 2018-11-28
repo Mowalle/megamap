@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Megamap {
-
     public class ConditionSwitcher : MonoBehaviour {
 
         // For .json loading
 
         [Serializable]
         public struct Condition {
-            public float scale;
-            public int wallHeight;
-            public float heightOffset;
+            [Range(0.01f, 1f)] public float scale;
+            private int wallHeight;
+            [Range(0.1f, 1.5f)] public float heightOffset;
         }
 
         [Serializable]
@@ -31,11 +31,13 @@ namespace Megamap {
         public Condition CurrentCondition
         {
             get {
-                return conditions[CurrentConditionIdx];
+                return FindObjectOfType<TaskSwitcher>().IsTutorialRunning ? tutorialCondition : conditions[CurrentConditionIdx];
             }
         }
 
         [Header("Condition Settings"), Space]
+
+        [SerializeField] private Condition tutorialCondition = new Condition();
 
         [SerializeField] private TextAsset conditionSequenceFile = null;
 
@@ -52,32 +54,16 @@ namespace Megamap {
         {
             // Last condition was reached -> experiment is over!
             if (numConditionsFinished == conditions.Length - 1) {
-                var task = FindObjectOfType<Task>();
-                task.Description = "Geschafft!\nDas Experiment ist vorbei.";
+                FindObjectOfType<TaskDisplay>().Description = "Geschafft!\nDas Experiment ist vorbei.";
                 RecordData.Log("All conditions completed. The experiment is over.");
-                return;
+            }
+            else {
+                ++numConditionsFinished;
+                RecordData.Log("Starting condition " + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + mySequence.Length + ")");
             }
 
-            ++numConditionsFinished;
-            RecordData.Log("Starting condition " + (mySequence[(startOffset + numConditionsFinished) % conditions.Length] + 1) + " / " + mySequence.Length);
-
-            var switcher = FindObjectOfType<TaskSwitcher>();
-            switcher.ResetTasks();
         }
 
-        public void PreviousCondition()
-        {
-            if (numConditionsFinished == 0) {
-                return;
-            }
-
-            --numConditionsFinished;
-            RecordData.Log("Starting condition " + (mySequence[(startOffset + numConditionsFinished) % conditions.Length] + 1) + " / " + mySequence.Length);
-
-            var switcher = FindObjectOfType<TaskSwitcher>();
-            switcher.ResetTasks();
-        }
-        
         private void Awake()
         {
             var json = conditionsJson.text;
@@ -103,7 +89,7 @@ namespace Megamap {
             RecordData.Log("Condition sequence is "
                 + string.Join(", ", new List<int>(mySequence).ConvertAll(i => i.ToString()).ToArray())
                 + ", starting with condition "
-                + (mySequence[startOffset] + 1) + "/" + mySequence.Length
+                + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + mySequence.Length + ")"
                 + ".");
         }
     }

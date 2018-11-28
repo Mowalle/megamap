@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace Megamap {
 
@@ -14,22 +11,14 @@ namespace Megamap {
         [SerializeField]
         private VRStandardAssets.Utils.SelectionRadial selectionRadial = null;
 
-        [SerializeField] private GameObject taskDisplay = null;
+        private string positionDescription = "STELLE dich auf das Ziel ('X').";
+        private string gazeDescription = "SCHAUE das Ziel an, um fortzufahren.";
 
-        private string positionDescription = "Bitte stelle dich auf das Ziel ('X').";
-        private string gazeDescription = "Schaue das Ziel an, um den Test zu starten.";
-
-        private Task currentTask;
+        private TaskDisplay taskDisplay = null;
 
         private LineRenderer guide = null;
 
-        private void Awake()
-        {
-            guide = transform.Find("Guide").GetComponent<LineRenderer>();
-            guide.SetPosition(0, Camera.main.transform.position + Vector3.down * 0.5f);
-        }
-
-        private void OnEnable()
+        public override void StartSubtask()
         {
             LogSubtask();
 
@@ -39,34 +28,47 @@ namespace Megamap {
             wallTarget.OnTargetExit.AddListener(HandleWallTargetExit);
             selectionRadial.OnSelectionComplete += HandleSelectionComplete;
 
-            // Should return the only active task.
-            currentTask = FindObjectOfType<Task>();
-            currentTask.Description = positionDescription;
+            taskDisplay.Description = positionDescription;
 
-            floorTarget.gameObject.SetActive(true);
-            wallTarget.gameObject.SetActive(false);
-            selectionRadial.Hide();
-            guide.enabled = true;
+            guide.gameObject.SetActive(true);
             guide.SetPosition(1, floorTarget.transform.position);
 
             wallTarget.transform.position = new Vector3(floorTarget.transform.position.x,
                                                         wallTarget.transform.position.y,
                                                         wallTarget.transform.position.z);
 
+            // Reset radial so it won't be shown as filled on start.
+            selectionRadial.Hide();
+
+            floorTarget.gameObject.SetActive(true);
+            wallTarget.gameObject.SetActive(false);
+
             // Re-Center TaskDisplay (TV) at WallTarget position.
-            taskDisplay.transform.position = new Vector3(
+            taskDisplay.transform.parent.position = new Vector3(
                 wallTarget.transform.position.x,
                 wallTarget.transform.position.y,
-                taskDisplay.transform.position.z);
+                taskDisplay.transform.parent.position.z);
         }
 
-        private void OnDisable()
+        public override void StopSubtask()
         {
             floorTarget.OnTargetEnter.AddListener(HandleFloorTargetEnter);
             floorTarget.OnTargetExit.AddListener(HandleFloorTargetExit);
             wallTarget.OnTargetEnter.AddListener(HandleWallTargetEnter);
             wallTarget.OnTargetExit.RemoveListener(HandleWallTargetExit);
             selectionRadial.OnSelectionComplete -= HandleSelectionComplete;
+
+            guide.gameObject.SetActive(false);
+            floorTarget.gameObject.SetActive(false);
+            wallTarget.gameObject.SetActive(false);
+        }
+
+        private void Awake()
+        {
+            taskDisplay = FindObjectOfType<TaskDisplay>();
+
+            guide = transform.Find("Guide").GetComponent<LineRenderer>();
+            guide.SetPosition(0, Camera.main.transform.position + Vector3.down * 0.5f);
         }
 
         private void Update()
@@ -76,26 +78,24 @@ namespace Megamap {
 
         private void HandleFloorTargetEnter()
         {
-            floorTarget.gameObject.SetActive(true);
             wallTarget.gameObject.SetActive(true);
             guide.SetPosition(1, wallTarget.transform.position);
 
-            currentTask.Description = gazeDescription;
+            taskDisplay.Description = gazeDescription;
         }
 
         private void HandleFloorTargetExit()
         {
             selectionRadial.Hide();
-            floorTarget.gameObject.SetActive(true);
             wallTarget.gameObject.SetActive(false);
             guide.SetPosition(1, floorTarget.transform.position);
 
-            currentTask.Description = positionDescription;
+            taskDisplay.Description = positionDescription;
         }
 
         private void HandleWallTargetEnter()
         {
-            currentTask.Description = "";
+            //taskDisplay.Description = "";
             selectionRadial.Show();
         }
 
@@ -103,12 +103,12 @@ namespace Megamap {
         {
             guide.SetPosition(1, wallTarget.transform.position);
             selectionRadial.Hide();
-            currentTask.Description = gazeDescription;
+            taskDisplay.Description = gazeDescription;
         }
 
         private void HandleSelectionComplete()
         {
-            currentTask.NextSubtask();
+            FindObjectOfType<TaskSwitcher>().CurrentTask.NextSubtask();
         }
     }
 

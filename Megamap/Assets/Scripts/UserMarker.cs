@@ -1,35 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Megamap {
 
+    [RequireComponent(typeof(Megamap))]
     public class UserMarker : MonoBehaviour {
 
-        [SerializeField] private Megamap megamap = null;
+        [SerializeField] private GameObject usermarkerOnMap = null;
         [SerializeField] private GameObject usermarkerInEnvironment = null;
 
         private void OnEnable()
         {
-            usermarkerInEnvironment.GetComponent<Renderer>().enabled = true;
+            ChangeVisibility.SetVisible(usermarkerOnMap, true);
+            ChangeVisibility.SetVisible(usermarkerInEnvironment, true);
         }
 
         private void OnDisable()
         {
-            if (usermarkerInEnvironment != null)
-                usermarkerInEnvironment.GetComponent<Renderer>().enabled = false;
+            ChangeVisibility.SetVisible(usermarkerOnMap, false);
+            ChangeVisibility.SetVisible(usermarkerInEnvironment, false);
         }
 
         private void Update()
         {
-            Camera cam = Camera.main;
+            var map = GetComponent<Megamap>();
+            if (usermarkerOnMap == null || usermarkerInEnvironment == null
+                || map.LabReference == null || map.MapReference == null) {
+                enabled = false;
+                return;
+            }
 
-            transform.position = new Vector3(megamap.MapReference.position.x, transform.position.y, megamap.MapReference.position.z);
+            var cam = Camera.main;
 
-            var offset = (cam.transform.position - megamap.LabReference.position);
-            transform.localPosition += new Vector3(offset.x, 0f, offset.z);
+            usermarkerOnMap.transform.position = new Vector3(map.MapReference.position.x, usermarkerOnMap.transform.position.y, map.MapReference.position.z);
 
-            transform.localRotation = Quaternion.Euler(0f, cam.transform.rotation.eulerAngles.y, 0f);
+            var offset = (cam.transform.position - map.LabReference.position);
+            usermarkerOnMap.transform.localPosition += new Vector3(offset.x, 0f, offset.z);
+
+            usermarkerOnMap.transform.localRotation = Quaternion.Euler(0f, cam.transform.rotation.eulerAngles.y, 0f);
 
             // Update the user marker circle that is placed in the VE (lab).
             var newPosition = usermarkerInEnvironment.transform.position;

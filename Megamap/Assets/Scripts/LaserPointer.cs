@@ -1,7 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Events;
+
 using Valve.VR;
 using Valve.VR.InteractionSystem;
 
@@ -64,11 +65,6 @@ namespace Megamap {
         private void Awake()
         {
             line = GetComponent<LineRenderer>();
-        }
-
-        private void Start()
-        {
-            Show(false);
         }
 
         // Have to use LateUpdate because hand position is updated via script, which is too late for Update apparently.

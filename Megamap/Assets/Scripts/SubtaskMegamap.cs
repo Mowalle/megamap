@@ -1,110 +1,120 @@
-﻿using System.Collections;
+﻿
+using System;
+
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Megamap {
 
     public class SubtaskMegamap : Subtask {
 
-        [Header("Pin randomization values")]
-        [SerializeField]
-        private int absoluteMinimum = 50;
-        [SerializeField]
-        private int maxTargetAttributeValue = 333;
-        [SerializeField]
-        private int maxAttributeValue = 1000;
+        public IndoorMap indoorMap = null;
 
-        public Megamap map;
+        private Megamap map = null;
+        private LaserPointer laser = null;
 
-        private readonly string description = "Finde den Raum mit dem niedrigsten Attribut.";
-
-        private LaserPointer laser;
+        private readonly string description = "1. FINDE den Raum mit den meisten Bällen.\n\n2. MERKE dir die Richtung zum Raum.\n\n3. WÄHLE den Raum mit dem TRIGGER aus.";
 
         private float startTime = 0f;
-        
-        private void Awake()
-        {
-            laser = FindObjectOfType<LaserPointer>();
-        }
 
-        private void OnEnable()
+        private bool completed = false;
+
+        public override void StartSubtask()
         {
+            completed = false;
+
             LogSubtask();
+            FindObjectOfType<TaskDisplay>().Description = description;
 
-            FindObjectOfType<Task>().Description = description;
-
+            laser.gameObject.SetActive(true);
             laser.Show(true);
-
-            // Randomization of LocationPins.
-            if (maxTargetAttributeValue <= 0) {
-                Debug.LogWarning("SubtaskMegamap: Invalid maxTargetAttributeValue <= 0. Using 1 instead.");
-                maxTargetAttributeValue = 1;
-            }
-
-            if (maxAttributeValue <= maxTargetAttributeValue) {
-                maxAttributeValue = maxTargetAttributeValue + 1;
-                Debug.LogWarning("SubtaskMegamap: Invalid maxAttributeValue <= " + maxTargetAttributeValue
-                                 + ". Using " + maxAttributeValue + " instead (not a good value).");
-            }
-
-            // Determine target pins' attribute value (pseudo-randomize).
-            int targetValue = Random.Range(absoluteMinimum, maxTargetAttributeValue + 1);
-            foreach (LocationPin pin in map.LocationPins) {
-                pin.roomNumber = Random.Range(100, 1000);
-                pin.attribute = pin.isTargetPin ? targetValue : Random.Range(maxTargetAttributeValue + 1, maxAttributeValue);
-                pin.OnTargetPinSelected.AddListener(HandleTargetPinSelected);
-                pin.OnWrongPinSelected.AddListener(HandleWrongPinSelected);
-            }
 
             // Update Megamap with values from condition.
             var condition = FindObjectOfType<ConditionSwitcher>().CurrentCondition;
             map.scale = condition.scale;
             map.heightOffset = condition.heightOffset;
 
-            // Map animation.
-            StopCoroutine("StartSubtask");
-            StartCoroutine("StartSubtask");
+            map.SetMap(indoorMap);
+            map.GetComponent<RoomGuides>().enabled = true;
+            map.GetComponent<UserMarker>().enabled = true;
+
+            var rooms = map.SelectableRooms;
+            RecordData.CurrentRecord.numBallsPerRoom = new int[rooms.Count];
+            RecordData.CurrentRecord.roomSelections = new int[rooms.Count];
+
+            FindObjectOfType<SelectRoomConfiguration>().RandomizeBallNumbers();
+            foreach (var room in rooms) {
+                // Make it so that none of the rooms counts as 'clicked'.
+                // Important if the same map is used across multiple tasks (e.g. in testing).
+                room.ResetRoom();
+
+                // Randomize balls.
+                room.GenerateBalls();
+
+                // Register handlers.
+                room.OnTargetRoomSelected.AddListener(HandleTargetRoomSelected);
+                room.OnWrongRoomSelected.AddListener(HandleWrongRoomSelected);
+            }
+
+            map.Show();
+
+            startTime = Time.realtimeSinceStartup;
         }
 
-        private void OnDisable()
+        public override void StopSubtask()
         {
-            if (laser != null)
-                laser.Show(false);
+            laser.Show(false);
 
-            foreach (LocationPin pin in map.LocationPins) {
-                pin.OnTargetPinSelected.RemoveListener(HandleTargetPinSelected);
-                pin.OnWrongPinSelected.RemoveListener(HandleWrongPinSelected);
+            foreach (var room in map.SelectableRooms) {
+                room.OnTargetRoomSelected.RemoveListener(HandleTargetRoomSelected);
+                room.OnWrongRoomSelected.RemoveListener(HandleWrongRoomSelected);
+            }
+
+            // No need to disable map here, as this is already handled
+            // by map.Hide() in HandleTargetRoomSelected().
+            // map.gameObject.SetActive(false); <-- No!
+        }
+
+        private void Awake()
+        {
+            map = FindObjectOfType<Megamap>();
+            laser = FindObjectOfType<LaserPointer>();
+        }
+
+        private void Update()
+        {
+            // When the correct room was clicked and handled by HandleTargetRoomSelected(),
+            // the hiding animation for the map is started. However, we don't want to switch
+            // to the next subtask UNTIL the map is completely hidden. Thus, we wait.
+            if (completed && !map.IsShown) {
+                FindObjectOfType<TaskSwitcher>().CurrentTask.NextSubtask();
             }
         }
 
-        private void HandleTargetPinSelected()
+        private void HandleTargetRoomSelected(SelectRoom room)
         {
+            // For data recording.
             float completionTime = Time.realtimeSinceStartup;
-            RecordData.CurrentRecord.megamapTime = completionTime - startTime;
+            // We have to subtract the animationDuration once since the start time is taken BEFORE the animation started (see StartSubtask()).
+            RecordData.CurrentRecord.megamapTime = completionTime - startTime - map.animationDuration;
 
-            StopCoroutine("CompleteSubtask");
-            StartCoroutine("CompleteSubtask");
+            var rooms = map.GetComponentsInChildren<SelectRoom>(true);
+            for (int i = 0; i < rooms.Length; ++i) {
+                RecordData.CurrentRecord.numBallsPerRoom[i] = rooms[i].Balls.Count;
+            }
+
+            RecordData.CurrentRecord.correctRoomIndex = Array.IndexOf(rooms, room);
+            RecordData.CurrentRecord.correctRoomName = room.name;
+
+            map.Hide();
+
+            completed = true;
         }
 
-        private void HandleWrongPinSelected()
+        private void HandleWrongRoomSelected(SelectRoom room)
         {
-            var task = FindObjectOfType<Task>();
-            task.Description = "Raum hat nicht das niedrigste Attribut.\nVersuche es weiter.";
+            FindObjectOfType<TaskDisplay>().Description = "Raum hat nicht die meisten Bälle.\nVersuche es weiter.";
 
             ++RecordData.CurrentRecord.numErrors;
-        }
-
-        private IEnumerator StartSubtask()
-        {
-            yield return StartCoroutine(map.Show());
-            startTime = Time.realtimeSinceStartup;
-            RecordData.CurrentRecord.numSelections = new int[map.LocationPins.Length];
-        }
-
-        private IEnumerator CompleteSubtask()
-        {
-            yield return StartCoroutine(map.Hide());
-            FindObjectOfType<Task>().NextSubtask();
         }
     }
 
