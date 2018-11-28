@@ -40,6 +40,10 @@ namespace Megamap {
                     waitingForExperimentStart = true;
                     return;
                 }
+                RecordData.Log("Starting tutorial " + numTutorialsFinished
+                    + " (" + (numTutorialsFinished + 1) + "/" + tutorials.Count
+                    + ") with tutorial condition instead of condition "
+                    + FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx + ".");
                 tutorials[CurrentTaskIndex].gameObject.SetActive(true);
                 tutorials[CurrentTaskIndex].StartTask();
 
