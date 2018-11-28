@@ -11,9 +11,9 @@ namespace Megamap {
 
         [Serializable]
         public struct Condition {
-            public float scale;
-            public int wallHeight;
-            public float heightOffset;
+            [Range(0.01f, 1f)] public float scale;
+            private int wallHeight;
+            [Range(0.1f, 1.5f)] public float heightOffset;
         }
 
         [Serializable]
@@ -31,11 +31,13 @@ namespace Megamap {
         public Condition CurrentCondition
         {
             get {
-                return conditions[CurrentConditionIdx];
+                return FindObjectOfType<TaskSwitcher>().IsTutorialRunning ? tutorialCondition : conditions[CurrentConditionIdx];
             }
         }
 
         [Header("Condition Settings"), Space]
+
+        [SerializeField] private Condition tutorialCondition = new Condition();
 
         [SerializeField] private TextAsset conditionSequenceFile = null;
 
