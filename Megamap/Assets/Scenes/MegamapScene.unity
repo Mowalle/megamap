@@ -11008,6 +11008,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1530904653}
+  - component: {fileID: 1530904655}
+  - component: {fileID: 1530904654}
   m_Layer: 0
   m_Name: '[TASK MANAGEMENT]'
   m_TagString: Untagged
@@ -11024,12 +11026,53 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1710403579}
-  - {fileID: 1733977611}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1530904654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1530904652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d67049a8c420c4ca7cb527b7ac06b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayLanguage: 0
+  randomizeTasks: 1
+  preventDirectRepetition: 1
+  tutorials:
+  - {fileID: 750260373}
+  - {fileID: 1089971289}
+  tasks:
+  - {fileID: 919861994}
+  - {fileID: 1800241361}
+  - {fileID: 932815078}
+  - {fileID: 489721029}
+  - {fileID: 928906156}
+  taskSequenceFile: {fileID: 4900000, guid: 5d35fed9bd5d8f0469aea3535251f6a4, type: 3}
+--- !u!114 &1530904655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1530904652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d75ac91edd52664d80d3b57c48f491b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialCondition:
+    scale: 0.09
+    heightOffset: 0.4
+  conditionSequenceFile: {fileID: 4900000, guid: 0ae924388bad46c459c4ceaeb1146925,
+    type: 3}
+  randomizeConditions: 1
+  conditionsJson: {fileID: 4900000, guid: f30838d574e878044bcccc9566b6f47e, type: 3}
+  conditions: []
 --- !u!1 &1545822868
 GameObject:
   m_ObjectHideFlags: 0
@@ -11704,54 +11747,6 @@ Transform:
   m_Father: {fileID: 1800241362}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1710403578
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1710403579}
-  - component: {fileID: 1710403580}
-  m_Layer: 0
-  m_Name: ConditionSwitcher
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1710403579
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1710403578}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1530904653}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1710403580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1710403578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d75ac91edd52664d80d3b57c48f491b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tutorialCondition:
-    scale: 0.09
-    heightOffset: 0.4
-  conditionSequenceFile: {fileID: 4900000, guid: 0ae924388bad46c459c4ceaeb1146925,
-    type: 3}
-  randomizeConditions: 1
-  conditionsJson: {fileID: 4900000, guid: f30838d574e878044bcccc9566b6f47e, type: 3}
-  conditions: []
 --- !u!1 &1711907285
 GameObject:
   m_ObjectHideFlags: 0
@@ -11876,59 +11871,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!1 &1733977610
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1733977611}
-  - component: {fileID: 1733977612}
-  m_Layer: 0
-  m_Name: TaskSwitcher
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1733977611
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1733977610}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1530904653}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1733977612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1733977610}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3d67049a8c420c4ca7cb527b7ac06b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayLanguage: 0
-  randomizeTasks: 1
-  preventDirectRepetition: 1
-  tutorials:
-  - {fileID: 750260373}
-  - {fileID: 1089971289}
-  tasks:
-  - {fileID: 919861994}
-  - {fileID: 1800241361}
-  - {fileID: 932815078}
-  - {fileID: 489721029}
-  - {fileID: 928906156}
-  taskSequenceFile: {fileID: 4900000, guid: 5d35fed9bd5d8f0469aea3535251f6a4, type: 3}
 --- !u!1 &1751784722
 GameObject:
   m_ObjectHideFlags: 0
