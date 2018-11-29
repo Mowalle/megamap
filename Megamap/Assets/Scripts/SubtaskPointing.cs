@@ -22,8 +22,8 @@ namespace Megamap {
             LogSubtask();
             FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "pointingNormal";
 
-            laser.Show(true);
             laser.IsFrozen = false;
+            laser.Show(true);
 
             // We want to enable the target room so that we can use its BoxCollider of Raycasts (otherwise, its size would be 0).
             // All other rooms are disabled to prevent rendering collisions/z-fighting with the virtual lab.
@@ -36,18 +36,12 @@ namespace Megamap {
         public override void StopSubtask()
         {
             DisplayTargetRoom(false);
-            laser.IsFrozen = false;
             laser.Show(false);
         }
 
         private void Awake()
         {
             laser = FindObjectOfType<LaserPointer>();
-        }
-
-        private void Start()
-        {
-            laser.gameObject.SetActive(false);
         }
 
         private void Update()

@@ -102,6 +102,8 @@ namespace Megamap {
 
             if (tutorials.Count > 0)
                 runningTutorial = true;
+
+            FindObjectOfType<LaserPointer>().Show(false);
         }
 
         private void Update()

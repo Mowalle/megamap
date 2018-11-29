@@ -23,7 +23,7 @@ namespace Megamap {
             LogSubtask();
             FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "megamapNormal";
 
-            laser.gameObject.SetActive(true);
+            laser.IsFrozen = false;
             laser.Show(true);
 
             // Update Megamap with values from condition.
