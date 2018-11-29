@@ -10421,7 +10421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e34b78a7d88c7347aeaec66c6a8948d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preferredHand: 2
+  preferredHand: 1
   normalMaterial: {fileID: 2100000, guid: 662312fd849edf94a97a91fedc4d5656, type: 2}
   frozenMaterial: {fileID: 2100000, guid: 194246134bb38a849a794bacf97dca09, type: 2}
   OnLaserStay:
@@ -12815,7 +12815,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 23e5f126029186c47a301cb4c506b280, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.62
+      value: 6.084
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 23e5f126029186c47a301cb4c506b280, type: 3}
       propertyPath: m_LocalPosition.y

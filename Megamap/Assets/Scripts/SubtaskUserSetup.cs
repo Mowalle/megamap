@@ -34,17 +34,23 @@ namespace Megamap {
                                                         wallTarget.transform.position.y,
                                                         wallTarget.transform.position.z);
 
+            // Re-Center TaskDisplay (TV) at WallTarget position.
+            float newX = wallTarget.GetComponent<RectTransform>().anchoredPosition.x;
+            // Limit tv position on x-axis with these magic numbers (so that tv does not clip the lab wall).
+            newX = Mathf.Max(newX, 5.2f);
+            newX = Mathf.Min(newX, 6.2f);
+
+            taskDisplay.transform.parent.localPosition = new Vector3(
+                newX,
+                taskDisplay.transform.parent.localPosition.y,
+                taskDisplay.transform.parent.localPosition.z);
+
             // Reset radial so it won't be shown as filled on start.
             selectionRadial.Hide();
 
             floorTarget.gameObject.SetActive(true);
             wallTarget.gameObject.SetActive(false);
 
-            // Re-Center TaskDisplay (TV) at WallTarget position.
-            taskDisplay.transform.parent.position = new Vector3(
-                wallTarget.transform.position.x,
-                wallTarget.transform.position.y,
-                taskDisplay.transform.parent.position.z);
         }
 
         public override void StopSubtask()
