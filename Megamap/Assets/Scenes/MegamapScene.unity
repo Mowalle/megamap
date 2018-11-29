@@ -10421,7 +10421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e34b78a7d88c7347aeaec66c6a8948d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preferredHand: 1
+  preferredHand: 2
   normalMaterial: {fileID: 2100000, guid: 662312fd849edf94a97a91fedc4d5656, type: 2}
   frozenMaterial: {fileID: 2100000, guid: 194246134bb38a849a794bacf97dca09, type: 2}
   OnLaserStay:
