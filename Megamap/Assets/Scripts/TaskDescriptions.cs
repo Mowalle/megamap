@@ -2,10 +2,12 @@
 
 namespace Megamap {
 
-    public class TaskDescriptions : MonoBehaviour {
+    public class TaskDescriptions : SingletonBehaviour<TaskDescriptions> {
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             var display = FindObjectOfType<TaskDisplay>();
 
             var waitTutorial = new TaskDisplay.TaskDescription();

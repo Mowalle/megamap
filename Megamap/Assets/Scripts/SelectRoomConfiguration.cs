@@ -2,7 +2,7 @@
 
 namespace Megamap {
 
-    public class SelectRoomConfiguration : SingletonBehaviour {
+    public class SelectRoomConfiguration : SingletonBehaviour<SelectRoomConfiguration> {
 
         [Header("Room Configuration")]
         public Material normalMaterial = null;
