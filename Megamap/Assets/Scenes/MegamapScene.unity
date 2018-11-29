@@ -3161,11 +3161,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 100340, guid: 48a88deda0bcfaf41b5d13c0d76ccfe2,
     type: 3}
   m_PrefabInternal: {fileID: 333586617}
---- !u!1 &333586628 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100336, guid: 48a88deda0bcfaf41b5d13c0d76ccfe2,
-    type: 3}
-  m_PrefabInternal: {fileID: 333586617}
 --- !u!1 &333586629 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100334, guid: 48a88deda0bcfaf41b5d13c0d76ccfe2,
@@ -3347,63 +3342,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 7.8999996, y: 5.299999, z: 2.9999995}
   m_Center: {x: -3.85, y: 2.5499997, z: 1.4999998}
---- !u!114 &333586640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 333586628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b632f73e9f43374388c6fb8b2ba6f7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTargetRoom: 0
-  OnTargetRoomSelected:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Megamap.RoomSelectionEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  OnWrongRoomSelected:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Megamap.RoomSelectionEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
---- !u!114 &333586641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 333586628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b93b6a877adcbf94c89a9d6e0c0e844d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activateActionSetOnAttach: {fileID: 0}
-  hideHandOnAttach: 1
-  hideSkeletonOnAttach: 0
-  hideControllerOnAttach: 0
-  handAnimationOnPickup: 0
-  setRangeOfMotionOnPickup: -1
-  useHandObjectAttachmentPoint: 1
-  handFollowTransform: {fileID: 0}
-  handFollowTransformPosition: 1
-  handFollowTransformRotation: 1
-  highlightOnHover: 1
-  hideHighlight: []
---- !u!65 &333586642
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 333586628}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 7.8999996, y: 5.2999997, z: 3.0000005}
-  m_Center: {x: -3.85, y: 2.55, z: 1.5}
 --- !u!114 &333586643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6043,6 +5981,68 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0d2c28f2a4dfc34db1ba9e49df71d7c, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &1016702744 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100318, guid: 48a88deda0bcfaf41b5d13c0d76ccfe2,
+    type: 3}
+  m_PrefabInternal: {fileID: 333586617}
+--- !u!114 &1016702745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1016702744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b632f73e9f43374388c6fb8b2ba6f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTargetRoom: 0
+  OnTargetRoomSelected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Megamap.RoomSelectionEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnWrongRoomSelected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Megamap.RoomSelectionEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!114 &1016702746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1016702744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b93b6a877adcbf94c89a9d6e0c0e844d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activateActionSetOnAttach: {fileID: 0}
+  hideHandOnAttach: 1
+  hideSkeletonOnAttach: 0
+  hideControllerOnAttach: 0
+  handAnimationOnPickup: 0
+  setRangeOfMotionOnPickup: -1
+  useHandObjectAttachmentPoint: 1
+  handFollowTransform: {fileID: 0}
+  handFollowTransformPosition: 1
+  handFollowTransformRotation: 1
+  highlightOnHover: 1
+  hideHighlight: []
+--- !u!65 &1016702747
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1016702744}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.9999998, y: 5.299999, z: 2.9999995}
+  m_Center: {x: -1.9, y: 2.5499997, z: 1.4999998}
 --- !u!1001 &1022125287
 Prefab:
   m_ObjectHideFlags: 0
@@ -6718,7 +6718,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.33, y: 0.01}
+  m_AnchoredPosition: {x: 6.377, y: 0.01}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!65 &1140749450
