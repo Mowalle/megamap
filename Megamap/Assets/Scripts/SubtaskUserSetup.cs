@@ -10,10 +10,7 @@ namespace Megamap {
         private WallTarget wallTarget = null;
         [SerializeField]
         private VRStandardAssets.Utils.SelectionRadial selectionRadial = null;
-
-        private string positionDescription = "STELLE dich auf das Ziel ('X').";
-        private string gazeDescription = "SCHAUE das Ziel an, um fortzufahren.";
-
+        
         private TaskDisplay taskDisplay = null;
 
         private LineRenderer guide = null;
@@ -28,7 +25,7 @@ namespace Megamap {
             wallTarget.OnTargetExit.AddListener(HandleWallTargetExit);
             selectionRadial.OnSelectionComplete += HandleSelectionComplete;
 
-            taskDisplay.Description = positionDescription;
+            taskDisplay.CurrentDescriptionID = "userSetupPosition";
 
             guide.gameObject.SetActive(true);
             guide.SetPosition(1, floorTarget.transform.position);
@@ -81,7 +78,7 @@ namespace Megamap {
             wallTarget.gameObject.SetActive(true);
             guide.SetPosition(1, wallTarget.transform.position);
 
-            taskDisplay.Description = gazeDescription;
+            taskDisplay.CurrentDescriptionID = "userSetupGaze";
         }
 
         private void HandleFloorTargetExit()
@@ -90,7 +87,7 @@ namespace Megamap {
             wallTarget.gameObject.SetActive(false);
             guide.SetPosition(1, floorTarget.transform.position);
 
-            taskDisplay.Description = positionDescription;
+            taskDisplay.CurrentDescriptionID = "userSetupPosition";
         }
 
         private void HandleWallTargetEnter()
@@ -103,7 +100,7 @@ namespace Megamap {
         {
             guide.SetPosition(1, wallTarget.transform.position);
             selectionRadial.Hide();
-            taskDisplay.Description = gazeDescription;
+            taskDisplay.CurrentDescriptionID = "userSetupGaze";
         }
 
         private void HandleSelectionComplete()

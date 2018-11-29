@@ -12,8 +12,6 @@ namespace Megamap {
         private Megamap map = null;
         private LaserPointer laser = null;
 
-        private readonly string description = "1. FINDE den Raum mit den meisten Bällen.\n\n2. MERKE dir die Richtung zum Raum.\n\n3. WÄHLE den Raum mit dem TRIGGER aus.";
-
         private float startTime = 0f;
 
         private bool completed = false;
@@ -23,7 +21,7 @@ namespace Megamap {
             completed = false;
 
             LogSubtask();
-            FindObjectOfType<TaskDisplay>().Description = description;
+            FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "megamapNormal";
 
             laser.gameObject.SetActive(true);
             laser.Show(true);
@@ -112,7 +110,7 @@ namespace Megamap {
 
         private void HandleWrongRoomSelected(SelectRoom room)
         {
-            FindObjectOfType<TaskDisplay>().Description = "Raum hat nicht die meisten Bälle.\nVersuche es weiter.";
+            FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "megamapError";
 
             ++RecordData.CurrentRecord.numErrors;
         }

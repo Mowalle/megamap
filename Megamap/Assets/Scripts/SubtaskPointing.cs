@@ -12,9 +12,6 @@ namespace Megamap {
         public SteamVR_Action_Boolean backAction;
         public LaserPointer laser = null;
 
-        private readonly string taskDescription = "1. ZEIGE, wo sich der Raum in deiner Umgebung befindet.\n(Ziele auf die Mitte des Raums).\n\n2. BESTÄTIGE die Richtung mit dem TRIGGER.";
-        private readonly string confirmation = "TRIGGER: Annehmen\n\nTRACKPAD: Korrigieren";
-
         private float startTime = 0f;
         private float startConfirmationTime = 0f;
 
@@ -23,7 +20,7 @@ namespace Megamap {
         public override void StartSubtask()
         {
             LogSubtask();
-            FindObjectOfType<TaskDisplay>().Description = taskDescription;
+            FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "pointingNormal";
 
             laser.Show(true);
             laser.IsFrozen = false;
@@ -62,7 +59,7 @@ namespace Megamap {
             if (acceptAction.GetStateDown(hand.handType) || Input.GetMouseButtonDown(0)) {
                 if (!laser.IsFrozen) {
                     laser.IsFrozen = true;
-                    FindObjectOfType<TaskDisplay>().Description = confirmation;
+                    FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "pointingConfirm";
 
                     startConfirmationTime = Time.realtimeSinceStartup;
                 }
@@ -113,7 +110,7 @@ namespace Megamap {
             }
             else if ((backAction.GetStateDown(hand.handType) || Input.GetKeyDown(KeyCode.Backspace)) && laser.IsFrozen) {
                 laser.IsFrozen = false;
-                FindObjectOfType<TaskDisplay>().Description = taskDescription;
+                FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "pointingNormal";
 
                 ++RecordData.CurrentRecord.numCorrections;
             }

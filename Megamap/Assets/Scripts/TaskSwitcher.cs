@@ -8,6 +8,8 @@ namespace Megamap {
 
     public class TaskSwitcher : MonoBehaviour {
 
+        [SerializeField] private TaskDisplay.Language displayLanguage = TaskDisplay.Language.German;
+
         [SerializeField] private bool randomizeTasks = true;
         [SerializeField] private bool preventDirectRepetition = true;
 
@@ -104,12 +106,14 @@ namespace Megamap {
 
         private void Update()
         {
+            FindObjectOfType<TaskDisplay>().SetLanguage(displayLanguage);
+
             if (!waitingForKeypress)
                 return;
 
             if (runningTutorial) {
                 // After start, tutorials need to be run by pressing Space or Return.
-                FindObjectOfType<TaskDisplay>().Description = "WARTE auf Beginn des Tutorials...";
+                FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "waitTutorial";
                 if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
                     waitingForKeypress = false;
                     StartTutorials();
@@ -117,7 +121,7 @@ namespace Megamap {
             }
             // Finished tutorials; waiting for experiment or repeating tutorials.
             else {
-                FindObjectOfType<TaskDisplay>().Description = "WARTE auf Beginn des Experiments...";
+                FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "waitExperiment";
                 if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
                     waitingForKeypress = false;
                     NextSequence();

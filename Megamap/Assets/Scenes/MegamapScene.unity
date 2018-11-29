@@ -10401,8 +10401,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1429894580}
-  - component: {fileID: 1429894579}
   - component: {fileID: 1429894578}
+  - component: {fileID: 1429894579}
   m_Layer: 0
   m_Name: LaserPointer
   m_TagString: Untagged
@@ -11916,6 +11916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d67049a8c420c4ca7cb527b7ac06b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayLanguage: 0
   randomizeTasks: 1
   preventDirectRepetition: 1
   tutorials:
@@ -12524,6 +12525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1831304635}
   - component: {fileID: 1831304636}
+  - component: {fileID: 1831304637}
   m_Layer: 0
   m_Name: '[SINGLETONS]'
   m_TagString: Untagged
@@ -12562,6 +12564,17 @@ MonoBehaviour:
   ballMinimum: 5
   targetRoomBallMinimum: 7
   ballMaximum: 10
+--- !u!114 &1831304637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1831304634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd4af5d02cf057a4091acd972a6ee564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1836676964
 GameObject:
   m_ObjectHideFlags: 0

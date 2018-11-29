@@ -54,7 +54,7 @@ namespace Megamap {
         {
             // Last condition was reached -> experiment is over!
             if (numConditionsFinished == conditions.Length - 1) {
-                FindObjectOfType<TaskDisplay>().Description = "Geschafft!\nDas Experiment ist vorbei.";
+                FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "finished";
                 RecordData.Log("All conditions completed. The experiment is over.");
             }
             else {
