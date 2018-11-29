@@ -98,7 +98,7 @@ namespace Megamap {
 
             tutorials.ForEach(t => t.gameObject.SetActive(false));
 
-            if (tutorials.Count >= 0)
+            if (tutorials.Count > 0)
                 runningTutorial = true;
         }
 
