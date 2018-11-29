@@ -12,11 +12,6 @@ namespace Megamap {
         [SerializeField] private bool preventDirectRepetition = true;
 
         [SerializeField] private List<Task> tutorials = new List<Task>();
-        bool runningTutorial = false;
-        public bool IsTutorialRunning { get { return runningTutorial; } }
-        int numTutorialsFinished = 0;
-        bool waitingForExperimentStart = false;
-
         [SerializeField] private Task[] tasks = new Task[5];
 
         [SerializeField] private TextAsset taskSequenceFile = null;
@@ -29,6 +24,12 @@ namespace Megamap {
         private int numTasksFinished = 0;
         private int CurrentTaskIndex { get { return runningTutorial ? numTutorialsFinished : currentSequence[(startOffset + numTasksFinished) % currentSequence.Length]; } }
 
+        bool runningTutorial = false;
+        public bool IsTutorialRunning { get { return runningTutorial; } }
+        int numTutorialsFinished = 0;
+
+        private bool waitingForKeypress = true;
+
         public void NextTask()
         {
             if (runningTutorial) {
@@ -37,7 +38,8 @@ namespace Megamap {
 
                 ++numTutorialsFinished;
                 if (numTutorialsFinished == tutorials.Count) {
-                    waitingForExperimentStart = true;
+                    runningTutorial = false;
+                    waitingForKeypress = true;
                     return;
                 }
                 RecordData.Log("Starting tutorial " + numTutorialsFinished
@@ -90,34 +92,40 @@ namespace Megamap {
 
         private void Start()
         {
-            NextSequence();
             foreach (var t in tasks) {
                 t.gameObject.SetActive(false);
             }
 
-            if (tutorials.Count == 0) {
-                StartTask();
-            }
-            else {
-                StartTutorials();
-            }
+            tutorials.ForEach(t => t.gameObject.SetActive(false));
+
+            if (tutorials.Count >= 0)
+                runningTutorial = true;
         }
 
         private void Update()
         {
-            if (!waitingForExperimentStart)
+            if (!waitingForKeypress)
                 return;
 
-            FindObjectOfType<TaskDisplay>().Description = "WARTE auf Beginn des Experiments...";
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
-                waitingForExperimentStart = false;
-                runningTutorial = false;
-                StartTask();
+            if (runningTutorial) {
+                // After start, tutorials need to be run by pressing Space or Return.
+                FindObjectOfType<TaskDisplay>().Description = "WARTE auf Beginn des Tutorials...";
+                if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
+                    waitingForKeypress = false;
+                    StartTutorials();
+                }
             }
-            else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.R)) {
-                waitingForExperimentStart = false;
-                runningTutorial = true;
-                StartTutorials();
+            // Finished tutorials; waiting for experiment or repeating tutorials.
+            else {
+                FindObjectOfType<TaskDisplay>().Description = "WARTE auf Beginn des Experiments...";
+                if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
+                    waitingForKeypress = false;
+                    NextSequence();
+                    StartTask();
+                }
+                else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.R)) {
+                    runningTutorial = true;
+                }
             }
         }
 
@@ -179,7 +187,6 @@ namespace Megamap {
         {
             numTutorialsFinished = 0;
             runningTutorial = true;
-            tutorials.ForEach(t => t.gameObject.SetActive(false));
             RecordData.Log("Starting tutorial 0 (1/" + tutorials.Count
                 + ") with tutorial condition instead of condition "
                 + FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx + ".");
