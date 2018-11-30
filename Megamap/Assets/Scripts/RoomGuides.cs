@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Megamap {
 
@@ -20,6 +21,16 @@ namespace Megamap {
             }
 
             lines = guides.GetComponentsInChildren<LineRenderer>();
+        }
+
+        private void OnEnable()
+        {
+            Array.ForEach(lines, l => l.enabled = true);
+        }
+
+        private void OnDisable()
+        {
+            Array.ForEach(lines, l => l.enabled = false);
         }
 
         private void LateUpdate()

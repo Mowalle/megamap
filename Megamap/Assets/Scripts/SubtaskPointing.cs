@@ -12,9 +12,6 @@ namespace Megamap {
         public SteamVR_Action_Boolean backAction;
         public LaserPointer laser = null;
 
-        private readonly string taskDescription = "1. ZEIGE, wo sich der Raum in deiner Umgebung befindet.\n(Ziele auf die Mitte des Raums).\n\n2. BESTÄTIGE die Richtung mit dem TRIGGER.";
-        private readonly string confirmation = "TRIGGER: Annehmen\n\nTRACKPAD: Korrigieren";
-
         private float startTime = 0f;
         private float startConfirmationTime = 0f;
 
@@ -23,10 +20,10 @@ namespace Megamap {
         public override void StartSubtask()
         {
             LogSubtask();
-            FindObjectOfType<TaskDisplay>().Description = taskDescription;
+            FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "pointingNormal";
 
-            laser.Show(true);
             laser.IsFrozen = false;
+            laser.Show(true);
 
             // We want to enable the target room so that we can use its BoxCollider of Raycasts (otherwise, its size would be 0).
             // All other rooms are disabled to prevent rendering collisions/z-fighting with the virtual lab.
@@ -39,18 +36,12 @@ namespace Megamap {
         public override void StopSubtask()
         {
             DisplayTargetRoom(false);
-            laser.IsFrozen = false;
             laser.Show(false);
         }
 
         private void Awake()
         {
             laser = FindObjectOfType<LaserPointer>();
-        }
-
-        private void Start()
-        {
-            laser.gameObject.SetActive(false);
         }
 
         private void Update()
@@ -62,7 +53,7 @@ namespace Megamap {
             if (acceptAction.GetStateDown(hand.handType) || Input.GetMouseButtonDown(0)) {
                 if (!laser.IsFrozen) {
                     laser.IsFrozen = true;
-                    FindObjectOfType<TaskDisplay>().Description = confirmation;
+                    FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "pointingConfirm";
 
                     startConfirmationTime = Time.realtimeSinceStartup;
                 }
@@ -113,7 +104,7 @@ namespace Megamap {
             }
             else if ((backAction.GetStateDown(hand.handType) || Input.GetKeyDown(KeyCode.Backspace)) && laser.IsFrozen) {
                 laser.IsFrozen = false;
-                FindObjectOfType<TaskDisplay>().Description = taskDescription;
+                FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "pointingNormal";
 
                 ++RecordData.CurrentRecord.numCorrections;
             }
