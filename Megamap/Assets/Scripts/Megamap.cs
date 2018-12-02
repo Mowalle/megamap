@@ -7,17 +7,22 @@ namespace Megamap {
 
     public class Megamap : MonoBehaviour {
 
+        public enum Mode { Flat, Default }
+
+        [Header("General Settings"), Space]
+        [SerializeField] private Mode mode = Mode.Default;
+        [SerializeField] private bool useAnimation = true;
+        public bool UseAnimation { get { return useAnimation; } set { useAnimation = value; } }
+        public float animationDuration = 1.5f;
+
+        [Header("2D Settings"), Space]
+        [SerializeField] private Transform targetTransform = null;
+
+        [Header("3D Settings"), Space]
         [Range(0.01f, 1f)] public float scale = 1f;
         [Range(0.1f, 1.5f)] public float heightOffset = 0f;
-
-        public Transform LabReference { get { return labReference; } set { labReference = value; } }
         [SerializeField] private Transform labReference = null;
-
-        public bool placeAtPlayer = true;
-
-        public bool UseAnimation { get { return useAnimation; } set { useAnimation = value; } }
-        [SerializeField] private bool useAnimation = true;
-        public float animationDuration = 1.5f;
+        public Transform LabReference { get { return labReference; } set { labReference = value; } }
 
         public List<GameObject> Rooms { get { return indoorMap.Rooms; } }
         public List<SelectRoom> SelectableRooms { get { return indoorMap.SelectableRooms; } }
@@ -34,6 +39,9 @@ namespace Megamap {
         private Coroutine animationRoutine = null;
 
         // -------------------------------- //
+
+        public Mode GetMode() { return mode; }
+        public void SetMode(Mode mode) { this.mode = mode; }
 
         public void SetMap(IndoorMap indoorMap, Transform referencePoint = null)
         {
@@ -55,9 +63,6 @@ namespace Megamap {
             this.indoorMap.transform.localPosition = Vector3.zero;
             this.indoorMap.gameObject.SetActive(true);
             mapReference = referencePoint != null ? referencePoint : indoorMap.transform;
-
-            if (placeAtPlayer)
-                transform.position = GetPlayerOffsetPosition();
         }
 
         public void Show()
@@ -65,6 +70,8 @@ namespace Megamap {
             if (isShown || animationRoutine != null)
                 return;
 
+            // Will be overriden in 2D-Mode.
+            transform.position = GetPlayerOffsetPosition();
             gameObject.SetActive(true);
             // Animaiton.
             animationRoutine = StartCoroutine(ShowRoutine());
@@ -89,7 +96,7 @@ namespace Megamap {
             if (!isShown || animationRoutine != null)
                 return;
 
-            ApplyCondition();
+            UpdateTransform();
         }
 
         private IEnumerator ShowRoutine()
@@ -98,25 +105,39 @@ namespace Megamap {
             SelectableRooms.ForEach(room => room.EnableInteraction(false));
 
             if (useAnimation) {
-                var targetPosition = placeAtPlayer ? GetPlayerOffsetPosition() : transform.position;
-                targetPosition.y = heightOffset;
+                Vector3 targetPosition, targetScale;
+                Quaternion targetRotation;
+                if (mode == Mode.Default) {
+                    targetPosition = GetPlayerOffsetPosition();
+                    targetPosition.y = heightOffset;
+                    targetRotation = Quaternion.Euler(Vector3.zero);
+                    targetScale = new Vector3(scale, scale, scale);
+                }
+                else {
+                    targetPosition = targetTransform.position;
+                    targetRotation = targetTransform.rotation;
+                    targetScale = new Vector3(scale, 0.001f, scale);
+                }
                 yield return StartCoroutine(Transition(
                     transform,
                     labReference.position,
                     targetPosition,
+                    transform.rotation,
+                    targetRotation,
                     Vector3.one,
-                    new Vector3(scale, scale, scale),
+                    targetScale,
                     animationDuration));
             }
 
             // Just to make sure...
-            ApplyCondition();
+            UpdateTransform();
 
             animationRoutine = null;
             isShown = true;
 
             // Re-activate rooms after transition.
             SelectableRooms.ForEach(room => room.EnableInteraction(true));
+            yield return null;
         }
 
         private IEnumerator HideRoutine()
@@ -129,7 +150,9 @@ namespace Megamap {
                     transform,
                     transform.position,
                     labReference.position,
-                    new Vector3(scale, scale, scale),
+                    transform.rotation,
+                    Quaternion.Euler(Vector3.zero),
+                    transform.localScale,
                     Vector3.one,
                     animationDuration));
             }
@@ -144,12 +167,15 @@ namespace Megamap {
 
             isShown = false;
             gameObject.SetActive(false);
+            yield return null;
         }
 
         private IEnumerator Transition(
             Transform transform,
             Vector3 startPosition,
             Vector3 endPosition,
+            Quaternion startRotation,
+            Quaternion endRotation,
             Vector3 startScale,
             Vector3 endScale,
             float duration)
@@ -160,18 +186,27 @@ namespace Megamap {
             while (t < 1f) {
                 t += Time.deltaTime * rate;
                 transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0f, 1f, t));
+                transform.rotation = Quaternion.Lerp(startRotation, endRotation, Mathf.SmoothStep(0f, 1f, t));
                 transform.localScale = Vector3.Lerp(startScale, endScale, Mathf.SmoothStep(0f, 1f, t));
                 yield return null;
             }
         }
 
-        private void ApplyCondition()
+        private void UpdateTransform()
         {
-            // Apply room and wall scale.
-            transform.localScale = new Vector3(scale, scale, scale);
+            if (mode == Mode.Default) {
+                // Apply height offset.
+                transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
 
-            // Apply height offset.
-            transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
+                // Apply room and wall scale.
+                transform.localScale = new Vector3(scale, scale, scale);
+            }
+            // 2D flat mode.
+            else {
+                transform.position = targetTransform.position;
+                transform.eulerAngles = targetTransform.eulerAngles;
+                transform.localScale = new Vector3(scale, 0.001f, scale);
+            }
         }
 
         private Vector3 GetPlayerOffsetPosition()
