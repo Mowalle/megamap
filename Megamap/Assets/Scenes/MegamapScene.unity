@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -609,7 +609,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &73551406
 GameObject:
@@ -1833,7 +1833,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400372, guid: 1bfa27edf17c11f4f8013a2c5afdfe59, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100372, guid: 1bfa27edf17c11f4f8013a2c5afdfe59, type: 3}
       propertyPath: m_IsActive
@@ -3059,6 +3059,10 @@ Prefab:
     - target: {fileID: 400050, guid: 48a88deda0bcfaf41b5d13c0d76ccfe2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 100356, guid: 48a88deda0bcfaf41b5d13c0d76ccfe2, type: 3}
+      propertyPath: m_Name
+      value: map_6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48a88deda0bcfaf41b5d13c0d76ccfe2, type: 3}
@@ -5111,7 +5115,7 @@ Transform:
   - {fileID: 1545822870}
   - {fileID: 295551618}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &772546077
 GameObject:
@@ -5640,6 +5644,34 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Megamap.RoomSelectionEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+--- !u!1 &878754815
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 878754816}
+  m_Layer: 0
+  m_Name: 2D-Map-Transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &878754816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 878754815}
+  m_LocalRotation: {x: -0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 5.999, y: 1.119, z: 3.132}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: -45, y: 0, z: 0}
 --- !u!4 &899611597 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 3df2746dbbb9fcd4b98280488b85163f,
@@ -6546,7 +6578,7 @@ GameObject:
   - component: {fileID: 1089971290}
   - component: {fileID: 1089971289}
   m_Layer: 0
-  m_Name: '[TUTORIAL 2]'
+  m_Name: '[TASK 6]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6587,7 +6619,7 @@ Transform:
   - {fileID: 1049957230}
   - {fileID: 333586618}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1117749754
 GameObject:
@@ -6633,12 +6665,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7206dc98b3aa4c54584b4fd2c76322c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mode: 1
+  useAnimation: 1
+  animationDuration: 1.5
+  targetTransform: {fileID: 878754816}
   scale: 0.1
   heightOffset: 0.25
   labReference: {fileID: 1573455972}
-  placeAtPlayer: 1
-  useAnimation: 1
-  animationDuration: 1.5
 --- !u!114 &1117749757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6663,7 +6696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d6adc9bf58b7e448bfecacc5b4db9e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetRoomName: LabRoom
   showUpperOnly: 1
   guides: {fileID: 543335901}
 --- !u!1 &1126398392 stripped
@@ -10532,7 +10564,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1436303324
 Prefab:
@@ -11028,7 +11060,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1530904654
 MonoBehaviour:
@@ -11046,13 +11078,14 @@ MonoBehaviour:
   preventDirectRepetition: 1
   tutorials:
   - {fileID: 750260373}
-  - {fileID: 1089971289}
+  - {fileID: 750260373}
   tasks:
   - {fileID: 919861994}
   - {fileID: 1800241361}
   - {fileID: 932815078}
   - {fileID: 489721029}
   - {fileID: 928906156}
+  - {fileID: 1089971289}
   taskSequenceFile: {fileID: 4900000, guid: 5d35fed9bd5d8f0469aea3535251f6a4, type: 3}
 --- !u!114 &1530904655
 MonoBehaviour:
@@ -11066,6 +11099,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorialCondition:
+    mode: default
     scale: 0.09
     heightOffset: 0.4
   conditionSequenceFile: {fileID: 4900000, guid: 0ae924388bad46c459c4ceaeb1146925,

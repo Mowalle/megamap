@@ -37,7 +37,7 @@ namespace Megamap {
 
         [Header("Condition Settings"), Space]
 
-        [SerializeField] private Condition tutorialCondition = new Condition();
+        public Condition tutorialCondition = new Condition();
 
         [SerializeField] private TextAsset conditionSequenceFile = null;
 
