@@ -1,18 +1,42 @@
 {
     "conditions": [
         {
+            "mode": "default",
             "scale": 0.04,
             "heightOffset": 0.25
         },
         {
+            "mode": "flat",
+            "scale": 0.04,
+            "heightOffset": 0.25
+        },
+        {
+            "mode": "default",
             "scale": 0.04,
             "heightOffset": 0.75
         },
         {
+            "mode": "flat",
+            "scale": 0.04,
+            "heightOffset": 0.75
+        },
+        {
+            "mode": "default",
             "scale": 0.075,
             "heightOffset": 0.25
         },
         {
+            "mode": "flat",
+            "scale": 0.075,
+            "heightOffset": 0.25
+        },
+        {
+            "mode": "default",
+            "scale": 0.075,
+            "heightOffset": 0.75
+        },
+        {
+            "mode": "flat",
             "scale": 0.075,
             "heightOffset": 0.75
         }

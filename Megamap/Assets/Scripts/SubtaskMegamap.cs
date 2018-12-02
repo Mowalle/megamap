@@ -28,6 +28,7 @@ namespace Megamap {
 
             // Update Megamap with values from condition.
             var condition = FindObjectOfType<ConditionSwitcher>().CurrentCondition;
+            map.SetMode(condition.mode.ToLower().Equals("default") ? Megamap.Mode.Default : Megamap.Mode.Flat);
             map.scale = condition.scale;
             map.heightOffset = condition.heightOffset;
 
