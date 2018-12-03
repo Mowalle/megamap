@@ -16,7 +16,7 @@ namespace Megamap {
         public float animationDuration = 1.5f;
 
         [Header("2D Settings"), Space]
-        [SerializeField] private Transform targetTransform = null;
+        public Transform targetTransform = null;
 
         [Header("3D Settings"), Space]
         [Range(0.01f, 1f)] public float scale = 1f;
