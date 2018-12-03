@@ -42,6 +42,7 @@ namespace Megamap {
         [SerializeField] private TextAsset conditionSequenceFile = null;
 
         [SerializeField] private bool randomizeConditions = true;
+        [SerializeField] private bool randomizeStartCondition = false;
 
         [SerializeField] private TextAsset conditionsJson = null;
         [SerializeField] private Condition[] conditions = null;
@@ -77,7 +78,7 @@ namespace Megamap {
                 var conditionSequences = SequenceLoader.LoadSequences(conditionSequenceFile);
                 mySequence = conditionSequences[UnityEngine.Random.Range(0, conditionSequences.GetLength(0))];
                 Assert.AreEqual(conditions.Length, mySequence.Length);
-                startOffset = UnityEngine.Random.Range(0, mySequence.Length);
+                startOffset = randomizeStartCondition ? UnityEngine.Random.Range(0, mySequence.Length) : 0;
             }
             else {
                 mySequence = new int[conditions.Length];
