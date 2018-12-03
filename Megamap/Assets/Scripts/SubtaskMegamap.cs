@@ -26,14 +26,16 @@ namespace Megamap {
             laser.IsFrozen = false;
             laser.Show(true);
 
-            // Update Megamap with values from condition.
-            var condition = FindObjectOfType<ConditionSwitcher>().CurrentCondition;
-            map.SetMode(condition.mode.ToLower().Equals("default") ? Megamap.Mode.Default : Megamap.Mode.Flat);
-            map.targetTransform = transform.Find("2D-Transform");
-            map.scale = condition.scale;
-            map.heightOffset = condition.heightOffset;
+            map.targetTransform2D = transform.Find("2D-Transform");
             map.SetMap(indoorMap);
             map.GetComponent<UserMarker>().enabled = true;
+
+            // Update Megamap with values from condition.
+            var condition = FindObjectOfType<ConditionSwitcher>().CurrentCondition;
+            map.SetViewMode(condition.viewMode.ToLower().Equals("flat") ? Megamap.ViewMode.Flat : Megamap.ViewMode.Default);
+            map.SetHeightMode(condition.heightMode.ToLower().Equals("adaptive") ? Megamap.HeightMode.Adaptive : Megamap.HeightMode.Fixed);
+            map.heightOffset = condition.heightOffset;
+            map.scale = condition.scale;
 
             var rooms = map.SelectableRooms;
             RecordData.CurrentRecord.numBallsPerRoom = new int[rooms.Count];

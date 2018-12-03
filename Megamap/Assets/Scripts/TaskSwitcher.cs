@@ -49,9 +49,9 @@ namespace Megamap {
                     + ") with tutorial condition instead of condition "
                     + FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx + ".");
                 if (numTutorialsFinished % 2 != 0)
-                    FindObjectOfType<ConditionSwitcher>().tutorialCondition.mode = "flat";
+                    FindObjectOfType<ConditionSwitcher>().tutorialCondition.viewMode = "flat";
                 else
-                    FindObjectOfType<ConditionSwitcher>().tutorialCondition.mode = "default";
+                    FindObjectOfType<ConditionSwitcher>().tutorialCondition.viewMode = "default";
 
                 tutorials[CurrentTaskIndex].gameObject.SetActive(true);
                 tutorials[CurrentTaskIndex].StartTask();
@@ -200,7 +200,7 @@ namespace Megamap {
             RecordData.Log("Starting tutorial 0 (1/" + tutorials.Count
                 + ") with tutorial condition instead of condition "
                 + FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx + ".");
-            FindObjectOfType<ConditionSwitcher>().tutorialCondition.mode = "default";
+            FindObjectOfType<ConditionSwitcher>().tutorialCondition.viewMode = "default";
             tutorials[0].gameObject.SetActive(true);
             tutorials[0].StartTask();
         }

@@ -1,19 +1,22 @@
 {
     "conditions": [
         {
-            "mode": "default",
-            "scale": 0.06,
-            "heightOffset": 0.25
+            "viewMode": "default",
+            "heightMode": "fixed",
+            "heightOffset": 0.25,
+            "scale": 0.06
         },
         {
-            "mode": "default",
-            "scale": 0.06,
-            "heightOffset": 0.75
+            "viewMode": "default",
+            "heightMode": "adaptive",
+            "heightOffset": 1.0,
+            "scale": 0.06
         },
         {
-            "mode": "flat",
-            "scale": 0.06,
-            "heightOffset": 0.0
+            "viewMode": "flat",
+            "heightMode": "fixed",
+            "heightOffset": 0.25,
+            "scale": 0.06
         }
     ]
 }

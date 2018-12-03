@@ -6832,13 +6832,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7206dc98b3aa4c54584b4fd2c76322c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 1
+  viewMode: 1
+  scale: 0.1
   useAnimation: 1
   animationDuration: 1.5
-  targetTransform: {fileID: 0}
-  scale: 0.1
-  heightOffset: 0.25
   labReference: {fileID: 1573455972}
+  targetTransform2D: {fileID: 0}
+  heightMode: 0
+  heightOffset: 0.25
 --- !u!114 &1117749757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11389,9 +11390,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorialCondition:
-    mode: default
-    scale: 0.04
+    viewMode: default
+    heightMode: fixed
     heightOffset: 0.4
+    scale: 0.04
   conditionSequenceFile: {fileID: 4900000, guid: 0ae924388bad46c459c4ceaeb1146925,
     type: 3}
   randomizeConditions: 1

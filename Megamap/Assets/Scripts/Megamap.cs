@@ -7,22 +7,26 @@ namespace Megamap {
 
     public class Megamap : MonoBehaviour {
 
-        public enum Mode { Flat, Default }
+        public enum ViewMode { Flat, Default }
+        public enum HeightMode { Fixed, Adaptive }
 
         [Header("General Settings"), Space]
-        [SerializeField] private Mode mode = Mode.Default;
+        [SerializeField] private ViewMode viewMode = ViewMode.Default;
+        [Range(0.01f, 1f)] public float scale = 1f;
+
         [SerializeField] private bool useAnimation = true;
         public bool UseAnimation { get { return useAnimation; } set { useAnimation = value; } }
         public float animationDuration = 1.5f;
 
-        [Header("2D Settings"), Space]
-        public Transform targetTransform = null;
-
-        [Header("3D Settings"), Space]
-        [Range(0.01f, 1f)] public float scale = 1f;
-        [Range(0.1f, 1.5f)] public float heightOffset = 0f;
         [SerializeField] private Transform labReference = null;
         public Transform LabReference { get { return labReference; } set { labReference = value; } }
+
+        [Header("2D Settings"), Space]
+        public Transform targetTransform2D = null;
+
+        [Header("3D Settings"), Space]
+        [SerializeField] private HeightMode heightMode = HeightMode.Fixed;
+        [Range(0.1f, 1.5f)] public float heightOffset = 0f;
 
         public List<GameObject> Rooms { get { return indoorMap.Rooms; } }
         public List<SelectRoom> SelectableRooms { get { return indoorMap.SelectableRooms; } }
@@ -40,16 +44,18 @@ namespace Megamap {
 
         // -------------------------------- //
 
-        public Mode GetMode() { return mode; }
-        public void SetMode(Mode mode)
+        public ViewMode GetViewMode() { return viewMode; }
+        public void SetViewMode(ViewMode mode)
         {
-            this.mode = mode;
+            viewMode = mode;
 
             // Enable Room Guides (if available) only in 3D-Mode.
             if (GetComponent<RoomGuides>() != null) {
-                GetComponent<RoomGuides>().enabled = this.mode == Mode.Default;
+                GetComponent<RoomGuides>().enabled = viewMode == ViewMode.Default;
             }
         }
+        public HeightMode GetHeightMode() { return heightMode; }
+        public void SetHeightMode(HeightMode mode) { heightMode = mode; }
 
         public void SetMap(IndoorMap indoorMap, Transform referencePoint = null)
         {
@@ -79,7 +85,9 @@ namespace Megamap {
                 return;
 
             // Will be overriden in 2D-Mode.
-            transform.position = GetPlayerOffsetPosition();
+            var newPosition = GetPlayerOffsetPosition();
+            newPosition.y = (heightMode == HeightMode.Fixed) ? heightOffset : Camera.main.transform.position.y - heightOffset;
+            transform.position = newPosition;
             gameObject.SetActive(true);
             // Animaiton.
             animationRoutine = StartCoroutine(ShowRoutine());
@@ -115,15 +123,14 @@ namespace Megamap {
             if (useAnimation) {
                 Vector3 targetPosition, targetScale;
                 Quaternion targetRotation;
-                if (mode == Mode.Default) {
-                    targetPosition = GetPlayerOffsetPosition();
-                    targetPosition.y = heightOffset;
+                if (viewMode == ViewMode.Default) {
+                    targetPosition = transform.position;
                     targetRotation = Quaternion.Euler(Vector3.zero);
                     targetScale = new Vector3(scale, scale, scale);
                 }
                 else {
-                    targetPosition = targetTransform.position;
-                    targetRotation = targetTransform.rotation;
+                    targetPosition = targetTransform2D.position;
+                    targetRotation = targetTransform2D.rotation;
                     targetScale = new Vector3(scale, 0.001f, scale);
                 }
                 yield return StartCoroutine(Transition(
@@ -202,17 +209,14 @@ namespace Megamap {
 
         private void UpdateTransform()
         {
-            if (mode == Mode.Default) {
-                // Apply height offset.
-                transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
-
+            if (viewMode == ViewMode.Default) {
                 // Apply room and wall scale.
                 transform.localScale = new Vector3(scale, scale, scale);
             }
             // 2D flat mode.
             else {
-                transform.position = targetTransform.position;
-                transform.eulerAngles = targetTransform.eulerAngles;
+                transform.position = targetTransform2D.position;
+                transform.eulerAngles = targetTransform2D.eulerAngles;
                 transform.localScale = new Vector3(scale, 0.001f, scale);
             }
         }

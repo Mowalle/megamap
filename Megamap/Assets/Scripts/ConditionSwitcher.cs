@@ -11,9 +11,10 @@ namespace Megamap {
 
         [Serializable]
         public struct Condition {
-            public string mode;
-            [Range(0.01f, 1f)] public float scale;
+            public string viewMode;
+            public string heightMode;
             [Range(0.1f, 1.5f)] public float heightOffset;
+            [Range(0.01f, 1f)] public float scale;
         }
 
         [Serializable]
