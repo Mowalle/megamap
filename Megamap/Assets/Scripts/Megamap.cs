@@ -41,7 +41,15 @@ namespace Megamap {
         // -------------------------------- //
 
         public Mode GetMode() { return mode; }
-        public void SetMode(Mode mode) { this.mode = mode; }
+        public void SetMode(Mode mode)
+        {
+            this.mode = mode;
+
+            // Enable Room Guides (if available) only in 3D-Mode.
+            if (GetComponent<RoomGuides>() != null) {
+                GetComponent<RoomGuides>().enabled = this.mode == Mode.Default;
+            }
+        }
 
         public void SetMap(IndoorMap indoorMap, Transform referencePoint = null)
         {

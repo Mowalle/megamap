@@ -35,8 +35,6 @@ namespace Megamap {
             map.SetMap(indoorMap);
             map.GetComponent<UserMarker>().enabled = true;
 
-            map.GetComponent<RoomGuides>().enabled = true;
-
             var rooms = map.SelectableRooms;
             RecordData.CurrentRecord.numBallsPerRoom = new int[rooms.Count];
             RecordData.CurrentRecord.roomSelections = new int[rooms.Count];
