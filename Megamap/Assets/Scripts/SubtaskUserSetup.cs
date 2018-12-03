@@ -34,17 +34,6 @@ namespace Megamap {
                                                         wallTarget.transform.position.y,
                                                         wallTarget.transform.position.z);
 
-            // Re-Center TaskDisplay (TV) at WallTarget position.
-            float newX = wallTarget.GetComponent<RectTransform>().anchoredPosition.x;
-            // Limit tv position on x-axis with these magic numbers (so that tv does not clip the lab wall).
-            newX = Mathf.Max(newX, 5.2f);
-            newX = Mathf.Min(newX, 6.2f);
-
-            taskDisplay.transform.parent.localPosition = new Vector3(
-                newX,
-                taskDisplay.transform.parent.localPosition.y,
-                taskDisplay.transform.parent.localPosition.z);
-
             // Reset radial so it won't be shown as filled on start.
             selectionRadial.Hide();
 
