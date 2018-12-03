@@ -37,6 +37,12 @@ namespace Megamap {
             map.heightOffset = condition.heightOffset;
             map.scale = condition.scale;
 
+            RecordData.CurrentRecord.viewMode = map.GetViewMode();
+            RecordData.CurrentRecord.heightMode = map.GetHeightMode();
+            RecordData.CurrentRecord.heightOffset = map.heightOffset;
+            RecordData.CurrentRecord.scale = map.scale;
+            RecordData.CurrentRecord.mapName = indoorMap.name;
+
             var rooms = map.SelectableRooms;
             RecordData.CurrentRecord.numBallsPerRoom = new int[rooms.Count];
             RecordData.CurrentRecord.roomSelections = new int[rooms.Count];
