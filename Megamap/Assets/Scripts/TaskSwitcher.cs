@@ -23,9 +23,8 @@ namespace Megamap {
 
         private int[][] sequences = null;
         private int[] currentSequence = null;
-        private int startOffset = -1;
         private int numTasksFinished = 0;
-        private int CurrentTaskIndex { get { return runningTutorial ? numTutorialsFinished : currentSequence[(startOffset + numTasksFinished) % currentSequence.Length]; } }
+        private int CurrentTaskIndex { get { return runningTutorial ? numTutorialsFinished : currentSequence[numTasksFinished % currentSequence.Length]; } }
 
         bool runningTutorial = false;
         public bool IsTutorialRunning { get { return runningTutorial; } }
@@ -150,11 +149,14 @@ namespace Megamap {
             }
 
             // Remember previous task in case we don't want to repeat it. 
-            int lastTask = (startOffset == -1) ? -1 : CurrentTaskIndex;
+            int lastTask = (currentSequence == null) ? -1 : CurrentTaskIndex;
 
-            // Pick sequence and remove it from list of available sequences.
-            var sequenceIndex = Random.Range(0, sequences.GetLength(0));
-            currentSequence = sequences[sequenceIndex];
+            int sequenceIndex;
+            do {
+                // Pick sequence and remove it from list of available sequences.
+                sequenceIndex = Random.Range(0, sequences.GetLength(0));
+                currentSequence = sequences[sequenceIndex];
+            } while (randomizeTasks && preventDirectRepetition && lastTask == currentSequence[0]);
             Assert.AreEqual(currentSequence.Length, tasks.Length);
 
             // This removes the used element, but it's quite ugly...
@@ -162,25 +164,17 @@ namespace Megamap {
             tmp.RemoveAt(sequenceIndex);
             sequences = tmp.ToArray();
 
-            if (tasks.Length > 1 && randomizeTasks) {
-                do {
-                    startOffset = Random.Range(0, currentSequence.Length);
-                } while (preventDirectRepetition && lastTask == currentSequence[startOffset]);
-            }
-            else {
-                startOffset = 0;
-            }
-
             RecordData.Log("New task sequence is " + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray()));
         }
 
         private void LoadSequences()
         {
-            if (taskSequenceFile != null) {
+            if (randomizeTasks && taskSequenceFile != null) {
                 sequences = SequenceLoader.LoadSequences(taskSequenceFile);
             }
+            // In case there is no sequence file or randomization is turned of,
+            // just do the tasks in assigned sequence (0, 1, 2, ...).
             else {
-                // In case file is not setup, just do [0, 1, 2, 3, ...].
                 sequences = new int[1][];
                 sequences[0] = new int[tasks.Length];
                 for (int i = 0; i < sequences[0].Length; ++i) {
@@ -211,7 +205,7 @@ namespace Megamap {
         private void SaveData()
         {
             RecordData.CurrentRecord.conditionIndex = FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx;
-            int currentTaskIdx = (startOffset + numTasksFinished) % tasks.Length;
+            int currentTaskIdx = numTasksFinished % tasks.Length;
             RecordData.CurrentRecord.taskIndex = currentSequence[currentTaskIdx];
 
             if (RecordData.writeData)

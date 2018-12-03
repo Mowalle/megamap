@@ -11367,6 +11367,7 @@ MonoBehaviour:
   displayLanguage: 0
   randomizeTasks: 1
   preventDirectRepetition: 1
+  skipTutorials: 0
   tutorials:
   - {fileID: 750260373}
   - {fileID: 750260373}
@@ -11394,12 +11395,9 @@ MonoBehaviour:
     heightMode: fixed
     heightOffset: 0.4
     scale: 0.04
-  conditionSequenceFile: {fileID: 4900000, guid: 0ae924388bad46c459c4ceaeb1146925,
-    type: 3}
-  randomizeConditions: 1
-  randomizeStartCondition: 0
   conditionsJson: {fileID: 4900000, guid: f30838d574e878044bcccc9566b6f47e, type: 3}
   conditions: []
+  sequence: 000000000100000002000000
 --- !u!1 &1545822868
 GameObject:
   m_ObjectHideFlags: 0
