@@ -15,8 +15,8 @@ namespace Megamap {
             waitTutorial.AddTranslation(TaskDisplay.Language.English, "WAIT for the start of the tutorial...");
 
             var waitExperiment = new TaskDisplay.TaskDescription();
-            waitExperiment.AddTranslation(TaskDisplay.Language.German, "WARTE auf Beginn des Experiments...");
-            waitExperiment.AddTranslation(TaskDisplay.Language.English, "WAIT for the start of the experiment...");
+            waitExperiment.AddTranslation(TaskDisplay.Language.German, "WARTE auf Fortfahren des Experiments...");
+            waitExperiment.AddTranslation(TaskDisplay.Language.English, "WAIT for instructor to continue experiment...");
 
             var userSetupPosition = new TaskDisplay.TaskDescription();
             userSetupPosition.AddTranslation(TaskDisplay.Language.German, "STELLE dich auf das Ziel (X).");

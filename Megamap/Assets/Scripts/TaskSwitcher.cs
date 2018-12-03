@@ -79,14 +79,12 @@ namespace Megamap {
                 if (lastCondition == condSwitcher.CurrentConditionIdx)
                     return;
 
-                NextSequence();
-                numTasksFinished = 0;
+                waitingForKeypress = true;
             }
             else {
                 ++numTasksFinished;
+                StartTask();
             }
-
-            StartTask();
         }
 
         private void Awake()
@@ -132,9 +130,10 @@ namespace Megamap {
                 if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
                     waitingForKeypress = false;
                     NextSequence();
+                    numTasksFinished = 0;
                     StartTask();
                 }
-                else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.R)) {
+                else if (numTasksFinished == 0 && (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.R))) {
                     runningTutorial = true;
                 }
             }
