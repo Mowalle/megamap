@@ -11,8 +11,8 @@ namespace Megamap {
 
         [Serializable]
         public struct Condition {
+            public string mode;
             [Range(0.01f, 1f)] public float scale;
-            private int wallHeight;
             [Range(0.1f, 1.5f)] public float heightOffset;
         }
 
@@ -37,11 +37,12 @@ namespace Megamap {
 
         [Header("Condition Settings"), Space]
 
-        [SerializeField] private Condition tutorialCondition = new Condition();
+        public Condition tutorialCondition = new Condition();
 
         [SerializeField] private TextAsset conditionSequenceFile = null;
 
         [SerializeField] private bool randomizeConditions = true;
+        [SerializeField] private bool randomizeStartCondition = false;
 
         [SerializeField] private TextAsset conditionsJson = null;
         [SerializeField] private Condition[] conditions = null;
@@ -77,7 +78,7 @@ namespace Megamap {
                 var conditionSequences = SequenceLoader.LoadSequences(conditionSequenceFile);
                 mySequence = conditionSequences[UnityEngine.Random.Range(0, conditionSequences.GetLength(0))];
                 Assert.AreEqual(conditions.Length, mySequence.Length);
-                startOffset = UnityEngine.Random.Range(0, mySequence.Length);
+                startOffset = randomizeStartCondition ? UnityEngine.Random.Range(0, mySequence.Length) : 0;
             }
             else {
                 mySequence = new int[conditions.Length];

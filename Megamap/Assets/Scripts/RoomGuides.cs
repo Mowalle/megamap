@@ -1,4 +1,5 @@
 ﻿using System;
+
 using UnityEngine;
 
 namespace Megamap {
@@ -6,8 +7,6 @@ namespace Megamap {
     [RequireComponent(typeof(Megamap))]
     public class RoomGuides : MonoBehaviour {
 
-
-        [SerializeField] private string targetRoomName = "LabRoom";
         [SerializeField] private bool showUpperOnly = true;
         [SerializeField] private GameObject guides = null;
 
@@ -41,25 +40,16 @@ namespace Megamap {
                 return;
             }
 
-            var target = map.MapReference.Find(targetRoomName);
-            if (target == null)
-                target = map.MapReference;
-
-            Bounds labMapBounds = new Bounds(target.position, Vector3.zero);
             Bounds labEnvBounds = new Bounds(map.LabReference.transform.position, Vector3.zero);
-            foreach (var r in target.GetComponentsInChildren<Renderer>(true)) {
-                labMapBounds.Encapsulate(r.bounds);
-            }
             foreach (var r in map.LabReference.GetComponentsInChildren<Renderer>(true)) {
                 labEnvBounds.Encapsulate(r.bounds);
             }
 
-            var mapPoints = GetBoundsPoints(labMapBounds);
             var envPoints = GetBoundsPoints(labEnvBounds);
 
             for (int i = 0; i < 8; ++i) {
                 lines[i].SetPosition(0, envPoints[i]);
-                lines[i].SetPosition(1, mapPoints[i]);
+                lines[i].SetPosition(1, map.transform.localToWorldMatrix.MultiplyPoint(envPoints[i]));
             }
 
             for (int i = 0; i < 4; ++i) {

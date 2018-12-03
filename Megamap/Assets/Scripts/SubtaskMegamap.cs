@@ -28,11 +28,11 @@ namespace Megamap {
 
             // Update Megamap with values from condition.
             var condition = FindObjectOfType<ConditionSwitcher>().CurrentCondition;
+            map.SetMode(condition.mode.ToLower().Equals("default") ? Megamap.Mode.Default : Megamap.Mode.Flat);
+            map.targetTransform = transform.Find("2D-Transform");
             map.scale = condition.scale;
             map.heightOffset = condition.heightOffset;
-
             map.SetMap(indoorMap);
-            map.GetComponent<RoomGuides>().enabled = true;
             map.GetComponent<UserMarker>().enabled = true;
 
             var rooms = map.SelectableRooms;
