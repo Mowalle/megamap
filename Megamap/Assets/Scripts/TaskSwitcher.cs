@@ -13,6 +13,7 @@ namespace Megamap {
         [SerializeField] private bool randomizeTasks = true;
         [SerializeField] private bool preventDirectRepetition = true;
 
+        [SerializeField] private bool skipTutorials = false;
         [SerializeField] private List<Task> tutorials = new List<Task>();
         [SerializeField] private Task[] tasks = new Task[5];
 
@@ -103,7 +104,7 @@ namespace Megamap {
 
             tutorials.ForEach(t => t.gameObject.SetActive(false));
 
-            if (tutorials.Count > 0)
+            if (!skipTutorials && tutorials.Count > 0)
                 runningTutorial = true;
 
             FindObjectOfType<LaserPointer>().Show(false);
@@ -133,7 +134,9 @@ namespace Megamap {
                     numTasksFinished = 0;
                     StartTask();
                 }
-                else if (numTasksFinished == 0 && (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.R))) {
+                else if (!skipTutorials && tutorials.Count > 0
+                    && numTasksFinished == 0 // So that when pausing between experiment conditions, tutorials cannot be started.
+                    && (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.R))) {
                     runningTutorial = true;
                 }
             }
