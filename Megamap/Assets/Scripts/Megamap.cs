@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -23,6 +24,9 @@ namespace Megamap {
 
         [Header("2D Settings"), Space]
         public Transform targetTransform2D = null;
+        public GameObject doorArc = null;
+        public bool showDoorArcs = true;
+        private List<GameObject> doorArcs = new List<GameObject>();
 
         [Header("3D Settings"), Space]
         [SerializeField] private HeightMode heightMode = HeightMode.Fixed;
@@ -150,6 +154,17 @@ namespace Megamap {
             animationRoutine = null;
             isShown = true;
 
+            // If in 2D-Mode, use doorArc models instead of doors.
+            if (viewMode == ViewMode.Flat && showDoorArcs) {
+                foreach (var renderer in Array.FindAll(indoorMap.GetComponentsInChildren<MeshRenderer>(true),
+                    r => r.name.ToLower().StartsWith("doorframe"))) {
+                    // Disable all child renderers of the current door.
+                    Array.ForEach(renderer.GetComponentsInChildren<Renderer>(true), r => r.enabled = false);
+                    doorArcs.Add(Instantiate(doorArc, renderer.transform));
+                    doorArcs[doorArcs.Count - 1].transform.localEulerAngles = new Vector3(90, 0, 0);
+                }
+            }
+
             // Re-activate rooms after transition.
             SelectableRooms.ForEach(room => room.EnableInteraction(true));
             yield return null;
@@ -159,6 +174,20 @@ namespace Megamap {
         {
             // Disable rooms during transition to prevent accidental selection.
             SelectableRooms.ForEach(room => room.EnableInteraction(false));
+
+            // If in 2D-Mode, re-enable doors.
+            if (viewMode == ViewMode.Flat) {
+                foreach (var go in doorArcs) {
+                    Destroy(go);
+                }
+                doorArcs.Clear();
+
+                foreach (var renderer in Array.FindAll(indoorMap.GetComponentsInChildren<MeshRenderer>(true),
+                    r => r.name.ToLower().StartsWith("doorframe"))) {
+                    // Disable all child renderers of the current door.
+                    Array.ForEach(renderer.GetComponentsInChildren<Renderer>(true), r => r.enabled = true);
+                }
+            }
 
             if (useAnimation) {
                 yield return StartCoroutine(Transition(

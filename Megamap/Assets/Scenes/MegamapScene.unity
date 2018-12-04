@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6816,8 +6816,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1308832570}
   - {fileID: 1638521366}
+  - {fileID: 1308832570}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6838,6 +6838,8 @@ MonoBehaviour:
   animationDuration: 1.5
   labReference: {fileID: 1573455972}
   targetTransform2D: {fileID: 0}
+  doorArc: {fileID: 100000, guid: c659f700829471642b43e2edbb5a4cac, type: 3}
+  showDoorArcs: 1
   heightMode: 0
   heightOffset: 0.25
 --- !u!114 &1117749757
@@ -8691,7 +8693,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4509594472480876, guid: dff4b9f5cd481df45bc7d6f2edaf0ba9, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1253155615370426, guid: dff4b9f5cd481df45bc7d6f2edaf0ba9, type: 2}
       propertyPath: m_IsActive
@@ -11145,6 +11147,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100018, guid: 948c47449f3194143824232a766648a0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 948c47449f3194143824232a766648a0, type: 3}
   m_IsPrefabAsset: 0
@@ -11936,7 +11942,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4227754282105862, guid: 145095c4103356a4fb82675fe7b57bfe, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114307314682466020, guid: 145095c4103356a4fb82675fe7b57bfe,
         type: 2}
