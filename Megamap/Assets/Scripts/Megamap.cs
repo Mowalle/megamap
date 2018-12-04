@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -7,17 +8,29 @@ namespace Megamap {
 
     public class Megamap : MonoBehaviour {
 
+        public enum ViewMode { Flat, Default }
+        public enum HeightMode { Fixed, Adaptive }
+
+        [Header("General Settings"), Space]
+        [SerializeField] private ViewMode viewMode = ViewMode.Default;
         [Range(0.01f, 1f)] public float scale = 1f;
-        [Range(0.1f, 1.5f)] public float heightOffset = 0f;
 
-        public Transform LabReference { get { return labReference; } set { labReference = value; } }
-        [SerializeField] private Transform labReference = null;
-
-        public bool placeAtPlayer = true;
-
-        public bool UseAnimation { get { return useAnimation; } set { useAnimation = value; } }
         [SerializeField] private bool useAnimation = true;
+        public bool UseAnimation { get { return useAnimation; } set { useAnimation = value; } }
         public float animationDuration = 1.5f;
+
+        [SerializeField] private Transform labReference = null;
+        public Transform LabReference { get { return labReference; } set { labReference = value; } }
+
+        [Header("2D Settings"), Space]
+        public Transform targetTransform2D = null;
+        public GameObject doorArc = null;
+        public bool showDoorArcs = true;
+        private List<GameObject> doorArcs = new List<GameObject>();
+
+        [Header("3D Settings"), Space]
+        [SerializeField] private HeightMode heightMode = HeightMode.Fixed;
+        [Range(0.1f, 1.5f)] public float heightOffset = 0f;
 
         public List<GameObject> Rooms { get { return indoorMap.Rooms; } }
         public List<SelectRoom> SelectableRooms { get { return indoorMap.SelectableRooms; } }
@@ -34,6 +47,19 @@ namespace Megamap {
         private Coroutine animationRoutine = null;
 
         // -------------------------------- //
+
+        public ViewMode GetViewMode() { return viewMode; }
+        public void SetViewMode(ViewMode mode)
+        {
+            viewMode = mode;
+
+            // Enable Room Guides (if available) only in 3D-Mode.
+            if (GetComponent<RoomGuides>() != null) {
+                GetComponent<RoomGuides>().enabled = viewMode == ViewMode.Default;
+            }
+        }
+        public HeightMode GetHeightMode() { return heightMode; }
+        public void SetHeightMode(HeightMode mode) { heightMode = mode; }
 
         public void SetMap(IndoorMap indoorMap, Transform referencePoint = null)
         {
@@ -55,9 +81,6 @@ namespace Megamap {
             this.indoorMap.transform.localPosition = Vector3.zero;
             this.indoorMap.gameObject.SetActive(true);
             mapReference = referencePoint != null ? referencePoint : indoorMap.transform;
-
-            if (placeAtPlayer)
-                transform.position = GetPlayerOffsetPosition();
         }
 
         public void Show()
@@ -65,6 +88,10 @@ namespace Megamap {
             if (isShown || animationRoutine != null)
                 return;
 
+            // Will be overriden in 2D-Mode.
+            var newPosition = GetPlayerOffsetPosition();
+            newPosition.y = (heightMode == HeightMode.Fixed) ? heightOffset : Camera.main.transform.position.y - heightOffset;
+            transform.position = newPosition;
             gameObject.SetActive(true);
             // Animaiton.
             animationRoutine = StartCoroutine(ShowRoutine());
@@ -89,7 +116,7 @@ namespace Megamap {
             if (!isShown || animationRoutine != null)
                 return;
 
-            ApplyCondition();
+            UpdateTransform();
         }
 
         private IEnumerator ShowRoutine()
@@ -98,25 +125,49 @@ namespace Megamap {
             SelectableRooms.ForEach(room => room.EnableInteraction(false));
 
             if (useAnimation) {
-                var targetPosition = placeAtPlayer ? GetPlayerOffsetPosition() : transform.position;
-                targetPosition.y = heightOffset;
+                Vector3 targetPosition, targetScale;
+                Quaternion targetRotation;
+                if (viewMode == ViewMode.Default) {
+                    targetPosition = transform.position;
+                    targetRotation = Quaternion.Euler(Vector3.zero);
+                    targetScale = new Vector3(scale, scale, scale);
+                }
+                else {
+                    targetPosition = targetTransform2D.position;
+                    targetRotation = targetTransform2D.rotation;
+                    targetScale = new Vector3(scale, 0.001f, scale);
+                }
                 yield return StartCoroutine(Transition(
                     transform,
                     labReference.position,
                     targetPosition,
+                    transform.rotation,
+                    targetRotation,
                     Vector3.one,
-                    new Vector3(scale, scale, scale),
+                    targetScale,
                     animationDuration));
             }
 
             // Just to make sure...
-            ApplyCondition();
+            UpdateTransform();
 
             animationRoutine = null;
             isShown = true;
 
+            // If in 2D-Mode, use doorArc models instead of doors.
+            if (viewMode == ViewMode.Flat && showDoorArcs) {
+                foreach (var renderer in Array.FindAll(indoorMap.GetComponentsInChildren<MeshRenderer>(true),
+                    r => r.name.ToLower().StartsWith("doorframe"))) {
+                    // Disable all child renderers of the current door.
+                    Array.ForEach(renderer.GetComponentsInChildren<Renderer>(true), r => r.enabled = false);
+                    doorArcs.Add(Instantiate(doorArc, renderer.transform));
+                    doorArcs[doorArcs.Count - 1].transform.localEulerAngles = new Vector3(90, 0, 0);
+                }
+            }
+
             // Re-activate rooms after transition.
             SelectableRooms.ForEach(room => room.EnableInteraction(true));
+            yield return null;
         }
 
         private IEnumerator HideRoutine()
@@ -124,12 +175,28 @@ namespace Megamap {
             // Disable rooms during transition to prevent accidental selection.
             SelectableRooms.ForEach(room => room.EnableInteraction(false));
 
+            // If in 2D-Mode, re-enable doors.
+            if (viewMode == ViewMode.Flat) {
+                foreach (var go in doorArcs) {
+                    Destroy(go);
+                }
+                doorArcs.Clear();
+
+                foreach (var renderer in Array.FindAll(indoorMap.GetComponentsInChildren<MeshRenderer>(true),
+                    r => r.name.ToLower().StartsWith("doorframe"))) {
+                    // Disable all child renderers of the current door.
+                    Array.ForEach(renderer.GetComponentsInChildren<Renderer>(true), r => r.enabled = true);
+                }
+            }
+
             if (useAnimation) {
                 yield return StartCoroutine(Transition(
                     transform,
                     transform.position,
                     labReference.position,
-                    new Vector3(scale, scale, scale),
+                    transform.rotation,
+                    Quaternion.Euler(Vector3.zero),
+                    transform.localScale,
                     Vector3.one,
                     animationDuration));
             }
@@ -144,12 +211,15 @@ namespace Megamap {
 
             isShown = false;
             gameObject.SetActive(false);
+            yield return null;
         }
 
         private IEnumerator Transition(
             Transform transform,
             Vector3 startPosition,
             Vector3 endPosition,
+            Quaternion startRotation,
+            Quaternion endRotation,
             Vector3 startScale,
             Vector3 endScale,
             float duration)
@@ -160,18 +230,24 @@ namespace Megamap {
             while (t < 1f) {
                 t += Time.deltaTime * rate;
                 transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0f, 1f, t));
+                transform.rotation = Quaternion.Lerp(startRotation, endRotation, Mathf.SmoothStep(0f, 1f, t));
                 transform.localScale = Vector3.Lerp(startScale, endScale, Mathf.SmoothStep(0f, 1f, t));
                 yield return null;
             }
         }
 
-        private void ApplyCondition()
+        private void UpdateTransform()
         {
-            // Apply room and wall scale.
-            transform.localScale = new Vector3(scale, scale, scale);
-
-            // Apply height offset.
-            transform.position = new Vector3(transform.position.x, heightOffset, transform.position.z);
+            if (viewMode == ViewMode.Default) {
+                // Apply room and wall scale.
+                transform.localScale = new Vector3(scale, scale, scale);
+            }
+            // 2D flat mode.
+            else {
+                transform.position = targetTransform2D.position;
+                transform.eulerAngles = targetTransform2D.eulerAngles;
+                transform.localScale = new Vector3(scale, 0.001f, scale);
+            }
         }
 
         private Vector3 GetPlayerOffsetPosition()

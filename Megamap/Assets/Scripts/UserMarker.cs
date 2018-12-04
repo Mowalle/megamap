@@ -30,12 +30,8 @@ namespace Megamap {
             }
 
             var cam = Camera.main;
-
-            usermarkerOnMap.transform.position = new Vector3(map.MapReference.position.x, usermarkerOnMap.transform.position.y, map.MapReference.position.z);
-
             var offset = (cam.transform.position - map.LabReference.position);
-            usermarkerOnMap.transform.localPosition += new Vector3(offset.x, 0f, offset.z);
-
+            usermarkerOnMap.transform.localPosition = new Vector3(offset.x, 0.01f, offset.z);
             usermarkerOnMap.transform.localRotation = Quaternion.Euler(0f, cam.transform.rotation.eulerAngles.y, 0f);
 
             // Update the user marker circle that is placed in the VE (lab).

@@ -13,6 +13,7 @@ namespace Megamap {
         [SerializeField] private bool randomizeTasks = true;
         [SerializeField] private bool preventDirectRepetition = true;
 
+        [SerializeField] private bool skipTutorials = false;
         [SerializeField] private List<Task> tutorials = new List<Task>();
         [SerializeField] private Task[] tasks = new Task[5];
 
@@ -22,9 +23,8 @@ namespace Megamap {
 
         private int[][] sequences = null;
         private int[] currentSequence = null;
-        private int startOffset = -1;
         private int numTasksFinished = 0;
-        private int CurrentTaskIndex { get { return runningTutorial ? numTutorialsFinished : currentSequence[(startOffset + numTasksFinished) % currentSequence.Length]; } }
+        private int CurrentTaskIndex { get { return runningTutorial ? numTutorialsFinished : currentSequence[numTasksFinished % currentSequence.Length]; } }
 
         bool runningTutorial = false;
         public bool IsTutorialRunning { get { return runningTutorial; } }
@@ -48,6 +48,11 @@ namespace Megamap {
                     + " (" + (numTutorialsFinished + 1) + "/" + tutorials.Count
                     + ") with tutorial condition instead of condition "
                     + FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx + ".");
+                if (numTutorialsFinished % 2 != 0)
+                    FindObjectOfType<ConditionSwitcher>().tutorialCondition.viewMode = "flat";
+                else
+                    FindObjectOfType<ConditionSwitcher>().tutorialCondition.viewMode = "default";
+
                 tutorials[CurrentTaskIndex].gameObject.SetActive(true);
                 tutorials[CurrentTaskIndex].StartTask();
 
@@ -74,14 +79,12 @@ namespace Megamap {
                 if (lastCondition == condSwitcher.CurrentConditionIdx)
                     return;
 
-                NextSequence();
-                numTasksFinished = 0;
+                waitingForKeypress = true;
             }
             else {
                 ++numTasksFinished;
+                StartTask();
             }
-
-            StartTask();
         }
 
         private void Awake()
@@ -100,7 +103,7 @@ namespace Megamap {
 
             tutorials.ForEach(t => t.gameObject.SetActive(false));
 
-            if (tutorials.Count > 0)
+            if (!skipTutorials && tutorials.Count > 0)
                 runningTutorial = true;
 
             FindObjectOfType<LaserPointer>().Show(false);
@@ -127,9 +130,12 @@ namespace Megamap {
                 if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
                     waitingForKeypress = false;
                     NextSequence();
+                    numTasksFinished = 0;
                     StartTask();
                 }
-                else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.R)) {
+                else if (!skipTutorials && tutorials.Count > 0
+                    && numTasksFinished == 0 // So that when pausing between experiment conditions, tutorials cannot be started.
+                    && (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.R))) {
                     runningTutorial = true;
                 }
             }
@@ -143,11 +149,14 @@ namespace Megamap {
             }
 
             // Remember previous task in case we don't want to repeat it. 
-            int lastTask = (startOffset == -1) ? -1 : CurrentTaskIndex;
+            int lastTask = (currentSequence == null) ? -1 : CurrentTaskIndex;
 
-            // Pick sequence and remove it from list of available sequences.
-            var sequenceIndex = Random.Range(0, sequences.GetLength(0));
-            currentSequence = sequences[sequenceIndex];
+            int sequenceIndex;
+            do {
+                // Pick sequence and remove it from list of available sequences.
+                sequenceIndex = Random.Range(0, sequences.GetLength(0));
+                currentSequence = sequences[sequenceIndex];
+            } while (randomizeTasks && preventDirectRepetition && lastTask == currentSequence[0]);
             Assert.AreEqual(currentSequence.Length, tasks.Length);
 
             // This removes the used element, but it's quite ugly...
@@ -155,25 +164,17 @@ namespace Megamap {
             tmp.RemoveAt(sequenceIndex);
             sequences = tmp.ToArray();
 
-            if (tasks.Length > 1 && randomizeTasks) {
-                do {
-                    startOffset = Random.Range(0, currentSequence.Length);
-                } while (preventDirectRepetition && lastTask == currentSequence[startOffset]);
-            }
-            else {
-                startOffset = 0;
-            }
-
             RecordData.Log("New task sequence is " + string.Join(", ", new List<int>(currentSequence).ConvertAll(i => i.ToString()).ToArray()));
         }
 
         private void LoadSequences()
         {
-            if (taskSequenceFile != null) {
+            if (randomizeTasks && taskSequenceFile != null) {
                 sequences = SequenceLoader.LoadSequences(taskSequenceFile);
             }
+            // In case there is no sequence file or randomization is turned of,
+            // just do the tasks in assigned sequence (0, 1, 2, ...).
             else {
-                // In case file is not setup, just do [0, 1, 2, 3, ...].
                 sequences = new int[1][];
                 sequences[0] = new int[tasks.Length];
                 for (int i = 0; i < sequences[0].Length; ++i) {
@@ -196,6 +197,7 @@ namespace Megamap {
             RecordData.Log("Starting tutorial 0 (1/" + tutorials.Count
                 + ") with tutorial condition instead of condition "
                 + FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx + ".");
+            FindObjectOfType<ConditionSwitcher>().tutorialCondition.viewMode = "default";
             tutorials[0].gameObject.SetActive(true);
             tutorials[0].StartTask();
         }
@@ -203,7 +205,7 @@ namespace Megamap {
         private void SaveData()
         {
             RecordData.CurrentRecord.conditionIndex = FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx;
-            int currentTaskIdx = (startOffset + numTasksFinished) % tasks.Length;
+            int currentTaskIdx = numTasksFinished % tasks.Length;
             RecordData.CurrentRecord.taskIndex = currentSequence[currentTaskIdx];
 
             if (RecordData.writeData)

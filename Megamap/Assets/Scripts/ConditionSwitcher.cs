@@ -11,9 +11,10 @@ namespace Megamap {
 
         [Serializable]
         public struct Condition {
-            [Range(0.01f, 1f)] public float scale;
-            private int wallHeight;
+            public string viewMode;
+            public string heightMode;
             [Range(0.1f, 1.5f)] public float heightOffset;
+            [Range(0.01f, 1f)] public float scale;
         }
 
         [Serializable]
@@ -25,7 +26,7 @@ namespace Megamap {
 
         public int CurrentConditionIdx
         {
-            get { return mySequence[(startOffset + numConditionsFinished) % conditions.Length]; }
+            get { return sequence[numConditionsFinished % conditions.Length]; }
         }
 
         public Condition CurrentCondition
@@ -37,17 +38,12 @@ namespace Megamap {
 
         [Header("Condition Settings"), Space]
 
-        [SerializeField] private Condition tutorialCondition = new Condition();
-
-        [SerializeField] private TextAsset conditionSequenceFile = null;
-
-        [SerializeField] private bool randomizeConditions = true;
+        public Condition tutorialCondition = new Condition();
 
         [SerializeField] private TextAsset conditionsJson = null;
         [SerializeField] private Condition[] conditions = null;
 
-        private int[] mySequence = null;
-        private int startOffset = 0;
+        [SerializeField] private int[] sequence = null;
         private int numConditionsFinished = 0;
 
         public void NextCondition()
@@ -59,7 +55,7 @@ namespace Megamap {
             }
             else {
                 ++numConditionsFinished;
-                RecordData.Log("Starting condition " + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + mySequence.Length + ")");
+                RecordData.Log("Starting condition " + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + sequence.Length + ")");
             }
 
         }
@@ -70,26 +66,18 @@ namespace Megamap {
             var config = JsonUtility.FromJson<ConditionConfiguration>(json);
             conditions = config.conditions;
 
-            if (conditionSequenceFile == null)
-                randomizeConditions = false;
-
-            if (randomizeConditions) {
-                var conditionSequences = SequenceLoader.LoadSequences(conditionSequenceFile);
-                mySequence = conditionSequences[UnityEngine.Random.Range(0, conditionSequences.GetLength(0))];
-                Assert.AreEqual(conditions.Length, mySequence.Length);
-                startOffset = UnityEngine.Random.Range(0, mySequence.Length);
-            }
-            else {
-                mySequence = new int[conditions.Length];
-                for (int i = 0; i < mySequence.Length; ++i) {
-                    mySequence[i] = i;
+            if (sequence == null || sequence.Length != conditions.Length) {
+                Debug.LogWarning(conditionsJson.name + " defines " + conditions.Length + " conditions, but set sequence is invalid. Using default sequence.");
+                sequence = new int[conditions.Length];
+                for (int i = 0; i < sequence.Length; ++i) {
+                    sequence[i] = i;
                 }
             }
 
             RecordData.Log("Condition sequence is "
-                + string.Join(", ", new List<int>(mySequence).ConvertAll(i => i.ToString()).ToArray())
+                + string.Join(", ", new List<int>(sequence).ConvertAll(i => i.ToString()).ToArray())
                 + ", starting with condition "
-                + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + mySequence.Length + ")"
+                + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + sequence.Length + ")"
                 + ".");
         }
     }

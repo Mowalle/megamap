@@ -12,6 +12,11 @@ namespace Megamap {
 
     public class Record {
         public int conditionIndex = 0;
+        public Megamap.ViewMode viewMode = Megamap.ViewMode.Default;
+        public Megamap.HeightMode heightMode = Megamap.HeightMode.Fixed;
+        public float heightOffset = 0f;
+        public float scale = 0f;
+        public string mapName = "";
         public int taskIndex = 0;
 
         // Megamap subtask data.
@@ -58,6 +63,11 @@ namespace Megamap {
             var writer = File.AppendText(directory.FullName + "/" + name);
 
             writer.WriteLine("conditionIndex: " + CurrentRecord.conditionIndex);
+            writer.WriteLine("viewMode: " + CurrentRecord.viewMode);
+            writer.WriteLine("heightMode: " + CurrentRecord.heightMode);
+            writer.WriteLine("heightOffset: " + CurrentRecord.heightOffset);
+            writer.WriteLine("scale: " + CurrentRecord.scale);
+            writer.WriteLine("mapName: " + CurrentRecord.mapName);
             writer.WriteLine("taskIndex: " + CurrentRecord.taskIndex);
             writer.WriteLine("megamapTime: " + CurrentRecord.megamapTime);
             writer.WriteLine("correctRoomName: " + CurrentRecord.correctRoomName);
