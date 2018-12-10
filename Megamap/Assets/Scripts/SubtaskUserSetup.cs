@@ -17,8 +17,6 @@ namespace Megamap {
 
         public override void StartSubtask()
         {
-            LogSubtask();
-
             floorTarget.OnTargetEnter.AddListener(HandleFloorTargetEnter);
             floorTarget.OnTargetExit.AddListener(HandleFloorTargetExit);
             wallTarget.OnTargetEnter.AddListener(HandleWallTargetEnter);

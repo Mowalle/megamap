@@ -20,7 +20,6 @@ namespace Megamap {
         {
             completed = false;
 
-            LogSubtask();
             FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "megamapNormal";
 
             laser.IsFrozen = false;
