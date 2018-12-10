@@ -24,7 +24,7 @@ namespace Megamap {
 
         //------------------
 
-        public int CurrentConditionIdx
+        public int CurrentConditionIndex
         {
             get { return sequence[numConditionsFinished % conditions.Length]; }
         }
@@ -32,7 +32,7 @@ namespace Megamap {
         public Condition CurrentCondition
         {
             get {
-                return FindObjectOfType<TaskSwitcher>().IsTutorialRunning ? tutorialCondition : conditions[CurrentConditionIdx];
+                return FindObjectOfType<TaskSwitcher>().IsTutorialRunning ? tutorialCondition : conditions[CurrentConditionIndex];
             }
         }
 
@@ -46,6 +46,8 @@ namespace Megamap {
         [SerializeField] private int[] sequence = null;
         private int numConditionsFinished = 0;
 
+        public int[] GetSequence() { return sequence; }
+
         public void NextCondition()
         {
             // Last condition was reached -> experiment is over!
@@ -55,7 +57,7 @@ namespace Megamap {
             }
             else {
                 ++numConditionsFinished;
-                RecordData.Log("Starting condition " + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + sequence.Length + ")");
+                RecordData.Log("Starting condition " + CurrentConditionIndex + " (" + (numConditionsFinished + 1) + " / " + sequence.Length + ")");
             }
 
         }
@@ -77,7 +79,7 @@ namespace Megamap {
             RecordData.Log("Condition sequence is "
                 + string.Join(", ", new List<int>(sequence).ConvertAll(i => i.ToString()).ToArray())
                 + ", starting with condition "
-                + CurrentConditionIdx + " (" + (numConditionsFinished + 1) + " / " + sequence.Length + ")"
+                + CurrentConditionIndex + " (" + (numConditionsFinished + 1) + " / " + sequence.Length + ")"
                 + ".");
         }
     }
