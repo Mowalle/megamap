@@ -41,15 +41,12 @@ namespace Megamap {
                     conditions.text += condSequence[i] + " ";
             }
 
+            tasks.text = "Tasks: ";
             if (taskSwitcher.IsTutorialRunning) {
-                tasks.enabled = false;
+                tasks.text += "Running tutorials";
                 return;
             }
-            else {
-                tasks.enabled = true;
-            }
 
-            tasks.text = "Tasks: ";
             var taskSequence = taskSwitcher.GetSequence();
             if (taskSequence == null) {
                 tasks.text += "null";
