@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Megamap {
@@ -7,7 +9,7 @@ namespace Megamap {
 
         public Text userID = null;
         public Text runtime = null;
-        public Text tutorials = null;
+        public Text conditions = null;
         public Text tasks = null;
         
         void Start()
@@ -22,6 +24,44 @@ namespace Megamap {
             int seconds = Mathf.FloorToInt(time - minutes * 60);
 
             runtime.text = "Runtime: " + string.Format("{0:00}:{1:00}", minutes, seconds);
+
+
+            var taskSwitcher = FindObjectOfType<TaskSwitcher>();
+
+            conditions.text = "Conditions: ";
+            if (taskSwitcher.IsTutorialRunning) {
+                conditions.text += "[Tutorial condition] ";
+            }
+            var condSwitcher = FindObjectOfType<ConditionSwitcher>();
+            var condSequence = condSwitcher.GetSequence();
+            for (int i = 0; i < condSequence.Length; ++i) {
+                if (condSequence[i] == condSwitcher.CurrentConditionIndex)
+                    conditions.text += "[" + condSequence[i] + "] ";
+                else
+                    conditions.text += condSequence[i] + " ";
+            }
+
+            if (taskSwitcher.IsTutorialRunning) {
+                tasks.enabled = false;
+                return;
+            }
+            else {
+                tasks.enabled = true;
+            }
+
+            tasks.text = "Tasks: ";
+            var taskSequence = taskSwitcher.GetSequence();
+            if (taskSequence == null) {
+                tasks.text += "null";
+                return;
+            }
+
+            for (int i = 0; i < taskSequence.Length; ++i) {
+                if (taskSequence[i] == taskSwitcher.CurrentTaskIndex)
+                    tasks.text += "[" + taskSequence[i] + "] ";
+                else
+                    tasks.text += taskSequence[i] + " ";
+            }
         }
     }
 }
