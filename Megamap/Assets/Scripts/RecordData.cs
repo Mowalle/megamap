@@ -49,7 +49,7 @@ namespace Megamap {
 
         public static bool writeData = true;
 
-        [SerializeField] private static string userID = "";
+        public static string userID = "";
 
         private static string startTime = "";
         private static StreamWriter logWriter = null;
