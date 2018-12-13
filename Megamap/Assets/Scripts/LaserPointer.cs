@@ -39,8 +39,6 @@ namespace Megamap {
         private Ray ray = new Ray();
         public Ray Ray { get { return ray; } }
 
-        private Coroutine linkToHandRoutine = null;
-
         public void Freeze(bool freeze)
         {
             isFrozen = freeze;
