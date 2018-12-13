@@ -68,6 +68,9 @@ namespace Megamap {
             tasks[CurrentTaskIndex].StopTask();
             tasks[CurrentTaskIndex].gameObject.SetActive(false);
 
+            RecordData.CurrentRecord.taskEndTime = Time.realtimeSinceStartup;
+            RecordData.CurrentRecord.taskDuration = RecordData.CurrentRecord.taskEndTime - RecordData.CurrentRecord.taskStartTime;
+
             SaveData();
 
             if (numTasksFinished == tasks.Length - 1) {
@@ -115,8 +118,14 @@ namespace Megamap {
         {
             FindObjectOfType<TaskDisplay>().SetLanguage(displayLanguage);
 
-            if (!waitingForKeypress)
+            if (!waitingForKeypress) {
+                if (Input.GetKeyDown(KeyCode.X)) {
+                    RecordData.CurrentRecord.skipped = !RecordData.CurrentRecord.skipped;
+                    RecordData.CurrentRecord.skippedAfterSeconds = RecordData.CurrentRecord.skipped ? Time.realtimeSinceStartup - RecordData.CurrentRecord.taskStartTime : 0f;
+                    RecordData.Log("Skip status of current task was marked as " + RecordData.CurrentRecord.skipped);
+                }
                 return;
+            }
 
             if (runningTutorial) {
                 // After start, tutorials need to be run by pressing Space or Return.
@@ -188,6 +197,7 @@ namespace Megamap {
         private void StartTask()
         {
             RecordData.Log("Starting task " + CurrentTaskIndex + " (" + (numTasksFinished + 1) + " / " + currentSequence.Length + ")");
+            RecordData.CurrentRecord.taskStartTime = Time.realtimeSinceStartup;
             tasks[CurrentTaskIndex].gameObject.SetActive(true);
             tasks[CurrentTaskIndex].StartTask();
         }

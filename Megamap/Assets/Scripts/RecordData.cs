@@ -18,6 +18,11 @@ namespace Megamap {
         public float scale = 0f;
         public string mapName = "";
         public int taskIndex = 0;
+        public float taskStartTime = 0f;
+        public float taskEndTime = 0f;
+        public float taskDuration = 0f;
+        public bool skipped = false;
+        public float skippedAfterSeconds = 0f;
 
         // Megamap subtask data.
         public float megamapTime = 0f;
@@ -69,6 +74,11 @@ namespace Megamap {
             writer.WriteLine("scale: " + CurrentRecord.scale);
             writer.WriteLine("mapName: " + CurrentRecord.mapName);
             writer.WriteLine("taskIndex: " + CurrentRecord.taskIndex);
+            writer.WriteLine("taskStartTime: " + CurrentRecord.taskStartTime);
+            writer.WriteLine("taskEndTime: " + CurrentRecord.taskEndTime);
+            writer.WriteLine("taskDuration: " + CurrentRecord.taskDuration);
+            writer.WriteLine("skipped: " + CurrentRecord.skipped);
+            writer.WriteLine("skippedAfterSeconds: " + CurrentRecord.skippedAfterSeconds);
             writer.WriteLine("megamapTime: " + CurrentRecord.megamapTime);
             writer.WriteLine("correctRoomName: " + CurrentRecord.correctRoomName);
             writer.WriteLine("correctRoomIndex: " + CurrentRecord.correctRoomIndex);

@@ -11,6 +11,7 @@ namespace Megamap {
         public Text runtime = null;
         public Text conditions = null;
         public Text tasks = null;
+        public Text skipped = null;
         
         void Start()
         {
@@ -58,6 +59,13 @@ namespace Megamap {
                     tasks.text += "[" + taskSequence[i] + "] ";
                 else
                     tasks.text += taskSequence[i] + " ";
+            }
+
+            if (RecordData.CurrentRecord.skipped) {
+                skipped.text = "Current task skipped (after " + RecordData.CurrentRecord.skippedAfterSeconds + "s).";
+            }
+            else {
+                skipped.text = "";
             }
         }
     }
