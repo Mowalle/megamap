@@ -82,19 +82,19 @@ namespace Megamap {
             writer.WriteLine("megamapTime: " + CurrentRecord.megamapTime);
             writer.WriteLine("correctRoomName: " + CurrentRecord.correctRoomName);
             writer.WriteLine("correctRoomIndex: " + CurrentRecord.correctRoomIndex);
-            writer.WriteLine("numBallsPerRoom: " + string.Join(", ", CurrentRecord.numBallsPerRoom.Select(x => x.ToString()).ToArray()));
+            writer.WriteLine("numBallsPerRoom: [ " + string.Join(", ", CurrentRecord.numBallsPerRoom.Select(x => x.ToString()).ToArray()) + " ]");
             writer.WriteLine("numRoomSelections: " + CurrentRecord.numRoomSelections);
-            writer.WriteLine("roomSelections: " + string.Join(", ", CurrentRecord.roomSelections.Select(x => x.ToString()).ToArray()));
+            writer.WriteLine("roomSelections: [ " + string.Join(", ", CurrentRecord.roomSelections.Select(x => x.ToString()).ToArray()) + " ]");
             writer.WriteLine("numErrors: " + CurrentRecord.numErrors);
             writer.WriteLine("pointingTime: " + CurrentRecord.pointingTime);
             writer.WriteLine("confirmationTime: " + CurrentRecord.confirmationTime);
             writer.WriteLine("numCorrections: " + CurrentRecord.numCorrections);
-            writer.WriteLine("positionAtConfirmation: " + CurrentRecord.positionAtConfirmation.x + ", " + CurrentRecord.positionAtConfirmation.y + ", " + CurrentRecord.positionAtConfirmation.z);
-            writer.WriteLine("viewAtConfirmation: " + CurrentRecord.viewAtConfirmation.x + ", " + CurrentRecord.viewAtConfirmation.y + ", " + CurrentRecord.viewAtConfirmation.z);
-            writer.WriteLine("rayPosition: " + CurrentRecord.rayPosition.x + ", " + CurrentRecord.rayPosition.y + ", " + CurrentRecord.rayPosition.z);
-            writer.WriteLine("rayDirection: " + CurrentRecord.rayDirection.x + ", " + CurrentRecord.rayDirection.y + ", " + CurrentRecord.rayDirection.z);
+            writer.WriteLine("positionAtConfirmation: [ " + CurrentRecord.positionAtConfirmation.x + ", " + CurrentRecord.positionAtConfirmation.y + ", " + CurrentRecord.positionAtConfirmation.z + " ]");
+            writer.WriteLine("viewAtConfirmation: [ " + CurrentRecord.viewAtConfirmation.x + ", " + CurrentRecord.viewAtConfirmation.y + ", " + CurrentRecord.viewAtConfirmation.z + " ]");
+            writer.WriteLine("rayPosition: [ " + CurrentRecord.rayPosition.x + ", " + CurrentRecord.rayPosition.y + ", " + CurrentRecord.rayPosition.z + " ]");
+            writer.WriteLine("rayDirection: [ " + CurrentRecord.rayDirection.x + ", " + CurrentRecord.rayDirection.y + ", " + CurrentRecord.rayDirection.z + " ]");
             writer.WriteLine("hitRoom: " + CurrentRecord.hitRoom);
-            writer.WriteLine("hitLocation: " + CurrentRecord.hitLocation.x + ", " + CurrentRecord.hitLocation.y + ", " + CurrentRecord.hitLocation.z);
+            writer.WriteLine("hitLocation: [ " + CurrentRecord.hitLocation.x + ", " + CurrentRecord.hitLocation.y + ", " + CurrentRecord.hitLocation.z + " ]");
             writer.WriteLine("horizOffsetDeg: " + CurrentRecord.horizOffsetDeg);
             writer.WriteLine("vertOffsetDeg: " + CurrentRecord.vertOffsetDeg);
 
