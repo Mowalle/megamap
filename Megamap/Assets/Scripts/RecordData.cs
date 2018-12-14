@@ -63,6 +63,8 @@ namespace Megamap {
 
         private static bool initialized = false;
 
+        public string UserID = "";
+
         public static void DumpToDisk(DirectoryInfo directory, string name)
         {
             var writer = File.AppendText(directory.FullName + "/" + name);
@@ -115,32 +117,35 @@ namespace Megamap {
 
         private static void CreateUserDir()
         {
-            startTime = DateTime.UtcNow.ToString("yyyy-MM-dd_HH_mm_ss");
-
             DirectoryInfo baseDir = Directory.GetParent(Application.dataPath);
 
             try {
                 DirectoryInfo resultsDir = baseDir.CreateSubdirectory("Results");
 
-                UserFolder = IncrementDirectory(resultsDir, "user_", "_" + startTime);
-                resultsDir.CreateSubdirectory(UserFolder.Name);
+                if (userID.Equals(""))
+                    userID = ParseNextUserID(resultsDir);
+                startTime = DateTime.UtcNow.ToString("yyyy-MM-dd_HH_mm_ss");
 
-                userID = UserFolder.Name;
+                UserFolder = new DirectoryInfo(resultsDir.FullName + "/" + userID + "_" + startTime);
+
+                // Just to make sure...
+                Debug.Assert(!UserFolder.Exists, "User folder would be overwritten; ABORT!");
+                resultsDir.CreateSubdirectory(UserFolder.Name);
             }
             catch (Exception e) {
                 Debug.LogError("Creating directory failed: " + e.ToString());
             }
         }
 
-        private static DirectoryInfo IncrementDirectory(DirectoryInfo rootDir, string dirNameStem, string suffix)
+        private static string ParseNextUserID(DirectoryInfo resultDir)
         {
-            var dirs = rootDir.GetDirectories();
+            var dirs = resultDir.GetDirectories();
 
             List<string> dirNames = new List<string>();
 
             foreach (var dir in dirs) {
-                if (dir.Name.StartsWith(dirNameStem)) {
-                    dirNames.Add(dir.Name.Substring(dirNameStem.Length));
+                if (dir.Name.StartsWith("user_")) {
+                    dirNames.Add(dir.Name.Substring("user_".Length));
                 }
             }
 
@@ -157,11 +162,7 @@ namespace Megamap {
                 }
             }
 
-            var newDir = new DirectoryInfo(rootDir.FullName + "/" + dirNameStem + newDirNumber + suffix);
-            // Just to make sure...
-            Debug.Assert(!newDir.Exists, "User folder would be overwritten; ABORT!");
-            newDir.Create();
-            return newDir;
+            return "user_" + newDirNumber;
         }
 
         private void Awake()
@@ -169,6 +170,7 @@ namespace Megamap {
             Assert.raiseExceptions = true;
 
             if (!initialized && writeData) {
+                userID = UserID;
                 CreateUserDir();
 
                 hmdLog = File.AppendText(UserFolder.FullName + "/hmd_pos_and_view.csv");
