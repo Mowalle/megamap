@@ -124,9 +124,11 @@ namespace Megamap {
 
                 if (userID.Equals(""))
                     userID = ParseNextUserID(resultsDir);
-                startTime = DateTime.UtcNow.ToString("yyyy-MM-dd_HH_mm_ss");
 
-                UserFolder = new DirectoryInfo(resultsDir.FullName + "/" + userID + "_" + startTime);
+                startTime = DateTime.UtcNow.ToString("yyyy-MM-dd_HH_mm_ss");
+                userID += "_" + startTime;
+
+                UserFolder = new DirectoryInfo(resultsDir.FullName + "/" + userID);
 
                 // Just to make sure...
                 Debug.Assert(!UserFolder.Exists, "User folder would be overwritten; ABORT!");
