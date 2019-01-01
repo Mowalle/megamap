@@ -20,7 +20,6 @@ namespace Megamap {
         {
             completed = false;
 
-            LogSubtask();
             FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "megamapNormal";
 
             laser.IsFrozen = false;
@@ -28,6 +27,7 @@ namespace Megamap {
 
             map.targetTransform2D = transform.Find("2D-Transform");
             map.SetMap(indoorMap);
+            map.enabled = true;
             map.GetComponent<UserMarker>().enabled = true;
 
             // Update Megamap with values from condition.

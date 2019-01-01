@@ -39,8 +39,6 @@ namespace Megamap {
         private Ray ray = new Ray();
         public Ray Ray { get { return ray; } }
 
-        private Coroutine linkToHandRoutine = null;
-
         public void Freeze(bool freeze)
         {
             isFrozen = freeze;
@@ -55,11 +53,6 @@ namespace Megamap {
                 IsFrozen = false;
 
             line.enabled = show;
-
-            if (show && linkToHandRoutine == null)
-                linkToHandRoutine = StartCoroutine(LinkToHand());
-            else if (!show && linkToHandRoutine != null)
-                StopCoroutine(linkToHandRoutine);
         }
 
         private void Awake()
@@ -72,6 +65,8 @@ namespace Megamap {
         {
             if (isFrozen)
                 return;
+
+            LinkToHand();
 
             if (hand == null)
                 return;
@@ -114,21 +109,20 @@ namespace Megamap {
             }
         }
 
-        private IEnumerator LinkToHand()
+        private void LinkToHand()
         {
-            while (true) {
-                var hands = FindObjectsOfType<Hand>();
-                if (hands.Length == 0)
-                    continue;
+            var hands = FindObjectsOfType<Hand>();
+            if (hands.Length == 0) {
+                hand = null;
+                return;
+            }
 
-                hand = hands[0];
-                foreach (Hand h in hands) {
-                    if (h.handType == preferredHand) {
-                        hand = h;
-                        break;
-                    }
+            hand = hands[0];
+            foreach (Hand h in hands) {
+                if (h.handType == preferredHand) {
+                    hand = h;
+                    return;
                 }
-                yield return null;
             }
         }
     }

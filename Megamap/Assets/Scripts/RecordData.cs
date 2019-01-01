@@ -18,6 +18,11 @@ namespace Megamap {
         public float scale = 0f;
         public string mapName = "";
         public int taskIndex = 0;
+        public float taskStartTime = 0f;
+        public float taskEndTime = 0f;
+        public float taskDuration = 0f;
+        public bool skipped = false;
+        public float skippedAfterSeconds = 0f;
 
         // Megamap subtask data.
         public float megamapTime = 0f;
@@ -49,7 +54,7 @@ namespace Megamap {
 
         public static bool writeData = true;
 
-        [SerializeField] private static string userID = "";
+        public static string userID = "";
 
         private static string startTime = "";
         private static StreamWriter logWriter = null;
@@ -57,6 +62,8 @@ namespace Megamap {
         private static StreamWriter handLog = null;
 
         private static bool initialized = false;
+
+        public string UserID = "";
 
         public static void DumpToDisk(DirectoryInfo directory, string name)
         {
@@ -69,22 +76,27 @@ namespace Megamap {
             writer.WriteLine("scale: " + CurrentRecord.scale);
             writer.WriteLine("mapName: " + CurrentRecord.mapName);
             writer.WriteLine("taskIndex: " + CurrentRecord.taskIndex);
+            writer.WriteLine("taskStartTime: " + CurrentRecord.taskStartTime);
+            writer.WriteLine("taskEndTime: " + CurrentRecord.taskEndTime);
+            writer.WriteLine("taskDuration: " + CurrentRecord.taskDuration);
+            writer.WriteLine("skipped: " + CurrentRecord.skipped);
+            writer.WriteLine("skippedAfterSeconds: " + CurrentRecord.skippedAfterSeconds);
             writer.WriteLine("megamapTime: " + CurrentRecord.megamapTime);
             writer.WriteLine("correctRoomName: " + CurrentRecord.correctRoomName);
             writer.WriteLine("correctRoomIndex: " + CurrentRecord.correctRoomIndex);
-            writer.WriteLine("numBallsPerRoom: " + string.Join(", ", CurrentRecord.numBallsPerRoom.Select(x => x.ToString()).ToArray()));
+            writer.WriteLine("numBallsPerRoom: [ " + string.Join(", ", CurrentRecord.numBallsPerRoom.Select(x => x.ToString()).ToArray()) + " ]");
             writer.WriteLine("numRoomSelections: " + CurrentRecord.numRoomSelections);
-            writer.WriteLine("roomSelections: " + string.Join(", ", CurrentRecord.roomSelections.Select(x => x.ToString()).ToArray()));
+            writer.WriteLine("roomSelections: [ " + string.Join(", ", CurrentRecord.roomSelections.Select(x => x.ToString()).ToArray()) + " ]");
             writer.WriteLine("numErrors: " + CurrentRecord.numErrors);
             writer.WriteLine("pointingTime: " + CurrentRecord.pointingTime);
             writer.WriteLine("confirmationTime: " + CurrentRecord.confirmationTime);
             writer.WriteLine("numCorrections: " + CurrentRecord.numCorrections);
-            writer.WriteLine("positionAtConfirmation: " + CurrentRecord.positionAtConfirmation.x + ", " + CurrentRecord.positionAtConfirmation.y + ", " + CurrentRecord.positionAtConfirmation.z);
-            writer.WriteLine("viewAtConfirmation: " + CurrentRecord.viewAtConfirmation.x + ", " + CurrentRecord.viewAtConfirmation.y + ", " + CurrentRecord.viewAtConfirmation.z);
-            writer.WriteLine("rayPosition: " + CurrentRecord.rayPosition.x + ", " + CurrentRecord.rayPosition.y + ", " + CurrentRecord.rayPosition.z);
-            writer.WriteLine("rayDirection: " + CurrentRecord.rayDirection.x + ", " + CurrentRecord.rayDirection.y + ", " + CurrentRecord.rayDirection.z);
+            writer.WriteLine("positionAtConfirmation: [ " + CurrentRecord.positionAtConfirmation.x + ", " + CurrentRecord.positionAtConfirmation.y + ", " + CurrentRecord.positionAtConfirmation.z + " ]");
+            writer.WriteLine("viewAtConfirmation: [ " + CurrentRecord.viewAtConfirmation.x + ", " + CurrentRecord.viewAtConfirmation.y + ", " + CurrentRecord.viewAtConfirmation.z + " ]");
+            writer.WriteLine("rayPosition: [ " + CurrentRecord.rayPosition.x + ", " + CurrentRecord.rayPosition.y + ", " + CurrentRecord.rayPosition.z + " ]");
+            writer.WriteLine("rayDirection: [ " + CurrentRecord.rayDirection.x + ", " + CurrentRecord.rayDirection.y + ", " + CurrentRecord.rayDirection.z + " ]");
             writer.WriteLine("hitRoom: " + CurrentRecord.hitRoom);
-            writer.WriteLine("hitLocation: " + CurrentRecord.hitLocation.x + ", " + CurrentRecord.hitLocation.y + ", " + CurrentRecord.hitLocation.z);
+            writer.WriteLine("hitLocation: [ " + CurrentRecord.hitLocation.x + ", " + CurrentRecord.hitLocation.y + ", " + CurrentRecord.hitLocation.z + " ]");
             writer.WriteLine("horizOffsetDeg: " + CurrentRecord.horizOffsetDeg);
             writer.WriteLine("vertOffsetDeg: " + CurrentRecord.vertOffsetDeg);
 
@@ -105,32 +117,37 @@ namespace Megamap {
 
         private static void CreateUserDir()
         {
-            startTime = DateTime.UtcNow.ToString("yyyy-MM-dd_HH_mm_ss");
-
             DirectoryInfo baseDir = Directory.GetParent(Application.dataPath);
 
             try {
                 DirectoryInfo resultsDir = baseDir.CreateSubdirectory("Results");
 
-                UserFolder = IncrementDirectory(resultsDir, "user_", "_" + startTime);
-                resultsDir.CreateSubdirectory(UserFolder.Name);
+                if (userID.Equals(""))
+                    userID = ParseNextUserID(resultsDir);
 
-                userID = UserFolder.Name;
+                startTime = DateTime.UtcNow.ToString("yyyy-MM-dd_HH_mm_ss");
+                userID += "_" + startTime;
+
+                UserFolder = new DirectoryInfo(resultsDir.FullName + "/" + userID);
+
+                // Just to make sure...
+                Debug.Assert(!UserFolder.Exists, "User folder would be overwritten; ABORT!");
+                resultsDir.CreateSubdirectory(UserFolder.Name);
             }
             catch (Exception e) {
                 Debug.LogError("Creating directory failed: " + e.ToString());
             }
         }
 
-        private static DirectoryInfo IncrementDirectory(DirectoryInfo rootDir, string dirNameStem, string suffix)
+        private static string ParseNextUserID(DirectoryInfo resultDir)
         {
-            var dirs = rootDir.GetDirectories();
+            var dirs = resultDir.GetDirectories();
 
             List<string> dirNames = new List<string>();
 
             foreach (var dir in dirs) {
-                if (dir.Name.StartsWith(dirNameStem)) {
-                    dirNames.Add(dir.Name.Substring(dirNameStem.Length));
+                if (dir.Name.StartsWith("user_")) {
+                    dirNames.Add(dir.Name.Substring("user_".Length));
                 }
             }
 
@@ -147,11 +164,7 @@ namespace Megamap {
                 }
             }
 
-            var newDir = new DirectoryInfo(rootDir.FullName + "/" + dirNameStem + newDirNumber + suffix);
-            // Just to make sure...
-            Debug.Assert(!newDir.Exists, "User folder would be overwritten; ABORT!");
-            newDir.Create();
-            return newDir;
+            return "user_" + newDirNumber;
         }
 
         private void Awake()
@@ -159,6 +172,7 @@ namespace Megamap {
             Assert.raiseExceptions = true;
 
             if (!initialized && writeData) {
+                userID = UserID;
                 CreateUserDir();
 
                 hmdLog = File.AppendText(UserFolder.FullName + "/hmd_pos_and_view.csv");

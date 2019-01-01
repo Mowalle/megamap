@@ -14,6 +14,7 @@ namespace Megamap {
 
         public void CommonStart()
         {
+            LogSubtask();
             StartSubtask();
             IsStarted = true;
         }

@@ -19,7 +19,6 @@ namespace Megamap {
 
         public override void StartSubtask()
         {
-            LogSubtask();
             FindObjectOfType<TaskDisplay>().CurrentDescriptionID = "pointingNormal";
 
             laser.IsFrozen = false;

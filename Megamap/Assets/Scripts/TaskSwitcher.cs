@@ -20,17 +20,19 @@ namespace Megamap {
         [SerializeField] private TextAsset taskSequenceFile = null;
 
         public Task CurrentTask { get { return runningTutorial ? tutorials[numTutorialsFinished] : tasks[CurrentTaskIndex]; } }
+        public int CurrentTaskIndex { get { return runningTutorial ? numTutorialsFinished : currentSequence[numTasksFinished % currentSequence.Length]; } }
 
         private int[][] sequences = null;
         private int[] currentSequence = null;
         private int numTasksFinished = 0;
-        private int CurrentTaskIndex { get { return runningTutorial ? numTutorialsFinished : currentSequence[numTasksFinished % currentSequence.Length]; } }
 
         bool runningTutorial = false;
         public bool IsTutorialRunning { get { return runningTutorial; } }
         int numTutorialsFinished = 0;
 
         private bool waitingForKeypress = true;
+
+        public int[] GetSequence() { return currentSequence; }
 
         public void NextTask()
         {
@@ -47,7 +49,7 @@ namespace Megamap {
                 RecordData.Log("Starting tutorial " + numTutorialsFinished
                     + " (" + (numTutorialsFinished + 1) + "/" + tutorials.Count
                     + ") with tutorial condition instead of condition "
-                    + FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx + ".");
+                    + FindObjectOfType<ConditionSwitcher>().CurrentConditionIndex + ".");
                 if (numTutorialsFinished % 2 != 0)
                     FindObjectOfType<ConditionSwitcher>().tutorialCondition.viewMode = "flat";
                 else
@@ -66,17 +68,20 @@ namespace Megamap {
             tasks[CurrentTaskIndex].StopTask();
             tasks[CurrentTaskIndex].gameObject.SetActive(false);
 
+            RecordData.CurrentRecord.taskEndTime = Time.realtimeSinceStartup;
+            RecordData.CurrentRecord.taskDuration = RecordData.CurrentRecord.taskEndTime - RecordData.CurrentRecord.taskStartTime;
+
             SaveData();
 
             if (numTasksFinished == tasks.Length - 1) {
                 // Switch conditions.
                 var condSwitcher = FindObjectOfType<ConditionSwitcher>();
-                int lastCondition = condSwitcher.CurrentConditionIdx;
+                int lastCondition = condSwitcher.CurrentConditionIndex;
                 condSwitcher.NextCondition();
                 // If conditions were not switched, it means all conditions were completed.
                 // In that case, don't start the next task (there is none) and just keep the
                 // task display and wait for user to take off HMD.
-                if (lastCondition == condSwitcher.CurrentConditionIdx)
+                if (lastCondition == condSwitcher.CurrentConditionIndex)
                     return;
 
                 waitingForKeypress = true;
@@ -113,8 +118,14 @@ namespace Megamap {
         {
             FindObjectOfType<TaskDisplay>().SetLanguage(displayLanguage);
 
-            if (!waitingForKeypress)
+            if (!waitingForKeypress) {
+                if (Input.GetKeyDown(KeyCode.X)) {
+                    RecordData.CurrentRecord.skipped = !RecordData.CurrentRecord.skipped;
+                    RecordData.CurrentRecord.skippedAfterSeconds = RecordData.CurrentRecord.skipped ? Time.realtimeSinceStartup - RecordData.CurrentRecord.taskStartTime : 0f;
+                    RecordData.Log("Skip status of current task was marked as " + RecordData.CurrentRecord.skipped);
+                }
                 return;
+            }
 
             if (runningTutorial) {
                 // After start, tutorials need to be run by pressing Space or Return.
@@ -186,6 +197,7 @@ namespace Megamap {
         private void StartTask()
         {
             RecordData.Log("Starting task " + CurrentTaskIndex + " (" + (numTasksFinished + 1) + " / " + currentSequence.Length + ")");
+            RecordData.CurrentRecord.taskStartTime = Time.realtimeSinceStartup;
             tasks[CurrentTaskIndex].gameObject.SetActive(true);
             tasks[CurrentTaskIndex].StartTask();
         }
@@ -196,7 +208,7 @@ namespace Megamap {
             runningTutorial = true;
             RecordData.Log("Starting tutorial 0 (1/" + tutorials.Count
                 + ") with tutorial condition instead of condition "
-                + FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx + ".");
+                + FindObjectOfType<ConditionSwitcher>().CurrentConditionIndex + ".");
             FindObjectOfType<ConditionSwitcher>().tutorialCondition.viewMode = "default";
             tutorials[0].gameObject.SetActive(true);
             tutorials[0].StartTask();
@@ -204,7 +216,7 @@ namespace Megamap {
 
         private void SaveData()
         {
-            RecordData.CurrentRecord.conditionIndex = FindObjectOfType<ConditionSwitcher>().CurrentConditionIdx;
+            RecordData.CurrentRecord.conditionIndex = FindObjectOfType<ConditionSwitcher>().CurrentConditionIndex;
             int currentTaskIdx = numTasksFinished % tasks.Length;
             RecordData.CurrentRecord.taskIndex = currentSequence[currentTaskIdx];
 
